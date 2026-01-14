@@ -531,9 +531,14 @@
 
                 document.getElementById('sheetUpdate').textContent =
                   fecha
-                    'Última actualización: ' + fecha.toLocaleString('es-AR', {
-                      hour12: false
-                    })
+                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', {
+                        hour12: false,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
