@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
             min-height: 100vh;
             padding: 15px;
         }
@@ -28,7 +28,7 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
         .config-section {
@@ -42,7 +42,7 @@
         }
 
         .config-section {
-            background: #f8f9fa;
+            background: #fff5f5;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 15px;
@@ -63,7 +63,7 @@
         input[type="text"] {
             width: 100%;
             padding: 10px;
-            border: 2px solid #ddd;
+            border: 2px solid #ffe0e0;
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
@@ -71,7 +71,7 @@
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #ff6b6b;
         }
 
         .help-text {
@@ -81,7 +81,7 @@
         }
 
         button {
-            background: #667eea;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -90,16 +90,19 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
         button:hover {
-            background: #5568d3;
+            background: linear-gradient(135deg, #ff5252 0%, #ff7043 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
         }
 
         button:disabled {
-            background: #ccc;
+            background: #ffcccc;
             cursor: not-allowed;
+            transform: none;
         }
 
         .stats {
@@ -110,14 +113,14 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             padding: 15px;
             border-radius: 10px;
             color: white;
         }
 
         .stat-card.total {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
             grid-column: 1 / -1;
         }
 
@@ -136,12 +139,12 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
         .invoice-item {
             padding: 15px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ffe0e0;
             transition: background 0.2s;
         }
 
@@ -150,7 +153,7 @@
         }
 
         .invoice-item.selected {
-            background: #e8f5e9;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
         }
 
         .invoice-item.paid {
@@ -179,13 +182,13 @@
         }
 
         .badge-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: white;
         }
 
         .badge-paid {
-            background: #d4edda;
-            color: #155724;
+            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
+            color: white;
         }
 
         .invoice-details {
@@ -200,7 +203,10 @@
         .invoice-amount {
             font-size: 20px;
             font-weight: bold;
-            color: #667eea;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
         }
 
@@ -212,9 +218,9 @@
         .btn-mark {
             flex: 1;
             padding: 10px;
-            border: 2px solid #667eea;
+            border: 2px solid #ff8e53;
             background: white;
-            color: #667eea;
+            color: #ff6b6b;
             border-radius: 8px;
             font-weight: 600;
             font-size: 13px;
@@ -223,8 +229,9 @@
         }
 
         .btn-mark.active {
-            background: #667eea;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             color: white;
+            border-color: #ff6b6b;
         }
 
         .btn-mark:disabled {
@@ -235,10 +242,15 @@
         .partial-input {
             width: 100%;
             padding: 8px;
-            border: 2px solid #667eea;
+            border: 2px solid #ff8e53;
             border-radius: 8px;
             font-size: 14px;
             margin-top: 8px;
+        }
+
+        .partial-input:focus {
+            outline: none;
+            border-color: #ff6b6b;
         }
 
         .loading {
@@ -248,8 +260,8 @@
         }
 
         .error {
-            background: #f8d7da;
-            color: #721c24;
+            background: linear-gradient(135deg, #ffcccc 0%, #ffb3b3 100%);
+            color: #cc0000;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 15px;
@@ -320,7 +332,7 @@
                          text-align:center;
                          margin-top:8px;
                          font-size:13px;
-                         color:#7c2d12;
+                         color:#cc0000;
                          opacity:0.85;
                     ">
                          Última actualización: —
@@ -366,7 +378,6 @@
         }
 
         function parseGvizDate(v) {
-          // v puede venir como "Date(2026,0,14,10,35,12)" o como Date real según el caso
           if (!v) return null;
           if (v instanceof Date) return v;
 
@@ -374,7 +385,7 @@
             const m = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
             if (m) {
               const y = Number(m[1]);
-              const mo = Number(m[2]); // 0-11
+              const mo = Number(m[2]);
               const d = Number(m[3]);
               const hh = Number(m[4] || 0);
               const mm = Number(m[5] || 0);
@@ -382,7 +393,6 @@
               return new Date(y, mo, d, hh, mm, ss);
             }
 
-            // fallback por si viniera ISO
             const d2 = new Date(v);
             return isNaN(d2) ? null : d2;
           }
@@ -435,7 +445,6 @@
 
             alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
 
-            // Opcional: si querés “limpiar” selección luego de registrar:
             invoices.forEach(inv => {
               inv.selected = false;
               inv.partial = false;
@@ -465,16 +474,14 @@
                 const response = await fetch(url);
                 const text = await response.text();
 
-                // Parse robusto: no depende del "47"
                 const start = text.indexOf('(');
                 const end = text.lastIndexOf(');');
                 const json = JSON.parse(text.substring(start + 1, end));
 
-                // Busca la última fecha válida en la columna F (c[5]) recorriendo todas las filas
                 let lastUpdateCell = null;
 
                 for (let i = json.table.rows.length - 1; i >= 0; i--) {
-                  const v = json.table.rows[i]?.c?.[5]?.v; // col F
+                  const v = json.table.rows[i]?.c?.[5]?.v;
                   if (v) { lastUpdateCell = v; break; }
                 }
 
@@ -487,12 +494,9 @@
 
                 const rows = json.table.rows;
 
-               // NO hacemos slice(1). Si tu primera fila es encabezado (texto tipo "Proveedor", "Monto"...),
-               // la saltamos SOLO si detectamos que "Monto" no es número.
                const dataRowsRaw =
                  (rows[0]?.c?.[1]?.v != null && isNaN(Number(rows[0].c[1].v))) ? rows.slice(1) : rows;
 
-               // Filtramos filas vacías (sin proveedor y sin monto)
                const dataRows = dataRowsRaw.filter(r => {
                  const supplier = (r.c?.[0]?.v ?? '').toString().trim();
                  const amount = r.c?.[1]?.v;
@@ -500,7 +504,7 @@
                });
 
                invoices = dataRows.map((row, idx) => {
-                const isPaid = row.c?.[4]?.v === true; // columna E: checkbox "Pagado"
+                const isPaid = row.c?.[4]?.v === true;
                 return {
                  id: idx + 1,
                  supplier: row.c?.[0]?.v || '',
@@ -632,7 +636,6 @@
             document.getElementById('todayTotal').textContent = formatCurrency(todayTotal);
         }
 
-        // Cargar automáticamente al iniciar
         window.addEventListener('load', () => {
             loadInvoices();
         });
