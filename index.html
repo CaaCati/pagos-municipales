@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos Municipales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .config-section {
+            display: none;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .config-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .help-text {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .stat-card.total {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            grid-column: 1 / -1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .invoices-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .invoice-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .invoice-item:last-child {
+            border-bottom: none;
+        }
+
+        .invoice-item.selected {
+            background: #e8f5e9;
+        }
+
+        .invoice-item.paid {
+            opacity: 0.5;
+            background: #f5f5f5;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .invoice-supplier {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .invoice-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .invoice-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .invoice-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-mark {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-mark.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-mark:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .partial-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-card.total {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Pagos Municipales</h1>
+            
+            <div class="config-section" id="configSection">
+                <div class="input-group">
+                    <label>ID de Google Sheet</label>
+                    <input type="text" id="sheetId" placeholder="Ejemplo: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+                    <div class="help-text">Está en la URL después de /d/</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Nombre de la Hoja</label>
+                    <input type="text" id="sheetName" placeholder="Hoja 1" value="Hoja 1">
+                </div>
+                
+                <button onclick="loadInvoices()" id="loadBtn">Cargar Facturas</button>
+            </div>
+
+            <div id="stats" style="display: none;">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Deuda Total</div>
+                        <div class="stat-value" id="totalDebt">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pendientes</div>
+                        <div class="stat-value" id="pendingCount">0</div>
+                    </div>
+                    <div class="stat-card total">
+                        <div class="stat-label">💳 Total a Pagar Hoy</div>
+                        <div class="stat-value" id="todayTotal">$0</div>
+                    </div>
+
+                    <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
+                      🧾 Registrar pago de hoy
+                    </button>
+
+                    <div id="sheetUpdate" style="
+                         text-align:center;
+                         margin-top:8px;
+                         font-size:13px;
+                         color:#7c2d12;
+                         opacity:0.85;
+                    ">
+                         Última actualización: —
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="loading" class="loading" style="display: none;">Cargando facturas...</div>
+        
+        <div class="invoices-container" id="invoicesContainer">
+            <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <p>Configura tu Google Sheet para comenzar</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let invoices = [];
+        const SHEET_ID = '17EPXK3fUPbCeoditXmqxq8Fn4-d40bh6HV7sQOn1kBo';
+        const SHEET_NAME = 'Deudas';
+        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyMWRuu8nrrrGMGFjmU_jaNtnhVSGWCa204H5tsa-5fVuHSKTSaI3Mx2j634_sbk0OxRw/exec';
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr === '-') return '-';
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('es-AR');
+            } catch {
+                return dateStr;
+            }
+        }
+
+        function parseGvizDate(v) {
+          // v puede venir como "Date(2026,0,14,10,35,12)" o como Date real según el caso
+          if (!v) return null;
+          if (v instanceof Date) return v;
+
+          if (typeof v === "string") {
+            const m = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (m) {
+              const y = Number(m[1]);
+              const mo = Number(m[2]); // 0-11
+              const d = Number(m[3]);
+              const hh = Number(m[4] || 0);
+              const mm = Number(m[5] || 0);
+              const ss = Number(m[6] || 0);
+              return new Date(y, mo, d, hh, mm, ss);
+            }
+
+            // fallback por si viniera ISO
+            const d2 = new Date(v);
+            return isNaN(d2) ? null : d2;
+          }
+
+          return null;
+        }
+
+        async function registerTodayPayments() {
+          const items = invoices
+            .filter(inv => !inv.isPaid)
+            .map(inv => {
+              let monto = 0;
+              let tipo = '';
+              if (inv.selected) { monto = inv.amount; tipo = 'COMPLETO'; }
+              else if (inv.partial && (inv.partialAmount || 0) > 0) { monto = inv.partialAmount; tipo = 'PARCIAL'; }
+              else return null;
+
+              return {
+                proveedor: inv.supplier || '',
+                tipo,
+                monto,
+              };
+            })
+            .filter(Boolean);
+
+          if (items.length === 0) {
+            alert('No hay pagos seleccionados para registrar hoy.');
+            return;
+          }
+
+          const btn = document.getElementById('registerBtn');
+          if (btn) btn.disabled = true;
+
+          try {
+            const payload = {
+              spreadsheetId: SHEET_ID,
+              targetSheetName: "Pagos_Hoy",
+              items
+            };
+
+            const res = await fetch(WEBAPP_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(payload)
+            });
+
+            const out = await res.json();
+
+            if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
+
+            alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
+
+            // Opcional: si querés “limpiar” selección luego de registrar:
+            invoices.forEach(inv => {
+              inv.selected = false;
+              inv.partial = false;
+              inv.partialAmount = 0;
+            });
+            renderInvoices();
+            updateStats();
+
+          } catch (err) {
+            console.error(err);
+            alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
+          } finally {
+            if (btn) btn.disabled = false;
+          }
+        }
+      
+        async function loadInvoices() {
+            const sheetId = SHEET_ID;
+            const sheetName = SHEET_NAME;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('configSection').style.display = 'none';
+
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+                const response = await fetch(url);
+                const text = await response.text();
+
+                // Parse robusto: no depende del "47"
+                const start = text.indexOf('(');
+                const end = text.lastIndexOf(');');
+                const json = JSON.parse(text.substring(start + 1, end));
+
+                // Busca la última fecha válida en la columna F (c[5]) recorriendo todas las filas
+                let lastUpdateCell = null;
+
+                for (let i = json.table.rows.length - 1; i >= 0; i--) {
+                  const v = json.table.rows[i]?.c?.[5]?.v; // col F
+                  if (v) { lastUpdateCell = v; break; }
+                }
+
+                const fecha = parseGvizDate(lastUpdateCell);
+
+                document.getElementById('sheetUpdate').textContent =
+                  fecha
+                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR')
+                    : 'Última actualización: —';
+
+                const rows = json.table.rows;
+
+               // NO hacemos slice(1). Si tu primera fila es encabezado (texto tipo "Proveedor", "Monto"...),
+               // la saltamos SOLO si detectamos que "Monto" no es número.
+               const dataRowsRaw =
+                 (rows[0]?.c?.[1]?.v != null && isNaN(Number(rows[0].c[1].v))) ? rows.slice(1) : rows;
+
+               // Filtramos filas vacías (sin proveedor y sin monto)
+               const dataRows = dataRowsRaw.filter(r => {
+                 const supplier = (r.c?.[0]?.v ?? '').toString().trim();
+                 const amount = r.c?.[1]?.v;
+                 return supplier !== '' || (amount != null && amount !== '');
+               });
+
+               invoices = dataRows.map((row, idx) => {
+                const isPaid = row.c?.[4]?.v === true; // columna E: checkbox "Pagado"
+                return {
+                 id: idx + 1,
+                 supplier: row.c?.[0]?.v || '',
+                 amount: parseFloat(row.c?.[1]?.v || 0),
+                 issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
+                 payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
+                 isPaid,
+                 selected: false,
+                 partial: false,
+                 partialAmount: 0
+                };
+              });
+
+                document.getElementById('configSection').style.display = 'none';
+                document.getElementById('stats').style.display = 'block';
+                renderInvoices();
+                updateStats();
+
+            } catch (err) {
+                showError('Error al cargar. Verifica que la hoja sea pública y los datos sean correctos.');
+                console.error(err);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function toggleInvoice(id, type) {
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice || invoice.isPaid) return;
+
+            if (type === 'full') {
+                invoice.selected = !invoice.selected;
+                invoice.partial = false;
+                invoice.partialAmount = 0;
+            } else if (type === 'partial') {
+                invoice.partial = !invoice.partial;
+                invoice.selected = false;
+                if (!invoice.partial) {
+                    invoice.partialAmount = 0;
+                }
+            }
+
+            renderInvoices();
+            updateStats();
+        }
+
+        function updatePartialAmount(id, value) {
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice) return;
+
+            const amount = parseFloat(value) || 0;
+            invoice.partialAmount = Math.min(amount, invoice.amount);
+            updateStats();
+        }
+
+        function renderInvoices() {
+            const container = document.getElementById('invoicesContainer');
+            
+            if (invoices.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <p>No hay facturas para mostrar</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = invoices.map(inv => `
+                <div class="invoice-item ${inv.selected || inv.partial ? 'selected' : ''} ${inv.isPaid ? 'paid' : ''}">
+                    <div class="invoice-header">
+                        <div class="invoice-supplier">${inv.supplier}</div>
+                        <span class="invoice-badge ${inv.isPaid ? 'badge-paid' : 'badge-pending'}">
+                            ${inv.isPaid ? 'PAGADO' : 'PENDIENTE'}
+                        </span>
+                    </div>
+                    
+                    <div class="invoice-amount">${formatCurrency(inv.amount)}</div>
+                    
+                    <div class="invoice-details">
+                        <div>📅 Emisión: ${formatDate(inv.issueDate)}</div>
+                        <div>✅ Ultimo Pago: ${formatDate(inv.payDate)}</div>
+                    </div>
+                    
+                    ${!inv.isPaid ? `
+                        <div class="invoice-actions">
+                            <button class="btn-mark ${inv.selected ? 'active' : ''}" 
+                                    onclick="toggleInvoice(${inv.id}, 'full')"
+                                    ${inv.partial ? 'disabled' : ''}>
+                                ${inv.selected ? '✓ Completo' : 'Pago Completo'}
+                            </button>
+                            <button class="btn-mark ${inv.partial ? 'active' : ''}" 
+                                    onclick="toggleInvoice(${inv.id}, 'partial')"
+                                    ${inv.selected ? 'disabled' : ''}>
+                                ${inv.partial ? '✓ Parcial' : 'Pago Parcial'}
+                            </button>
+                        </div>
+                        ${inv.partial ? `
+                            <input type="number" 
+                                   class="partial-input" 
+                                   placeholder="Monto a pagar"
+                                   value="${inv.partialAmount || ''}"
+                                   max="${inv.amount}"
+                                   oninput="updatePartialAmount(${inv.id}, this.value)">
+                        ` : ''}
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const pending = invoices.filter(inv => !inv.isPaid);
+            const totalDebt = pending.reduce((sum, inv) => sum + inv.amount, 0);
+            
+            const todayTotal = invoices.reduce((sum, inv) => {
+                if (inv.selected) return sum + inv.amount;
+                if (inv.partial) return sum + inv.partialAmount;
+                return sum;
+            }, 0);
+
+            document.getElementById('totalDebt').textContent = formatCurrency(totalDebt);
+            document.getElementById('pendingCount').textContent = pending.length;
+            document.getElementById('todayTotal').textContent = formatCurrency(todayTotal);
+        }
+
+        // Cargar automáticamente al iniciar
+        window.addEventListener('load', () => {
+            loadInvoices();
+        });
+    </script>
+</body>
+</html>
