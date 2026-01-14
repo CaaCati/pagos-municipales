@@ -367,15 +367,57 @@
             }).format(amount);
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr || dateStr === '-') return '-';
-            try {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('es-AR');
-            } catch {
-                return dateStr;
-            }
-        }
+        function formatDate(value) {
+          if (!value || value === '-') return '-';
+
+          // 1) Si ya es Date real
+          if (value instanceof Date) {
+            return value.toLocaleDateString('es-AR');
+          }
+
+          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
+          if (typeof value === 'string') {
+            const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (m) {
+              const y = Number(m[1]);
+              const mo = Number(m[2]); // 0-11
+              const d = Number(m[3]);
+              const hh = Number(m[4] || 0);
+              const mm = Number(m[5] || 0);
+              const ss = Number(m[6] || 0);
+              const dt = new Date(y, mo, d, hh, mm, ss);
+              return dt.toLocaleDateString('es-AR');
+           }
+         }
+
+         // 3) Si viene como string "DD/MM/AAAA" o "DD-MM-AAAA"
+         if (typeof value === 'string') {
+           const s = value.trim();
+
+           // DD/MM/YYYY o DD-MM-YYYY
+           let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+           if (m) {
+             const dd = Number(m[1]);
+             const mm = Number(m[2]);
+             const yyyy = Number(m[3]);
+             const dt = new Date(yyyy, mm - 1, dd);
+             return isNaN(dt) ? '-' : dt.toLocaleDateString('es-AR');
+         }
+
+         // YYYY-MM-DD (por si alguna vez llega así)
+         m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+         if (m) {
+           const yyyy = Number(m[1]);
+           const mm = Number(m[2]);
+           const dd = Number(m[3]);
+           const dt = new Date(yyyy, mm - 1, dd);
+           return isNaN(dt) ? '-' : dt.toLocaleDateString('es-AR');
+         }
+       }
+
+       // 4) Fallback: si no lo entendemos, devolvemos tal cual (mejor que Invalid Date)
+       return String(value);
+     }
 
         function parseGvizDate(v) {
           if (!v) return null;
@@ -489,7 +531,9 @@
 
                 document.getElementById('sheetUpdate').textContent =
                   fecha
-                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR')
+                    'Última actualización: ' + fecha.toLocaleString('es-AR', {
+                      hour12: false
+                    })
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
