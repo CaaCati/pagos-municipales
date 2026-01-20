@@ -337,7 +337,6 @@
                     ">
                          Última actualización: —
                     </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -487,14 +486,13 @@
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
 
             alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
+            await loadInvoices();
 
             invoices.forEach(inv => {
               inv.selected = false;
               inv.partial = false;
               inv.partialAmount = 0;
             });
-            renderInvoices();
-            updateStats();
 
           } catch (err) {
             console.error(err);
@@ -543,15 +541,6 @@
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
-
-               const dataRowsRaw =
-                 (rows[0]?.c?.[1]?.v != null && isNaN(Number(rows[0].c[1].v))) ? rows.slice(1) : rows;
-
-               const dataRows = dataRowsRaw.filter(r => {
-                 const supplier = (r.c?.[0]?.v ?? '').toString().trim();
-                 const amount = r.c?.[1]?.v;
-                 return supplier !== '' || (amount != null && amount !== '');
-               });
 
                // Necesitamos saber la fila real en la hoja.
                // Si tu hoja tiene encabezados en fila 1, la primera fila de datos es la 2.
@@ -655,10 +644,11 @@
             container.innerHTML = invoices.map(inv => `
                 <div class="invoice-item ${inv.selected || inv.partial ? 'selected' : ''} ${inv.isPaid ? 'paid' : ''}">
                     <div class="invoice-header">
-                        <div class="invoice-supplier">${inv.supplier}</div>
-                        <span class="invoice-badge ${inv.isPaid ? 'badge-paid' : 'badge-pending'}">
-                            ${inv.isPaid ? 'PAGADO' : 'PENDIENTE'}
-                        </span>
+                      <div class="invoice-supplier">${inv.supplier}</div>
+                      ${(!inv.isPaid && inv.estado?.toUpperCase() === 'SALDO PENDIENTE')
+                        ? `<span class="invoice-badge badge-pending">SALDO PENDIENTE</span>`
+                        : ''
+                      }
                     </div>
                     
                     <div class="invoice-amount">${formatCurrency(inv.amount)}</div>
@@ -715,3 +705,4 @@
     </script>
 </body>
 </html>
+
