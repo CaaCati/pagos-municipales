@@ -453,7 +453,8 @@
               else return null;
 
               return {
-                proveedor: inv.supplier || '',
+                  sheetRow: inv.sheetRow,
+                  proveedor: inv.supplier || '',
                 tipo,
                 monto,
               };
@@ -552,20 +553,43 @@
                  return supplier !== '' || (amount != null && amount !== '');
                });
 
-               invoices = dataRows.map((row, idx) => {
-                const isPaid = row.c?.[4]?.v === true;
-                return {
-                 id: idx + 1,
-                 supplier: row.c?.[0]?.v || '',
-                 amount: parseFloat(row.c?.[1]?.v || 0),
-                 issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
-                 payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
-                 isPaid,
-                 selected: false,
-                 partial: false,
-                 partialAmount: 0
-                };
-              });
+               // Necesitamos saber la fila real en la hoja.
+               // Si tu hoja tiene encabezados en fila 1, la primera fila de datos es la 2.
+               // Como ya manejás slice(1) cuando detecta encabezados, ajustamos con baseRow:
+               const hasHeader = (rows[0]?.c?.[1]?.v != null && isNaN(Number(rows[0].c[1].v)));
+               const baseRow = hasHeader ? 2 : 1;
+
+               // dataRowsRaw es el array original (sin filtrar vacías). Para preservar fila real,
+               // vamos a mapear usando su índice dentro de rows (no dentro de dataRows filtradas).
+               const rowsForData = hasHeader ? rows.slice(1) : rows;
+
+               // Creamos una lista de objetos con su índice real
+               const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
+
+               // filtramos vacías pero conservando sheetRow
+               const dataIndexed = indexed.filter(({ r }) => {
+                 const supplier = (r.c?.[0]?.v ?? '').toString().trim();
+                 const amount = r.c?.[1]?.v;
+                 return supplier !== '' || (amount != null && amount !== '');
+               });
+
+               invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
+                 const isPaid = row.c?.[4]?.v === true;        // E: checkbox pagado
+                 const estado = (row.c?.[6]?.v ?? '').toString().trim(); // G: ESTADO
+                 return {
+                   id: idx + 1,
+                   sheetRow,                // ⭐ fila real para poder actualizar
+                   supplier: row.c?.[0]?.v || '',
+                   amount: parseFloat(row.c?.[1]?.v || 0),
+                   issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
+                   payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
+                   estado,
+                   isPaid,
+                   selected: false,
+                   partial: false,
+                   partialAmount: 0
+                 };
+               });
 
                 document.getElementById('configSection').style.display = 'none';
                 document.getElementById('stats').style.display = 'block';
