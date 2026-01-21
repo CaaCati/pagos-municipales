@@ -541,16 +541,13 @@
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
+               
+               // ✅ Forzamos: fila 1 = encabezados, datos empiezan en fila 2               
+               const baseRow = 2;
 
-               // Necesitamos saber la fila real en la hoja.
-               // Si tu hoja tiene encabezados en fila 1, la primera fila de datos es la 2.
-               // Como ya manejás slice(1) cuando detecta encabezados, ajustamos con baseRow:
-               const hasHeader = (rows[0]?.c?.[1]?.v != null && isNaN(Number(rows[0].c[1].v)));
-               const baseRow = hasHeader ? 2 : 1;
-
-               // dataRowsRaw es el array original (sin filtrar vacías). Para preservar fila real,
-               // vamos a mapear usando su índice dentro de rows (no dentro de dataRows filtradas).
-               const rowsForData = hasHeader ? rows.slice(1) : rows;
+               // GViz devuelve rows incluyendo la fila de encabezados como primera "row" en algunos casos,
+               // pero tu hoja real tiene encabezado fijo: tomamos datos desde la segunda.
+               const rowsForData = rows.slice(1);
 
                // Creamos una lista de objetos con su índice real
                const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
@@ -559,15 +556,15 @@
                const dataIndexed = indexed.filter(({ r }) => {
                  const supplier = (r.c?.[0]?.v ?? '').toString().trim();
                  const amount = r.c?.[1]?.v;
-                 return supplier !== '' || (amount != null && amount !== '');
+                 invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
                });
 
                invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
-                 const isPaid = row.c?.[4]?.v === true;        // E: checkbox pagado
-                 const estado = (row.c?.[6]?.v ?? '').toString().trim(); // G: ESTADO
+                 const isPaid = row.c?.[4]?.v === true;                 // E
+                 const estado = (row.c?.[6]?.v ?? '').toString().trim(); // G
                  return {
                    id: idx + 1,
-                   sheetRow,                // ⭐ fila real para poder actualizar
+                   sheetRow,
                    supplier: row.c?.[0]?.v || '',
                    amount: parseFloat(row.c?.[1]?.v || 0),
                    issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
@@ -705,4 +702,3 @@
     </script>
 </body>
 </html>
-
