@@ -541,15 +541,21 @@
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
+
+               // rows = json.table.rows;
+
+               // Detecta si la primera "fila" es el encabezado automático "Columna 1"
+               const firstCell = (rows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+               const isAutoHeader = firstCell === 'columna 1';
+
+               // Si hay encabezado automático, NO lo contamos como proveedor real
+               const rowsForData = isAutoHeader ? rows.slice(1) : rows;
                
-               // ✅ Forzamos: fila 1 = encabezados, datos empiezan en fila 2               
+               // IMPORTANTE: baseRow debe coincidir con la fila REAL del sheet donde empiezan datos
+               // En tu caso: fila 1 = encabezado, fila 2 = primer proveedor              
                const baseRow = 2;
 
-               // GViz devuelve rows incluyendo la fila de encabezados como primera "row" en algunos casos,
-               // pero tu hoja real tiene encabezado fijo: tomamos datos desde la segunda.
-               const rowsForData = rows.slice(1);
-
-               // Creamos una lista de objetos con su índice real
+               // Indexamos con fila real de Sheets
                const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
 
                // filtramos vacías pero conservando sheetRow
