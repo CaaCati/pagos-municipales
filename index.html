@@ -556,11 +556,11 @@
                const dataIndexed = indexed.filter(({ r }) => {
                  const supplier = (r.c?.[0]?.v ?? '').toString().trim();
                  const amount = r.c?.[1]?.v;
-                 invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
+                 return supplier !== '' || (amount != null && amount !== '');
                });
 
                invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
-                 const isPaid = row.c?.[4]?.v === true;                 // E
+                 const isPaid = row.c?.[4]?.v === true;                  // E
                  const estado = (row.c?.[6]?.v ?? '').toString().trim(); // G
                  return {
                    id: idx + 1,
