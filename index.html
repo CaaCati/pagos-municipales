@@ -315,10 +315,6 @@
                         <div class="stat-label">Deuda Total</div>
                         <div class="stat-value" id="totalDebt">$0</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Pendientes</div>
-                        <div class="stat-value" id="pendingCount">0</div>
-                    </div>
                     <div class="stat-card total">
                         <div class="stat-label">💳 Total a Pagar Hoy</div>
                         <div class="stat-value" id="todayTotal">$0</div>
@@ -698,7 +694,6 @@
             }, 0);
 
             document.getElementById('totalDebt').textContent = formatCurrency(totalDebt);
-            document.getElementById('pendingCount').textContent = pending.length;
             document.getElementById('todayTotal').textContent = formatCurrency(todayTotal);
         }
 
