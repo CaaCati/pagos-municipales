@@ -166,10 +166,9 @@
         }
 
         .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
-            margin-bottom: 15px;
         }
 
         .stat-card {
@@ -181,7 +180,6 @@
 
         .stat-card.total {
             background: linear-gradient(135deg, #c23616 0%, #8e44ad 100%);
-            grid-column: 1 / -1;
         }
 
         .stat-label {
