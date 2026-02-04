@@ -456,7 +456,7 @@
         }
 
         .movement-amount.positive {
-            color: #00d2d3;
+            color: #10ac84;
         }
 
         .movement-amount.negative {
@@ -789,8 +789,18 @@
                 updateStats();
 
             } catch (err) {
-                showError('Error al cargar. Verifica que la hoja sea pública y los datos sean correctos.');
-                console.error(err);
+                console.error('Error detallado al cargar proveedores:', err);
+                let errorMessage = 'Error al cargar proveedores. ';
+                
+                if (err.message && err.message.includes('Failed to fetch')) {
+                    errorMessage += 'Verifica tu conexión a internet y que el Sheet ID sea correcto.';
+                } else if (err.message && err.message.includes('JSON')) {
+                    errorMessage += 'La respuesta del Sheet no es válida. Verifica que la hoja "Deudas" exista y sea pública.';
+                } else {
+                    errorMessage += 'Verifica que la hoja sea pública (Compartir → Cualquiera con el enlace → Lector).';
+                }
+                
+                showError(errorMessage);
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
@@ -936,17 +946,19 @@
                     : saldosRows;
 
                 saldosDataRows.forEach(row => {
-                    const banco = row.c?.[0]?.v || '';
-                    const referencia = row.c?.[1]?.v || '';
+                    const banco = (row.c?.[0]?.v || '').toString().trim();
+                    const referencia = (row.c?.[1]?.v !== null && row.c?.[1]?.v !== undefined) 
+                        ? row.c[1].v.toString().trim() 
+                        : '';
                     const saldo = parseFloat(row.c?.[2]?.v || 0);
 
-                    if (banco || referencia) {
+                    if (banco || referencia || saldo !== 0) {
                         totalDisponible += saldo;
                         saldosHTML += `
                             <div class="balance-item">
                                 <div>
                                     <span class="balance-bank">${banco}</span>
-                                    <span class="balance-ref">${referencia}</span>
+                                    ${referencia ? `<span class="balance-ref">${referencia}</span>` : ''}
                                 </div>
                                 <div class="balance-amount">${formatCurrency(saldo)}</div>
                             </div>
@@ -1003,9 +1015,17 @@
                 document.getElementById('finanzasContainer').style.display = 'block';
 
             } catch (err) {
-                console.error(err);
+                console.error('Error detallado al cargar finanzas:', err);
                 const errorDiv = document.getElementById('finanzasError');
-                errorDiv.textContent = 'Error al cargar el estado financiero. Verifica que la hoja sea pública.';
+                
+                let errorMessage = 'Error al cargar estado financiero. ';
+                if (err.message && err.message.includes('Failed to fetch')) {
+                    errorMessage += 'Verifica tu conexión a internet.';
+                } else {
+                    errorMessage += 'Verifica que el Sheet "Estado Financiero" sea público (Compartir → Cualquiera con el enlace → Lector) y que las hojas "Saldos" y "Movimientos" existan.';
+                }
+                
+                errorDiv.textContent = errorMessage;
                 errorDiv.style.display = 'block';
             } finally {
                 document.getElementById('finanzasLoading').style.display = 'none';
