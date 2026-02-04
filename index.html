@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagos Proveedores</title>
+    <title>Sistema Municipal</title>
     <style>
         * {
             margin: 0;
@@ -15,12 +15,72 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 0;
+            padding-bottom: 80px;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* TABS NAVEGACIÓN */
+        .tabs-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+
+        .tabs {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            border: none;
+            background: white;
+            color: #999;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-top: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tab-icon {
+            font-size: 22px;
+        }
+
+        .tab.active {
+            color: #ff6b6b;
+            border-top: 3px solid #ff6b6b;
+            background: linear-gradient(to bottom, #fff5f5 0%, white 100%);
+        }
+
+        .tab:not(.active):hover {
+            background: #fafafa;
+        }
+
+        /* CONTENT SECTIONS */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .header {
@@ -31,10 +91,6 @@
             box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
-        .config-section {
-            display: none;
-        }
-
         h1 {
             color: #333;
             font-size: 24px;
@@ -42,10 +98,7 @@
         }
 
         .config-section {
-            background: #fff5f5;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            display: none;
         }
 
         .input-group {
@@ -248,23 +301,34 @@
             margin-top: 8px;
         }
 
-        .partial-input:focus {
-            outline: none;
-            border-color: #ff6b6b;
-        }
-
         .loading {
             text-align: center;
             padding: 40px;
             color: #666;
         }
 
+        .spinner {
+            border: 3px solid #ffe0e0;
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .error {
-            background: linear-gradient(135deg, #ffcccc 0%, #ffb3b3 100%);
-            color: #cc0000;
+            background: #ffe0e0;
+            color: #c23616;
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: none;
         }
 
         .empty-state {
@@ -274,190 +338,338 @@
         }
 
         .empty-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 60px;
+            margin-bottom: 15px;
+            opacity: 0.5;
         }
 
-        @media (max-width: 600px) {
-            .stats {
-                grid-template-columns: 1fr;
-            }
-            
-            .stat-card.total {
-                grid-column: 1;
-            }
+        .update-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* ESTADO FINANCIERO STYLES */
+        .balance-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .balance-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .balance-item:last-child {
+            border-bottom: none;
+        }
+
+        .balance-bank {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .balance-ref {
+            font-size: 12px;
+            color: #999;
+            margin-left: 8px;
+        }
+
+        .balance-amount {
+            font-weight: 700;
+            font-size: 16px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .total-disponible {
+            background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .total-disponible-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .total-disponible-value {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .movement-item {
+            padding: 15px;
+            border-bottom: 1px solid #ffe0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .movement-item:last-child {
+            border-bottom: none;
+        }
+
+        .movement-info {
+            flex: 1;
+        }
+
+        .movement-desc {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .movement-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .movement-amount {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .movement-amount.positive {
+            color: #00d2d3;
+        }
+
+        .movement-amount.negative {
+            color: #ff6b6b;
+        }
+
+        .refresh-btn {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b 0%, transparent 100%);
+            margin: 20px 0;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💰 Pagos Proveedores</h1>
-            
-            <div class="config-section" id="configSection">
-                <div class="input-group">
-                    <label>ID de Google Sheet</label>
-                    <input type="text" id="sheetId" placeholder="Ejemplo: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
-                    <div class="help-text">Está en la URL después de /d/</div>
-                </div>
-                
-                <div class="input-group">
-                    <label>Nombre de la Hoja</label>
-                    <input type="text" id="sheetName" placeholder="Hoja 1" value="Hoja 1">
-                </div>
-                
-                <button onclick="loadInvoices()" id="loadBtn">Cargar Facturas</button>
-            </div>
+    <!-- TABS NAVEGACIÓN -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('proveedores')">
+                <div class="tab-icon">🏦</div>
+                <div>Proveedores</div>
+            </button>
+            <button class="tab" onclick="switchTab('finanzas')">
+                <div class="tab-icon">💰</div>
+                <div>Finanzas</div>
+            </button>
+        </div>
+    </div>
 
-            <div id="stats" style="display: none;">
-                <div class="stats">
+    <!-- CONTENIDO PROVEEDORES -->
+    <div id="proveedores-content" class="tab-content active">
+        <div class="container">
+            <div class="header">
+                <h1>💳 Pagos Proveedores</h1>
+                
+                <div id="configSection" class="config-section">
+                    <div class="input-group">
+                        <label>ID de la Hoja de Cálculo</label>
+                        <input type="text" id="sheetId" placeholder="ID del Google Sheet">
+                        <div class="help-text">Ejemplo: 1abc...xyz</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Nombre de la Pestaña</label>
+                        <input type="text" id="sheetName" value="Deudas">
+                    </div>
+                    <button onclick="loadInvoices()">📊 Cargar Datos</button>
+                </div>
+
+                <div id="stats" class="stats" style="display: none;">
                     <div class="stat-card">
                         <div class="stat-label">Deuda Total</div>
                         <div class="stat-value" id="totalDebt">$0</div>
                     </div>
-                    <div class="stat-card total">
-                        <div class="stat-label">💳 Total a Pagar Hoy</div>
+                    <div class="stat-card">
+                        <div class="stat-label">A Pagar Hoy</div>
                         <div class="stat-value" id="todayTotal">$0</div>
                     </div>
-
-                    <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
-                      🧾 Registrar pago de hoy
-                    </button>
-
-                    <div id="sheetUpdate" style="
-                         text-align:center;
-                         margin-top:8px;
-                         font-size:13px;
-                         color:#cc0000;
-                         opacity:0.85;
-                    ">
-                         Última actualización: —
+                    <div class="stat-card total">
+                        <button id="registerBtn" onclick="registerPayments()">💸 Registrar Pagos</button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div id="error" class="error" style="display: none;"></div>
-        <div id="loading" class="loading" style="display: none;">Cargando facturas...</div>
-        
-        <div class="invoices-container" id="invoicesContainer">
-            <div class="empty-state">
-                <div class="empty-icon">📋</div>
-                <p>Configura tu Google Sheet para comenzar</p>
+                <div class="update-time" id="sheetUpdate">Última actualización: —</div>
+            </div>
+
+            <div id="error" class="error"></div>
+
+            <div id="loading" class="loading" style="display: block;">
+                <div class="spinner"></div>
+                <div>Cargando facturas...</div>
+            </div>
+
+            <div id="invoicesContainer" class="invoices-container"></div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO FINANZAS -->
+    <div id="finanzas-content" class="tab-content">
+        <div class="container">
+            <div class="header">
+                <h1>💰 Estado Financiero</h1>
+                <div class="update-time" id="finanzasUpdate">Última actualización: —</div>
+            </div>
+
+            <div id="finanzasError" class="error"></div>
+
+            <div id="finanzasLoading" class="loading" style="display: block;">
+                <div class="spinner"></div>
+                <div>Cargando estado financiero...</div>
+            </div>
+
+            <div id="finanzasContainer" style="display: none;">
+                <!-- TOTAL DISPONIBLE -->
+                <div class="total-disponible">
+                    <div class="total-disponible-label">TOTAL DISPONIBLE</div>
+                    <div class="total-disponible-value" id="totalDisponible">$ 0,00</div>
+                </div>
+
+                <!-- SALDOS POR BANCO -->
+                <div class="balance-section">
+                    <div class="balance-title">🏦 Saldos por Cuenta</div>
+                    <div id="saldosContainer"></div>
+                </div>
+
+                <!-- MOVIMIENTOS DEL DÍA -->
+                <div class="balance-section">
+                    <div class="balance-title">📊 Movimientos del Día</div>
+                    <div id="movimientosContainer"></div>
+                </div>
+
+                <button class="refresh-btn" onclick="loadFinanzas()">🔄 Actualizar Datos</button>
             </div>
         </div>
     </div>
 
     <script>
-        let invoices = [];
-        const SHEET_ID = '17EPXK3fUPbCeoditXmqxq8Fn4-d40bh6HV7sQOn1kBo';
+        // CONFIGURACIÓN PROVEEDORES
+        const SHEET_ID = '1oKRfpA_0N81xCN-kTZhM1D1PFPLQqUz_N3B-jbR5qFM';
         const SHEET_NAME = 'Deudas';
-        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyMWRuu8nrrrGMGFjmU_jaNtnhVSGWCa204H5tsa-5fVuHSKTSaI3Mx2j634_sbk0OxRw/exec';
+        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby8iEPqZ7xWZxTZ0vPLiE80_RH8a7BZt71LWmUAJ8d_AijkNGC0I-yCPLpvBKaWr40/exec';
 
+        // CONFIGURACIÓN FINANZAS
+        const FINANZAS_SHEET_ID = '1gt8VMJGb4OLt3XGA6vOGOqQUAxvclG6hAwfEL7dDobk';
+        const FINANZAS_WEBAPP_URL = 'TU_WEBAPP_URL_FINANZAS_AQUI'; // Lo agregarás después
+
+        let invoices = [];
+        let currentTab = 'proveedores';
+
+        // ============ NAVEGACIÓN TABS ============
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            // Actualizar tabs activas
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+
+            // Mostrar contenido correspondiente
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tabName === 'proveedores') {
+                document.getElementById('proveedores-content').classList.add('active');
+            } else if (tabName === 'finanzas') {
+                document.getElementById('finanzas-content').classList.add('active');
+                loadFinanzas();
+            }
+        }
+
+        // ============ FUNCIONES PROVEEDORES ============
         function formatCurrency(amount) {
             return new Intl.NumberFormat('es-AR', {
                 style: 'currency',
                 currency: 'ARS',
-                minimumFractionDigits: 0
+                minimumFractionDigits: 2
             }).format(amount);
         }
 
-        function formatDate(value) {
-          if (!value || value === '-') return '-';
-
-          // 1) Si ya es Date real
-          if (value instanceof Date) {
-            return value.toLocaleDateString('es-AR');
-          }
-
-          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
-          if (typeof value === 'string') {
-            const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
-            if (m) {
-              const y = Number(m[1]);
-              const mo = Number(m[2]); // 0-11
-              const d = Number(m[3]);
-              const hh = Number(m[4] || 0);
-              const mm = Number(m[5] || 0);
-              const ss = Number(m[6] || 0);
-              const dt = new Date(y, mo, d, hh, mm, ss);
-              return dt.toLocaleDateString('es-AR');
-           }
-         }
-
-         // 3) Si viene como string "DD/MM/AAAA" o "DD-MM-AAAA"
-         if (typeof value === 'string') {
-           const s = value.trim();
-
-           // DD/MM/YYYY o DD-MM-YYYY
-           let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-           if (m) {
-             const dd = Number(m[1]);
-             const mm = Number(m[2]);
-             const yyyy = Number(m[3]);
-             const dt = new Date(yyyy, mm - 1, dd);
-             return isNaN(dt) ? '-' : dt.toLocaleDateString('es-AR');
-         }
-
-         // YYYY-MM-DD (por si alguna vez llega así)
-         m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-         if (m) {
-           const yyyy = Number(m[1]);
-           const mm = Number(m[2]);
-           const dd = Number(m[3]);
-           const dt = new Date(yyyy, mm - 1, dd);
-           return isNaN(dt) ? '-' : dt.toLocaleDateString('es-AR');
-         }
-       }
-
-       // 4) Fallback: si no lo entendemos, devolvemos tal cual (mejor que Invalid Date)
-       return String(value);
-     }
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr === '-') return '-';
+            const date = new Date(dateStr);
+            if (isNaN(date)) return dateStr;
+            return date.toLocaleDateString('es-AR');
+        }
 
         function parseGvizDate(v) {
           if (!v) return null;
-          if (v instanceof Date) return v;
-
-          if (typeof v === "string") {
-            const m = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
-            if (m) {
-              const y = Number(m[1]);
-              const mo = Number(m[2]);
-              const d = Number(m[3]);
-              const hh = Number(m[4] || 0);
-              const mm = Number(m[5] || 0);
-              const ss = Number(m[6] || 0);
-              return new Date(y, mo, d, hh, mm, ss);
+          if (v.startsWith?.('Date(')) {
+            const match = v.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+            if (match) {
+              return new Date(
+                Number(match[1]),
+                Number(match[2]),
+                Number(match[3]),
+                Number(match[4]),
+                Number(match[5]),
+                Number(match[6])
+              );
             }
-
-            const d2 = new Date(v);
-            return isNaN(d2) ? null : d2;
           }
-
-          return null;
+          return new Date(v);
         }
 
-        async function registerTodayPayments() {
-          const items = invoices
-            .filter(inv => !inv.isPaid)
-            .map(inv => {
-              let monto = 0;
-              let tipo = '';
-              if (inv.selected) { monto = inv.amount; tipo = 'COMPLETO'; }
-              else if (inv.partial && (inv.partialAmount || 0) > 0) { monto = inv.partialAmount; tipo = 'PARCIAL'; }
-              else return null;
+        async function registerPayments() {
+          const items = [];
 
-              return {
-                  sheetRow: inv.sheetRow,
-                  proveedor: inv.supplier || '',
-                tipo,
-                monto,
-              };
-            })
-            .filter(Boolean);
+          invoices.forEach(inv => {
+            if (inv.selected) {
+              items.push({
+                sheetRow: inv.sheetRow,
+                proveedor: inv.supplier,
+                tipo: "COMPLETO",
+                monto: inv.amount
+              });
+            } else if (inv.partial && inv.partialAmount > 0) {
+              items.push({
+                sheetRow: inv.sheetRow,
+                proveedor: inv.supplier,
+                tipo: "PARCIAL",
+                monto: inv.partialAmount
+              });
+            }
+          });
 
-          if (items.length === 0) {
-            alert('No hay pagos seleccionados para registrar hoy.');
+          if (!items.length) {
+            alert("⚠️ No hay pagos seleccionados.");
             return;
           }
 
@@ -538,23 +750,15 @@
 
                 const rows = json.table.rows;
 
-               // rows = json.table.rows;
-
-               // Detecta si la primera "fila" es el encabezado automático "Columna 1"
                const firstCell = (rows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
                const isAutoHeader = firstCell === 'columna 1';
 
-               // Si hay encabezado automático, NO lo contamos como proveedor real
                const rowsForData = isAutoHeader ? rows.slice(1) : rows;
                
-               // IMPORTANTE: baseRow debe coincidir con la fila REAL del sheet donde empiezan datos
-               // En tu caso: fila 1 = encabezado, fila 2 = primer proveedor              
                const baseRow = 2;
 
-               // Indexamos con fila real de Sheets
                const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
 
-               // filtramos vacías pero conservando sheetRow
                const dataIndexed = indexed.filter(({ r }) => {
                  const supplier = (r.c?.[0]?.v ?? '').toString().trim();
                  const amount = r.c?.[1]?.v;
@@ -562,8 +766,8 @@
                });
 
                invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
-                 const isPaid = row.c?.[4]?.v === true;                  // E
-                 const estado = (row.c?.[6]?.v ?? '').toString().trim(); // G
+                 const isPaid = row.c?.[4]?.v === true;
+                 const estado = (row.c?.[6]?.v ?? '').toString().trim();
                  return {
                    id: idx + 1,
                    sheetRow,
@@ -697,6 +901,118 @@
             document.getElementById('todayTotal').textContent = formatCurrency(todayTotal);
         }
 
+        // ============ FUNCIONES FINANZAS ============
+        async function loadFinanzas() {
+            document.getElementById('finanzasLoading').style.display = 'block';
+            document.getElementById('finanzasError').style.display = 'none';
+            document.getElementById('finanzasContainer').style.display = 'none';
+
+            try {
+                // Cargar SALDOS
+                const saldosUrl = `https://docs.google.com/spreadsheets/d/${FINANZAS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Saldos`;
+                const saldosResponse = await fetch(saldosUrl);
+                const saldosText = await saldosResponse.text();
+                const saldosStart = saldosText.indexOf('(');
+                const saldosEnd = saldosText.lastIndexOf(');');
+                const saldosJson = JSON.parse(saldosText.substring(saldosStart + 1, saldosEnd));
+
+                // Cargar MOVIMIENTOS
+                const movimientosUrl = `https://docs.google.com/spreadsheets/d/${FINANZAS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Movimientos`;
+                const movimientosResponse = await fetch(movimientosUrl);
+                const movimientosText = await movimientosResponse.text();
+                const movimientosStart = movimientosText.indexOf('(');
+                const movimientosEnd = movimientosText.lastIndexOf(');');
+                const movimientosJson = JSON.parse(movimientosText.substring(movimientosStart + 1, movimientosEnd));
+
+                // Procesar SALDOS
+                const saldosRows = saldosJson.table.rows;
+                let totalDisponible = 0;
+                let saldosHTML = '';
+
+                // Saltar el encabezado si existe
+                const firstSaldoCell = (saldosRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const saldosDataRows = (firstSaldoCell === 'banco' || firstSaldoCell === 'columna 1') 
+                    ? saldosRows.slice(1) 
+                    : saldosRows;
+
+                saldosDataRows.forEach(row => {
+                    const banco = row.c?.[0]?.v || '';
+                    const referencia = row.c?.[1]?.v || '';
+                    const saldo = parseFloat(row.c?.[2]?.v || 0);
+
+                    if (banco || referencia) {
+                        totalDisponible += saldo;
+                        saldosHTML += `
+                            <div class="balance-item">
+                                <div>
+                                    <span class="balance-bank">${banco}</span>
+                                    <span class="balance-ref">${referencia}</span>
+                                </div>
+                                <div class="balance-amount">${formatCurrency(saldo)}</div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // Procesar MOVIMIENTOS
+                const movimientosRows = movimientosJson.table.rows;
+                let movimientosHTML = '';
+
+                // Saltar el encabezado si existe
+                const firstMovCell = (movimientosRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const movimientosDataRows = (firstMovCell === 'fecha' || firstMovCell === 'columna 1') 
+                    ? movimientosRows.slice(1) 
+                    : movimientosRows;
+
+                movimientosDataRows.forEach(row => {
+                    const fecha = row.c?.[0]?.f || row.c?.[0]?.v || '';
+                    const monto = parseFloat(row.c?.[1]?.v || 0);
+                    const descripcion = row.c?.[2]?.v || '';
+
+                    if (descripcion) {
+                        const isPositive = monto >= 0;
+                        movimientosHTML += `
+                            <div class="movement-item">
+                                <div class="movement-info">
+                                    <div class="movement-desc">${descripcion}</div>
+                                    <div class="movement-date">${formatDate(fecha)}</div>
+                                </div>
+                                <div class="movement-amount ${isPositive ? 'positive' : 'negative'}">
+                                    ${formatCurrency(Math.abs(monto))}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // Actualizar UI
+                document.getElementById('totalDisponible').textContent = formatCurrency(totalDisponible);
+                document.getElementById('saldosContainer').innerHTML = saldosHTML || '<div class="empty-state"><p>No hay saldos registrados</p></div>';
+                document.getElementById('movimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><p>No hay movimientos del día</p></div>';
+
+                document.getElementById('finanzasUpdate').textContent = 
+                    'Última actualización: ' + new Date().toLocaleString('es-AR', {
+                        hour12: false,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                document.getElementById('finanzasContainer').style.display = 'block';
+
+            } catch (err) {
+                console.error(err);
+                const errorDiv = document.getElementById('finanzasError');
+                errorDiv.textContent = 'Error al cargar el estado financiero. Verifica que la hoja sea pública.';
+                errorDiv.style.display = 'block';
+            } finally {
+                document.getElementById('finanzasLoading').style.display = 'none';
+            }
+        }
+
+        // ============ INICIALIZACIÓN ============
         window.addEventListener('load', () => {
             loadInvoices();
         });
