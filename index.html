@@ -91,6 +91,10 @@
             box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
+        .config-section {
+            display: none;
+        }
+
         h1 {
             color: #333;
             font-size: 24px;
@@ -98,7 +102,10 @@
         }
 
         .config-section {
-            display: none;
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
         .input-group {
@@ -162,7 +169,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
         .stat-card {
@@ -301,6 +308,11 @@
             margin-top: 8px;
         }
 
+        .partial-input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -323,12 +335,11 @@
         }
 
         .error {
-            background: #ffe0e0;
-            color: #c23616;
+            background: linear-gradient(135deg, #ffcccc 0%, #ffb3b3 100%);
+            color: #cc0000;
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
+            margin-bottom: 15px;
         }
 
         .empty-state {
@@ -338,15 +349,8 @@
         }
 
         .empty-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .update-time {
-            font-size: 11px;
-            color: #999;
-            margin-top: 10px;
+            font-size: 48px;
+            margin-bottom: 10px;
         }
 
         /* ESTADO FINANCIERO STYLES */
@@ -469,24 +473,17 @@
             font-size: 13px;
             margin-top: 10px;
         }
-
-        .section-divider {
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b 0%, transparent 100%);
-            margin: 20px 0;
-            border-radius: 2px;
-        }
     </style>
 </head>
 <body>
     <!-- TABS NAVEGACIÓN -->
     <div class="tabs-container">
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('proveedores')">
+            <button class="tab active" onclick="switchTab('proveedores', event)">
                 <div class="tab-icon">🏦</div>
                 <div>Proveedores</div>
             </button>
-            <button class="tab" onclick="switchTab('finanzas')">
+            <button class="tab" onclick="switchTab('finanzas', event)">
                 <div class="tab-icon">💰</div>
                 <div>Finanzas</div>
             </button>
@@ -499,37 +496,32 @@
             <div class="header">
                 <h1>💳 Pagos Proveedores</h1>
                 
-                <div id="configSection" class="config-section">
-                    <div class="input-group">
-                        <label>ID de la Hoja de Cálculo</label>
-                        <input type="text" id="sheetId" placeholder="ID del Google Sheet">
-                        <div class="help-text">Ejemplo: 1abc...xyz</div>
-                    </div>
-                    <div class="input-group">
-                        <label>Nombre de la Pestaña</label>
-                        <input type="text" id="sheetName" value="Deudas">
-                    </div>
-                    <button onclick="loadInvoices()">📊 Cargar Datos</button>
-                </div>
+                <div id="stats" style="display: none;">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Deuda Total</div>
+                            <div class="stat-value" id="totalDebt">$0</div>
+                        </div>
+                        <div class="stat-card total">
+                            <div class="stat-label">💳 Total a Pagar Hoy</div>
+                            <div class="stat-value" id="todayTotal">$0</div>
+                        </div>
 
-                <div id="stats" class="stats" style="display: none;">
-                    <div class="stat-card">
-                        <div class="stat-label">Deuda Total</div>
-                        <div class="stat-value" id="totalDebt">$0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">A Pagar Hoy</div>
-                        <div class="stat-value" id="todayTotal">$0</div>
-                    </div>
-                    <div class="stat-card total">
-                        <button id="registerBtn" onclick="registerPayments()">💸 Registrar Pagos</button>
+                        <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
+                          🧾 Registrar pago de hoy
+                        </button>
+
+                        <div id="sheetUpdate" style="
+                             text-align:center;
+                             margin-top:8px;
+                             font-size:13px;
+                             color:#999;">
+                        </div>
                     </div>
                 </div>
-
-                <div class="update-time" id="sheetUpdate">Última actualización: —</div>
             </div>
 
-            <div id="error" class="error"></div>
+            <div id="error" class="error" style="display: none;"></div>
 
             <div id="loading" class="loading" style="display: block;">
                 <div class="spinner"></div>
@@ -545,10 +537,10 @@
         <div class="container">
             <div class="header">
                 <h1>💰 Estado Financiero</h1>
-                <div class="update-time" id="finanzasUpdate">Última actualización: —</div>
+                <div style="text-align:center; margin-top:8px; font-size:13px; color:#999;" id="finanzasUpdate">Última actualización: —</div>
             </div>
 
-            <div id="finanzasError" class="error"></div>
+            <div id="finanzasError" class="error" style="display: none;"></div>
 
             <div id="finanzasLoading" class="loading" style="display: block;">
                 <div class="spinner"></div>
@@ -580,20 +572,18 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN PROVEEDORES
-        const SHEET_ID = '1oKRfpA_0N81xCN-kTZhM1D1PFPLQqUz_N3B-jbR5qFM';
+        let invoices = [];
+        const SHEET_ID = '17EPXK3fUPbCeoditXmqxq8Fn4-d40bh6HV7sQOn1kBo';
         const SHEET_NAME = 'Deudas';
-        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby8iEPqZ7xWZxTZ0vPLiE80_RH8a7BZt71LWmUAJ8d_AijkNGC0I-yCPLpvBKaWr40/exec';
-
+        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyMWRuu8nrrrGMGFjmU_jaNtnhVSGWCa204H5tsa-5fVuHSKTSaI3Mx2j634_sbk0OxRw/exec';
+        
         // CONFIGURACIÓN FINANZAS
         const FINANZAS_SHEET_ID = '1gt8VMJGb4OLt3XGA6vOGOqQUAxvclG6hAwfEL7dDobk';
-        const FINANZAS_WEBAPP_URL = 'TU_WEBAPP_URL_FINANZAS_AQUI'; // Lo agregarás después
 
-        let invoices = [];
         let currentTab = 'proveedores';
 
         // ============ NAVEGACIÓN TABS ============
-        function switchTab(tabName) {
+        function switchTab(tabName, event) {
             currentTab = tabName;
             
             // Actualizar tabs activas
@@ -613,20 +603,45 @@
             }
         }
 
-        // ============ FUNCIONES PROVEEDORES ============
+        // ============ FUNCIONES PROVEEDORES (ORIGINALES) ============
         function formatCurrency(amount) {
             return new Intl.NumberFormat('es-AR', {
                 style: 'currency',
                 currency: 'ARS',
-                minimumFractionDigits: 2
+                minimumFractionDigits: 0
             }).format(amount);
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr || dateStr === '-') return '-';
-            const date = new Date(dateStr);
-            if (isNaN(date)) return dateStr;
-            return date.toLocaleDateString('es-AR');
+        function formatDate(value) {
+          if (!value || value === '-') return '-';
+
+          // 1) Si ya es Date real
+          if (value instanceof Date) {
+            return value.toLocaleDateString('es-AR');
+          }
+
+          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
+          if (typeof value === 'string') {
+            const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (m) {
+              const y = Number(m[1]);
+              const mo = Number(m[2]); // 0-11
+              const d = Number(m[3]);
+              const hh = Number(m[4] || 0);
+              const mm = Number(m[5] || 0);
+              const ss = Number(m[6] || 0);
+              const dateObj = new Date(y, mo, d, hh, mm, ss);
+              return dateObj.toLocaleDateString('es-AR');
+            }
+          }
+
+          // 3) Intento crear Date genérico
+          const fallbackDate = new Date(value);
+          if (!isNaN(fallbackDate.getTime())) {
+            return fallbackDate.toLocaleDateString('es-AR');
+          }
+
+          return String(value);
         }
 
         function parseGvizDate(v) {
@@ -647,7 +662,7 @@
           return new Date(v);
         }
 
-        async function registerPayments() {
+        async function registerTodayPayments() {
           const items = [];
 
           invoices.forEach(inv => {
@@ -716,7 +731,6 @@
 
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
-            document.getElementById('configSection').style.display = 'none';
 
             try {
                 const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
@@ -783,24 +797,13 @@
                  };
                });
 
-                document.getElementById('configSection').style.display = 'none';
                 document.getElementById('stats').style.display = 'block';
                 renderInvoices();
                 updateStats();
 
             } catch (err) {
-                console.error('Error detallado al cargar proveedores:', err);
-                let errorMessage = 'Error al cargar proveedores. ';
-                
-                if (err.message && err.message.includes('Failed to fetch')) {
-                    errorMessage += 'Verifica tu conexión a internet y que el Sheet ID sea correcto.';
-                } else if (err.message && err.message.includes('JSON')) {
-                    errorMessage += 'La respuesta del Sheet no es válida. Verifica que la hoja "Deudas" exista y sea pública.';
-                } else {
-                    errorMessage += 'Verifica que la hoja sea pública (Compartir → Cualquiera con el enlace → Lector).';
-                }
-                
-                showError(errorMessage);
+                showError('Error al cargar. Verifica que la hoja sea pública y los datos sean correctos.');
+                console.error(err);
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
@@ -1015,17 +1018,9 @@
                 document.getElementById('finanzasContainer').style.display = 'block';
 
             } catch (err) {
-                console.error('Error detallado al cargar finanzas:', err);
+                console.error('Error al cargar finanzas:', err);
                 const errorDiv = document.getElementById('finanzasError');
-                
-                let errorMessage = 'Error al cargar estado financiero. ';
-                if (err.message && err.message.includes('Failed to fetch')) {
-                    errorMessage += 'Verifica tu conexión a internet.';
-                } else {
-                    errorMessage += 'Verifica que el Sheet "Estado Financiero" sea público (Compartir → Cualquiera con el enlace → Lector) y que las hojas "Saldos" y "Movimientos" existan.';
-                }
-                
-                errorDiv.textContent = errorMessage;
+                errorDiv.textContent = 'Error al cargar estado financiero. Verifica que el Sheet "Estado Financiero" sea público.';
                 errorDiv.style.display = 'block';
             } finally {
                 document.getElementById('finanzasLoading').style.display = 'none';
