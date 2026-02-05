@@ -1016,6 +1016,10 @@
                     }
                 });
 
+                // 👇 PEGAR JUSTO ACÁ
+                document.getElementById('saldosContainer').innerHTML = saldosHTML;
+                document.getElementById('movimientosContainer').innerHTML = movimientosHTML;
+                document.getElementById('totalDisponible').textContent = formatCurrency(totalDisponible);
                 document.getElementById('finanzasContainer').style.display = 'block';
 
             } catch (err) {
