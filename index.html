@@ -934,6 +934,25 @@
                 const movimientosEnd = movimientosText.lastIndexOf(');');
                 const movimientosJson = JSON.parse(movimientosText.substring(movimientosStart + 1, movimientosEnd));
 
+                // Obtener última actualización de D1 (columna 3, índice 0-based)
+                let lastUpdateCell = null;
+                if (saldosJson.table.rows.length > 0) {
+                    lastUpdateCell = saldosJson.table.rows[0]?.c?.[3]?.v; // D1 = índice 3
+                }
+
+                const fechaFinanzas = parseGvizDate(lastUpdateCell);
+                document.getElementById('finanzasUpdate').textContent =
+                    fechaFinanzas
+                        ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR', {
+                            hour12: false,
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })
+                        : 'Última actualización: —';
+
                 // Procesar SALDOS
                 const saldosRows = saldosJson.table.rows;
                 let totalDisponible = 0;
@@ -996,21 +1015,6 @@
                         `;
                     }
                 });
-
-                // Actualizar UI
-                document.getElementById('totalDisponible').textContent = formatCurrency(totalDisponible);
-                document.getElementById('saldosContainer').innerHTML = saldosHTML || '<div class="empty-state"><p>No hay saldos registrados</p></div>';
-                document.getElementById('movimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><p>No hay movimientos del día</p></div>';
-
-                document.getElementById('finanzasUpdate').textContent = 
-                    'Última actualización: ' + new Date().toLocaleString('es-AR', {
-                        hour12: false,
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
 
                 document.getElementById('finanzasContainer').style.display = 'block';
 
