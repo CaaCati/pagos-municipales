@@ -597,7 +597,6 @@
                 document.getElementById('proveedores-content').classList.add('active');
             } else if (tabName === 'finanzas') {
                 document.getElementById('finanzas-content').classList.add('active');
-                loadFinanzas();
             }
         }
 
@@ -1028,6 +1027,7 @@
         // ============ INICIALIZACIÓN ============
         window.addEventListener('load', () => {
             loadInvoices();
+            loadFinanzas();
         });
     </script>
 </body>
