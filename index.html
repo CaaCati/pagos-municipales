@@ -612,33 +612,28 @@
         function formatDate(value) {
           if (!value || value === '-') return '-';
 
-          // 1) Si ya es Date real
+          // Caso 1: Date real
           if (value instanceof Date) {
             return value.toLocaleDateString('es-AR');
           }
 
-          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
+          // Caso 2: GViz Date(yyyy,mm,dd,...)
           if (typeof value === 'string') {
-            const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
-            if (m) {
-              const y = Number(m[1]);
-              const mo = Number(m[2]); // 0-11
-              const d = Number(m[3]);
-              const hh = Number(m[4] || 0);
-              const mm = Number(m[5] || 0);
-              const ss = Number(m[6] || 0);
-              const dateObj = new Date(y, mo, d, hh, mm, ss);
-              return dateObj.toLocaleDateString('es-AR');
+            const gvizMatch = value.match(/Date\((\d+),(\d+),(\d+)/);
+            if (gvizMatch) {
+              const y = Number(gvizMatch[1]);
+              const m = Number(gvizMatch[2]);
+              const d = Number(gvizMatch[3]);
+              return new Date(y, m, d).toLocaleDateString('es-AR');
+            }
+
+            // Caso 3: string tipo DD/MM/YYYY → usar tal cual
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+              return value;
             }
           }
 
-          // 3) Intento crear Date genérico
-          const fallbackDate = new Date(value);
-          if (!isNaN(fallbackDate.getTime())) {
-            return fallbackDate.toLocaleDateString('es-AR');
-          }
-
-          return String(value);
+          return '-';
         }
 
         function parseGvizDate(v) {
