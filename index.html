@@ -746,7 +746,7 @@
 
                 document.getElementById('sheetUpdate').textContent =
                   fecha
-                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', {
+                    ? 'Última actualización: ' + fecha.toLocaleDateString('es-AR'), {
                         hour12: false,
                         year: 'numeric',
                         month: '2-digit',
@@ -940,7 +940,7 @@
                 const fechaFinanzas = parseGvizDate(lastUpdateCell);
                 document.getElementById('finanzasUpdate').textContent =
                     fechaFinanzas
-                        ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR', {
+                        ? 'Última actualización: ' + fechaFinanzas.toLocaleDateString('es-AR'), {
                             hour12: false,
                             year: 'numeric',
                             month: '2-digit',
