@@ -639,10 +639,18 @@
         function parseGvizDate(v) {
           if (!v) return null;
 
-          // GViz: Date(yyyy,mm,dd,...)
+          // GViz: Date(yyyy,mm,dd,hh,mm,ss)
           if (typeof v === 'string' && v.startsWith('Date(')) {
-            const m = v.match(/Date\((\d+),(\d+),(\d+)/);
-            if (m) return new Date(+m[1], +m[2], +m[3]);
+            const m = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (m) {
+              const year = +m[1];
+              const month = +m[2];
+              const day = +m[3];
+              const hours = m[4] ? +m[4] : 0;
+              const minutes = m[5] ? +m[5] : 0;
+              const seconds = m[6] ? +m[6] : 0;
+              return new Date(year, month, day, hours, minutes, seconds);
+            }
           }
 
           // String DD/MM/YYYY
@@ -654,7 +662,7 @@
           // ISO / Date real
           const d = new Date(v);
           return isNaN(d) ? null : d;
-       }
+        }
 
         async function registerTodayPayments() {
           const items = [];
