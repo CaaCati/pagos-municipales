@@ -754,7 +754,13 @@
 
                 document.getElementById('sheetUpdate').textContent =
                   fecha
-                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR')
+                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', { 
+                        day: '2-digit', 
+                        month: '2-digit', 
+                        year: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
@@ -941,7 +947,13 @@
                 const fechaFinanzas = parseGvizDate(lastUpdateCell);
                 document.getElementById('finanzasUpdate').textContent =
                     fechaFinanzas
-                        ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR')
+                        ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR', { 
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric', 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })
                         : 'Última actualización: —';
 
                 // Procesar SALDOS
