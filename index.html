@@ -483,24 +483,23 @@
         .hide-amounts .balance-amount,
         .hide-amounts .total-disponible-value,
         .hide-amounts .movement-amount {
-            color: transparent !important;
-            background: #e0e0e0 !important;
-            -webkit-background-clip: unset !important;
-            -webkit-text-fill-color: #999 !important;
-            background-clip: unset !important;
-            user-select: none;
+            visibility: hidden !important;
+            position: relative !important;
         }
 
-        .hide-amounts .stat-value::before,
-        .hide-amounts .invoice-amount::before,
-        .hide-amounts .balance-amount::before,
-        .hide-amounts .total-disponible-value::before,
-        .hide-amounts .movement-amount::before {
+        .hide-amounts .stat-value::after,
+        .hide-amounts .invoice-amount::after,
+        .hide-amounts .balance-amount::after,
+        .hide-amounts .total-disponible-value::after,
+        .hide-amounts .movement-amount::after {
             content: '••••••';
-            color: #999;
+            visibility: visible;
             position: absolute;
             left: 0;
             top: 0;
+            color: #999;
+            font-weight: bold;
+            font-size: 20px;
         }
 
         .toggle-amounts-btn {
