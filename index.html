@@ -191,6 +191,7 @@
         .stat-value {
             font-size: 24px;
             font-weight: bold;
+            position: relative;
         }
 
         .invoices-container {
@@ -266,6 +267,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
+            position: relative;
         }
 
         .invoice-actions {
@@ -357,7 +359,7 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(15, 188, 249, 0.35);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
         .balance-title {
@@ -397,10 +399,11 @@
         .balance-amount {
             font-weight: 700;
             font-size: 16px;
-            background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            position: relative;
         }
 
         .total-disponible {
@@ -422,6 +425,7 @@
         .total-disponible-value {
             font-size: 32px;
             font-weight: 800;
+            position: relative;
         }
 
         .movement-item {
@@ -455,6 +459,7 @@
         .movement-amount {
             font-weight: 700;
             font-size: 16px;
+            position: relative;
         }
 
         .movement-amount.positive {
@@ -471,9 +476,61 @@
             font-size: 13px;
             margin-top: 10px;
         }
+
+        /* OCULTAR MONTOS */
+        .hide-amounts .stat-value,
+        .hide-amounts .invoice-amount,
+        .hide-amounts .balance-amount,
+        .hide-amounts .total-disponible-value,
+        .hide-amounts .movement-amount {
+            color: transparent !important;
+            background: #e0e0e0 !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #999 !important;
+            background-clip: unset !important;
+            user-select: none;
+        }
+
+        .hide-amounts .stat-value::before,
+        .hide-amounts .invoice-amount::before,
+        .hide-amounts .balance-amount::before,
+        .hide-amounts .total-disponible-value::before,
+        .hide-amounts .movement-amount::before {
+            content: '••••••';
+            color: #999;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .toggle-amounts-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 999;
+            transition: all 0.3s;
+            width: auto;
+        }
+
+        .toggle-amounts-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
+    <!-- Botón para ocultar/mostrar montos -->
+    <button class="toggle-amounts-btn" onclick="toggleAmounts()" id="toggleBtn">
+        👁️
+    </button>
+
     <!-- TABS NAVEGACIÓN -->
     <div class="tabs-container">
         <div class="tabs">
@@ -579,6 +636,21 @@
         const FINANZAS_SHEET_ID = '1gt8VMJGb4OLt3XGA6vOGOqQUAxvclG6hAwfEL7dDobk';
 
         let currentTab = 'proveedores';
+        let amountsHidden = true; // Empezar con montos ocultos
+
+        // ============ OCULTAR/MOSTRAR MONTOS ============
+        function toggleAmounts() {
+            amountsHidden = !amountsHidden;
+            const btn = document.getElementById('toggleBtn');
+            
+            if (amountsHidden) {
+                document.body.classList.add('hide-amounts');
+                btn.textContent = '👁️';
+            } else {
+                document.body.classList.remove('hide-amounts');
+                btn.textContent = '🙈';
+            }
+        }
 
         // ============ NAVEGACIÓN TABS ============
         function switchTab(tabName, event) {
@@ -612,56 +684,51 @@
         function formatDate(value) {
           if (!value || value === '-') return '-';
 
-          // Caso 1: Date real
+          // 1) Si ya es Date real
           if (value instanceof Date) {
             return value.toLocaleDateString('es-AR');
           }
 
-          // Caso 2: GViz Date(yyyy,mm,dd,...)
+          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
           if (typeof value === 'string') {
-            const gvizMatch = value.match(/Date\((\d+),(\d+),(\d+)/);
-            if (gvizMatch) {
-              const y = Number(gvizMatch[1]);
-              const m = Number(gvizMatch[2]);
-              const d = Number(gvizMatch[3]);
-              return new Date(y, m, d).toLocaleDateString('es-AR');
-            }
-
-            // Caso 3: string tipo DD/MM/YYYY → usar tal cual
-            if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-              return value;
+            const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (m) {
+              const y = Number(m[1]);
+              const mo = Number(m[2]); // 0-11
+              const d = Number(m[3]);
+              const hh = Number(m[4] || 0);
+              const mm = Number(m[5] || 0);
+              const ss = Number(m[6] || 0);
+              const dateObj = new Date(y, mo, d, hh, mm, ss);
+              return dateObj.toLocaleDateString('es-AR');
             }
           }
 
-          return '-';
+          // 3) Intento crear Date genérico
+          const fallbackDate = new Date(value);
+          if (!isNaN(fallbackDate.getTime())) {
+            return fallbackDate.toLocaleDateString('es-AR');
+          }
+
+          return String(value);
         }
 
         function parseGvizDate(v) {
           if (!v) return null;
-
-          // GViz: Date(yyyy,mm,dd,hh,mm,ss)
-          if (typeof v === 'string' && v.startsWith('Date(')) {
-            const m = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
-            if (m) {
-              const year = +m[1];
-              const month = +m[2];
-              const day = +m[3];
-              const hours = m[4] ? +m[4] : 0;
-              const minutes = m[5] ? +m[5] : 0;
-              const seconds = m[6] ? +m[6] : 0;
-              return new Date(year, month, day, hours, minutes, seconds);
+          if (v.startsWith?.('Date(')) {
+            const match = v.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+            if (match) {
+              return new Date(
+                Number(match[1]),
+                Number(match[2]),
+                Number(match[3]),
+                Number(match[4]),
+                Number(match[5]),
+                Number(match[6])
+              );
             }
           }
-
-          // String DD/MM/YYYY
-          if (typeof v === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(v)) {
-            const [d, m, y] = v.split('/');
-            return new Date(y, m - 1, d);
-          }
-
-          // ISO / Date real
-          const d = new Date(v);
-          return isNaN(d) ? null : d;
+          return new Date(v);
         }
 
         async function registerTodayPayments() {
@@ -754,13 +821,13 @@
 
                 document.getElementById('sheetUpdate').textContent =
                   fecha
-                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', { 
-                        day: '2-digit', 
-                        month: '2-digit', 
-                        year: 'numeric', 
-                        hour: '2-digit', 
-                        minute: '2-digit',
-                        hour12: false
+                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', {
+                        hour12: false,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
                       })
                     : 'Última actualización: —';
 
@@ -789,8 +856,8 @@
                    sheetRow,
                    supplier: row.c?.[0]?.v || '',
                    amount: parseFloat(row.c?.[1]?.v || 0),
-                   issueDate: parseGvizDate(row.c?.[2]?.v),
-                   payDate: parseGvizDate(row.c?.[3]?.v),
+                   issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
+                   payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
                    estado,
                    isPaid,
                    selected: false,
@@ -1021,9 +1088,9 @@
                     }
                 });
 
-                // 👇 PEGAR JUSTO ACÁ
-                document.getElementById('saldosContainer').innerHTML = saldosHTML;
-                document.getElementById('movimientosContainer').innerHTML = movimientosHTML;
+                // Actualizar UI
+                document.getElementById('saldosContainer').innerHTML = saldosHTML || '<div class="empty-state"><p>No hay saldos registrados</p></div>';
+                document.getElementById('movimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><p>No hay movimientos del día</p></div>';
                 document.getElementById('totalDisponible').textContent = formatCurrency(totalDisponible);
                 document.getElementById('finanzasContainer').style.display = 'block';
 
@@ -1041,6 +1108,8 @@
         window.addEventListener('load', () => {
             loadInvoices();
             loadFinanzas();
+            // Inicializar con montos ocultos
+            document.body.classList.add('hide-amounts');
         });
     </script>
 </body>
