@@ -1255,23 +1255,17 @@
                 let saldoActual = 0;
                 let lastUpdate = null;
 
-                const firstSaldoCell = (saldoRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-                const saldoDataRows = (firstSaldoCell === 'concepto' || firstSaldoCell === 'columna 1' || firstSaldoCell === 'saldo')
-                    ? saldoRows.slice(1) : saldoRows;
-
-                // Sumar todos los saldos (puede haber varias cajas/fondos)
-                saldoDataRows.forEach(row => {
-                    const monto = parseFloat(row.c?.[1]?.v || 0);
+                // Estructura real: col A = Saldo Actual (número), col B = Última Actualización (fecha)
+                // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
+                saldoRows.forEach(row => {
+                    const monto = parseFloat(row.c?.[0]?.v || 0);
                     saldoActual += monto;
-                    // Buscar fecha de actualización en columna C si existe
-                    if (!lastUpdate && row.c?.[2]?.v) lastUpdate = row.c[2].v;
+                    if (!lastUpdate && row.c?.[1]?.v) lastUpdate = row.c[1].v;
                 });
 
                 // --- Procesar Movimientos ---
-                const movRows = movJson.table.rows;
-                const firstMovCell = (movRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-                const movDataRows = (firstMovCell === 'fecha' || firstMovCell === 'columna 1')
-                    ? movRows.slice(1) : movRows;
+                // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
+                const movDataRows = movJson.table.rows;
 
                 let totalIngresos = 0;
                 let totalEgresos = 0;
