@@ -933,10 +933,10 @@
 
         function parseGvizDate(v) {
           if (!v) return null;
-          if (v.startsWith?.('Date(')) {
-            const match = v.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+          if (typeof v === 'string' && v.startsWith('Date(')) {
+            const match = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
             if (match) {
-              return new Date(Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4]), Number(match[5]), Number(match[6]));
+              return new Date(Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4]||0), Number(match[5]||0), Number(match[6]||0));
             }
           }
           return new Date(v);
