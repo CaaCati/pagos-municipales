@@ -44,12 +44,12 @@
 
         .tab {
             flex: 1;
-            padding: 16px;
+            padding: 12px 8px;
             text-align: center;
             border: none;
             background: white;
             color: #999;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -57,11 +57,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .tab-icon {
-            font-size: 22px;
+            font-size: 20px;
         }
 
         .tab.active {
@@ -70,7 +70,13 @@
             background: linear-gradient(to bottom, #fff5f5 0%, white 100%);
         }
 
-        .tab:not(.active):hover {
+        .tab.active-green {
+            color: #10ac84;
+            border-top: 3px solid #10ac84;
+            background: linear-gradient(to bottom, #f0fff9 0%, white 100%);
+        }
+
+        .tab:not(.active):not(.active-green):hover {
             background: #fafafa;
         }
 
@@ -91,20 +97,13 @@
             box-shadow: 0 10px 30px rgba(255,107,107,0.3);
         }
 
-        .config-section {
-            display: none;
+        .header.green-header {
+            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
         }
 
         h1 {
             color: #333;
             font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .config-section {
-            background: #fff5f5;
-            padding: 15px;
-            border-radius: 10px;
             margin-bottom: 15px;
         }
 
@@ -132,12 +131,6 @@
         input[type="text"]:focus {
             outline: none;
             border-color: #ff6b6b;
-        }
-
-        .help-text {
-            font-size: 11px;
-            color: #999;
-            margin-top: 3px;
         }
 
         button {
@@ -329,6 +322,11 @@
             margin: 0 auto 15px;
         }
 
+        .spinner.green {
+            border: 3px solid #d5f5ef;
+            border-top: 3px solid #10ac84;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -360,6 +358,10 @@
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .balance-section.green-section {
+            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
         }
 
         .balance-title {
@@ -406,6 +408,13 @@
             position: relative;
         }
 
+        .balance-amount.green {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .total-disponible {
             background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
             color: white;
@@ -413,6 +422,10 @@
             border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
+        }
+
+        .total-disponible.green {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
         }
 
         .total-disponible-label {
@@ -434,6 +447,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .movement-item.green-border {
+            border-bottom: 1px solid #d5f5ef;
         }
 
         .movement-item:last-child {
@@ -477,12 +494,115 @@
             margin-top: 10px;
         }
 
+        .refresh-btn.green-btn {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+        }
+
+        .refresh-btn.green-btn:hover {
+            background: linear-gradient(135deg, #0d9e79 0%, #1abc9c 100%);
+            box-shadow: 0 5px 15px rgba(16,172,132,0.3);
+        }
+
+        /* CAJA CHICA SPECIFIC STYLES */
+        .caja-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .caja-stat {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .caja-stat.outflow {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        }
+
+        .caja-stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .caja-stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .caja-payment-item {
+            padding: 15px;
+            border-bottom: 1px solid #d5f5ef;
+            transition: background 0.2s;
+        }
+
+        .caja-payment-item:last-child {
+            border-bottom: none;
+        }
+
+        .caja-payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .caja-payment-beneficiary {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .caja-payment-type {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: white;
+        }
+
+        .caja-payment-type.proveedor {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6f00 100%);
+        }
+
+        .caja-payment-type.servicio {
+            background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
+        }
+
+        .caja-payment-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .caja-payment-details {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .caja-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+        }
+
         /* OCULTAR MONTOS */
         .hide-amounts .stat-value,
         .hide-amounts .invoice-amount,
         .hide-amounts .balance-amount,
         .hide-amounts .total-disponible-value,
-        .hide-amounts .movement-amount {
+        .hide-amounts .movement-amount,
+        .hide-amounts .caja-stat-value,
+        .hide-amounts .caja-payment-amount {
             visibility: hidden !important;
             position: relative !important;
         }
@@ -491,7 +611,9 @@
         .hide-amounts .invoice-amount::after,
         .hide-amounts .balance-amount::after,
         .hide-amounts .total-disponible-value::after,
-        .hide-amounts .movement-amount::after {
+        .hide-amounts .movement-amount::after,
+        .hide-amounts .caja-stat-value::after,
+        .hide-amounts .caja-payment-amount::after {
             content: '••••••';
             visibility: visible;
             position: absolute;
@@ -522,6 +644,72 @@
             transform: scale(1.1);
             box-shadow: 0 6px 16px rgba(0,0,0,0.2);
         }
+
+        /* Configuración del Sheet de Caja Chica */
+        .config-banner {
+            background: linear-gradient(135deg, #f0fff9 0%, #e0fdf4 100%);
+            border: 2px dashed #10ac84;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .config-banner-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .config-banner-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .config-banner-desc {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .config-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .config-input-row input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #b2dfdb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .config-input-row input:focus {
+            outline: none;
+            border-color: #10ac84;
+        }
+
+        .config-save-btn {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            width: auto;
+            transition: all 0.3s;
+        }
+
+        .config-save-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16,172,132,0.3);
+        }
     </style>
 </head>
 <body>
@@ -533,13 +721,17 @@
     <!-- TABS NAVEGACIÓN -->
     <div class="tabs-container">
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('proveedores', event)">
+            <button class="tab active" id="tab-proveedores" onclick="switchTab('proveedores', event)">
                 <div class="tab-icon">🏦</div>
                 <div>Proveedores</div>
             </button>
-            <button class="tab" onclick="switchTab('finanzas', event)">
+            <button class="tab" id="tab-finanzas" onclick="switchTab('finanzas', event)">
                 <div class="tab-icon">💰</div>
                 <div>Finanzas</div>
+            </button>
+            <button class="tab" id="tab-caja" onclick="switchTab('caja', event)">
+                <div class="tab-icon">💵</div>
+                <div>Caja Chica</div>
             </button>
         </div>
     </div>
@@ -625,6 +817,53 @@
         </div>
     </div>
 
+    <!-- CONTENIDO CAJA CHICA -->
+    <div id="caja-content" class="tab-content">
+        <div class="container">
+            <div class="header green-header">
+                <h1>💵 Caja Chica</h1>
+                <div style="text-align:center; margin-top:8px; font-size:13px; color:#999;" id="cajaUpdate">Última actualización: —</div>
+            </div>
+
+            <div id="cajaError" class="error" style="display: none;"></div>
+
+            <div id="cajaLoading" class="loading" style="display: none;">
+                <div class="spinner green"></div>
+                <div>Cargando caja chica...</div>
+            </div>
+
+            <div id="cajaContainer" style="display: none;">
+                <!-- SALDO ACTUAL EN EFECTIVO -->
+                <div class="total-disponible green">
+                    <div class="total-disponible-label">💵 EFECTIVO DISPONIBLE</div>
+                    <div class="total-disponible-value" id="cajaSaldoActual">$ 0,00</div>
+                </div>
+
+                <!-- RESUMEN DEL MES -->
+                <div style="margin-bottom: 20px;">
+                    <div class="caja-summary">
+                        <div class="caja-stat">
+                            <div class="caja-stat-label">📥 Ingresos del Mes</div>
+                            <div class="caja-stat-value" id="cajaTotalIngresos">$0</div>
+                        </div>
+                        <div class="caja-stat outflow">
+                            <div class="caja-stat-label">📤 Egresos del Mes</div>
+                            <div class="caja-stat-value" id="cajaTotalEgresos">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MOVIMIENTOS DE CAJA -->
+                <div class="balance-section green-section">
+                    <div class="balance-title">📋 Movimientos de Caja</div>
+                    <div id="cajaMovimientosContainer" class="caja-container" style="box-shadow:none; border-radius:0;"></div>
+                </div>
+
+                <button class="refresh-btn green-btn" onclick="loadCaja()">🔄 Actualizar Caja</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let invoices = [];
         const SHEET_ID = '17EPXK3fUPbCeoditXmqxq8Fn4-d40bh6HV7sQOn1kBo';
@@ -634,14 +873,16 @@
         // CONFIGURACIÓN FINANZAS
         const FINANZAS_SHEET_ID = '1gt8VMJGb4OLt3XGA6vOGOqQUAxvclG6hAwfEL7dDobk';
 
+        // CONFIGURACIÓN CAJA CHICA
+        const CAJA_SHEET_ID = '1lVLmlRjNpakbv13qZ_o8fwuFy14JkxUqq8EeuaTHUjg';
+
         let currentTab = 'proveedores';
-        let amountsHidden = true; // Empezar con montos ocultos
+        let amountsHidden = true;
 
         // ============ OCULTAR/MOSTRAR MONTOS ============
         function toggleAmounts() {
             amountsHidden = !amountsHidden;
             const btn = document.getElementById('toggleBtn');
-            
             if (amountsHidden) {
                 document.body.classList.add('hide-amounts');
                 btn.textContent = '👀';
@@ -655,23 +896,32 @@
         function switchTab(tabName, event) {
             currentTab = tabName;
             
-            // Actualizar tabs activas
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.target.closest('.tab').classList.add('active');
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.remove('active-green');
+            });
 
-            // Mostrar contenido correspondiente
+            const clickedTab = event.target.closest('.tab');
+            if (tabName === 'caja') {
+                clickedTab.classList.add('active-green');
+            } else {
+                clickedTab.classList.add('active');
+            }
+
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
 
-            if (tabName === 'proveedores') {
-                document.getElementById('proveedores-content').classList.add('active');
-            } else if (tabName === 'finanzas') {
-                document.getElementById('finanzas-content').classList.add('active');
+            document.getElementById(tabName + '-content').classList.add('active');
+
+            // Cargar caja chica al entrar si no hay datos
+            if (tabName === 'caja' && document.getElementById('cajaContainer').style.display === 'none'
+                && document.getElementById('cajaLoading').style.display === 'none') {
+                initCaja();
             }
         }
 
-        // ============ FUNCIONES PROVEEDORES (ORIGINALES) ============
+        // ============ FUNCIONES PROVEEDORES ============
         function formatCurrency(amount) {
             return new Intl.NumberFormat('es-AR', {
                 style: 'currency',
@@ -682,33 +932,16 @@
 
         function formatDate(value) {
           if (!value || value === '-') return '-';
-
-          // 1) Si ya es Date real
-          if (value instanceof Date) {
-            return value.toLocaleDateString('es-AR');
-          }
-
-          // 2) Si viene como GViz: "Date(2026,0,14,10,35,12)"
+          if (value instanceof Date) return value.toLocaleDateString('es-AR');
           if (typeof value === 'string') {
             const m = value.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
             if (m) {
-              const y = Number(m[1]);
-              const mo = Number(m[2]); // 0-11
-              const d = Number(m[3]);
-              const hh = Number(m[4] || 0);
-              const mm = Number(m[5] || 0);
-              const ss = Number(m[6] || 0);
-              const dateObj = new Date(y, mo, d, hh, mm, ss);
+              const dateObj = new Date(Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4]||0), Number(m[5]||0), Number(m[6]||0));
               return dateObj.toLocaleDateString('es-AR');
             }
           }
-
-          // 3) Intento crear Date genérico
           const fallbackDate = new Date(value);
-          if (!isNaN(fallbackDate.getTime())) {
-            return fallbackDate.toLocaleDateString('es-AR');
-          }
-
+          if (!isNaN(fallbackDate.getTime())) return fallbackDate.toLocaleDateString('es-AR');
           return String(value);
         }
 
@@ -717,14 +950,7 @@
           if (v.startsWith?.('Date(')) {
             const match = v.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
             if (match) {
-              return new Date(
-                Number(match[1]),
-                Number(match[2]),
-                Number(match[3]),
-                Number(match[4]),
-                Number(match[5]),
-                Number(match[6])
-              );
+              return new Date(Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4]), Number(match[5]), Number(match[6]));
             }
           }
           return new Date(v);
@@ -732,59 +958,31 @@
 
         async function registerTodayPayments() {
           const items = [];
-
           invoices.forEach(inv => {
             if (inv.selected) {
-              items.push({
-                sheetRow: inv.sheetRow,
-                proveedor: inv.supplier,
-                tipo: "COMPLETO",
-                monto: inv.amount
-              });
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "COMPLETO", monto: inv.amount });
             } else if (inv.partial && inv.partialAmount > 0) {
-              items.push({
-                sheetRow: inv.sheetRow,
-                proveedor: inv.supplier,
-                tipo: "PARCIAL",
-                monto: inv.partialAmount
-              });
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "PARCIAL", monto: inv.partialAmount });
             }
           });
 
-          if (!items.length) {
-            alert("⚠️ No hay pagos seleccionados.");
-            return;
-          }
+          if (!items.length) { alert("⚠️ No hay pagos seleccionados."); return; }
 
           const btn = document.getElementById('registerBtn');
           if (btn) btn.disabled = true;
 
           try {
-            const payload = {
-              spreadsheetId: SHEET_ID,
-              targetSheetName: "Pagos_Hoy",
-              items
-            };
-
+            const payload = { spreadsheetId: SHEET_ID, targetSheetName: "Pagos_Hoy", items };
             const res = await fetch(WEBAPP_URL, {
               method: "POST",
               headers: { "Content-Type": "text/plain;charset=utf-8" },
               body: JSON.stringify(payload)
             });
-
             const out = await res.json();
-
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-
             alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
             await loadInvoices();
-
-            invoices.forEach(inv => {
-              inv.selected = false;
-              inv.partial = false;
-              inv.partialAmount = 0;
-            });
-
+            invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; });
           } catch (err) {
             console.error(err);
             alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
@@ -794,81 +992,56 @@
         }
       
         async function loadInvoices() {
-            const sheetId = SHEET_ID;
-            const sheetName = SHEET_NAME;
-
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
 
             try {
-                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
                 const response = await fetch(url);
                 const text = await response.text();
-
                 const start = text.indexOf('(');
                 const end = text.lastIndexOf(');');
                 const json = JSON.parse(text.substring(start + 1, end));
 
                 let lastUpdateCell = null;
-
                 for (let i = json.table.rows.length - 1; i >= 0; i--) {
                   const v = json.table.rows[i]?.c?.[5]?.v;
                   if (v) { lastUpdateCell = v; break; }
                 }
 
                 const fecha = parseGvizDate(lastUpdateCell);
-
-                document.getElementById('sheetUpdate').textContent =
-                  fecha
-                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', {
-                        hour12: false,
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })
+                document.getElementById('sheetUpdate').textContent = fecha
+                    ? 'Última actualización: ' + fecha.toLocaleString('es-AR', { hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
                     : 'Última actualización: —';
 
                 const rows = json.table.rows;
+                const firstCell = (rows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const isAutoHeader = firstCell === 'columna 1';
+                const rowsForData = isAutoHeader ? rows.slice(1) : rows;
+                const baseRow = 2;
+                const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
+                const dataIndexed = indexed.filter(({ r }) => {
+                  const supplier = (r.c?.[0]?.v ?? '').toString().trim();
+                  const amount = r.c?.[1]?.v;
+                  return supplier !== '' || (amount != null && amount !== '');
+                });
 
-               const firstCell = (rows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-               const isAutoHeader = firstCell === 'columna 1';
-
-               const rowsForData = isAutoHeader ? rows.slice(1) : rows;
-               
-               const baseRow = 2;
-
-               const indexed = rowsForData.map((r, i) => ({ r, sheetRow: baseRow + i }));
-
-               const dataIndexed = indexed.filter(({ r }) => {
-                 const supplier = (r.c?.[0]?.v ?? '').toString().trim();
-                 const amount = r.c?.[1]?.v;
-                 return supplier !== '' || (amount != null && amount !== '');
-               });
-
-               invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
-                 const isPaid = row.c?.[4]?.v === true;
-                 const estado = (row.c?.[6]?.v ?? '').toString().trim();
-                 return {
-                   id: idx + 1,
-                   sheetRow,
-                   supplier: row.c?.[0]?.v || '',
-                   amount: parseFloat(row.c?.[1]?.v || 0),
-                   issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
-                   payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
-                   estado,
-                   isPaid,
-                   selected: false,
-                   partial: false,
-                   partialAmount: 0
-                 };
-               });
+                invoices = dataIndexed.map(({ r: row, sheetRow }, idx) => {
+                  const isPaid = row.c?.[4]?.v === true;
+                  const estado = (row.c?.[6]?.v ?? '').toString().trim();
+                  return {
+                    id: idx + 1, sheetRow,
+                    supplier: row.c?.[0]?.v || '',
+                    amount: parseFloat(row.c?.[1]?.v || 0),
+                    issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
+                    payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
+                    estado, isPaid, selected: false, partial: false, partialAmount: 0
+                  };
+                });
 
                 document.getElementById('stats').style.display = 'block';
                 renderInvoices();
                 updateStats();
-
             } catch (err) {
                 showError('Error al cargar. Verifica que la hoja sea pública y los datos sean correctos.');
                 console.error(err);
@@ -886,7 +1059,6 @@
         function toggleInvoice(id, type) {
             const invoice = invoices.find(inv => inv.id === id);
             if (!invoice || invoice.isPaid) return;
-
             if (type === 'full') {
                 invoice.selected = !invoice.selected;
                 invoice.partial = false;
@@ -894,11 +1066,8 @@
             } else if (type === 'partial') {
                 invoice.partial = !invoice.partial;
                 invoice.selected = false;
-                if (!invoice.partial) {
-                    invoice.partialAmount = 0;
-                }
+                if (!invoice.partial) invoice.partialAmount = 0;
             }
-
             renderInvoices();
             updateStats();
         }
@@ -906,42 +1075,28 @@
         function updatePartialAmount(id, value) {
             const invoice = invoices.find(inv => inv.id === id);
             if (!invoice) return;
-
-            const amount = parseFloat(value) || 0;
-            invoice.partialAmount = Math.min(amount, invoice.amount);
+            invoice.partialAmount = Math.min(parseFloat(value) || 0, invoice.amount);
             updateStats();
         }
 
         function renderInvoices() {
             const container = document.getElementById('invoicesContainer');
-            
             if (invoices.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📋</div>
-                        <p>No hay facturas para mostrar</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>No hay facturas para mostrar</p></div>`;
                 return;
             }
-
             container.innerHTML = invoices.map(inv => `
                 <div class="invoice-item ${inv.selected || inv.partial ? 'selected' : ''} ${inv.isPaid ? 'paid' : ''}">
                     <div class="invoice-header">
                       <div class="invoice-supplier">${inv.supplier}</div>
                       ${(!inv.isPaid && inv.estado?.toUpperCase() === 'SALDO PENDIENTE')
-                        ? `<span class="invoice-badge badge-pending">SALDO PENDIENTE</span>`
-                        : ''
-                      }
+                        ? `<span class="invoice-badge badge-pending">SALDO PENDIENTE</span>` : ''}
                     </div>
-                    
                     <div class="invoice-amount">${formatCurrency(inv.amount)}</div>
-                    
                     <div class="invoice-details">
                         <div>📅 Emisión: ${formatDate(inv.issueDate)}</div>
                         <div>✅ Ultimo Pago: ${formatDate(inv.payDate)}</div>
                     </div>
-                    
                     ${!inv.isPaid ? `
                         <div class="invoice-actions">
                             <button class="btn-mark ${inv.selected ? 'active' : ''}" 
@@ -956,8 +1111,7 @@
                             </button>
                         </div>
                         ${inv.partial ? `
-                            <input type="number" 
-                                   class="partial-input" 
+                            <input type="number" class="partial-input" 
                                    placeholder="Monto a pagar"
                                    value="${inv.partialAmount || ''}"
                                    max="${inv.amount}"
@@ -971,13 +1125,11 @@
         function updateStats() {
             const pending = invoices.filter(inv => !inv.isPaid);
             const totalDebt = pending.reduce((sum, inv) => sum + inv.amount, 0);
-            
             const todayTotal = invoices.reduce((sum, inv) => {
                 if (inv.selected) return sum + inv.amount;
                 if (inv.partial) return sum + inv.partialAmount;
                 return sum;
             }, 0);
-
             document.getElementById('totalDebt').textContent = formatCurrency(totalDebt);
             document.getElementById('todayTotal').textContent = formatCurrency(todayTotal);
         }
@@ -989,59 +1141,32 @@
             document.getElementById('finanzasContainer').style.display = 'none';
 
             try {
-                // Cargar SALDOS
                 const saldosUrl = `https://docs.google.com/spreadsheets/d/${FINANZAS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Saldos`;
                 const saldosResponse = await fetch(saldosUrl);
                 const saldosText = await saldosResponse.text();
-                const saldosStart = saldosText.indexOf('(');
-                const saldosEnd = saldosText.lastIndexOf(');');
-                const saldosJson = JSON.parse(saldosText.substring(saldosStart + 1, saldosEnd));
+                const saldosJson = JSON.parse(saldosText.substring(saldosText.indexOf('(') + 1, saldosText.lastIndexOf(');')));
 
-                // Cargar MOVIMIENTOS
                 const movimientosUrl = `https://docs.google.com/spreadsheets/d/${FINANZAS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Movimientos`;
                 const movimientosResponse = await fetch(movimientosUrl);
                 const movimientosText = await movimientosResponse.text();
-                const movimientosStart = movimientosText.indexOf('(');
-                const movimientosEnd = movimientosText.lastIndexOf(');');
-                const movimientosJson = JSON.parse(movimientosText.substring(movimientosStart + 1, movimientosEnd));
+                const movimientosJson = JSON.parse(movimientosText.substring(movimientosText.indexOf('(') + 1, movimientosText.lastIndexOf(');')));
 
-                // Obtener última actualización de D1 (columna 3, índice 0-based)
-                let lastUpdateCell = null;
-                if (saldosJson.table.rows.length > 0) {
-                    lastUpdateCell = saldosJson.table.rows[0]?.c?.[3]?.v; // D1 = índice 3
-                }
-
+                let lastUpdateCell = saldosJson.table.rows[0]?.c?.[3]?.v || null;
                 const fechaFinanzas = parseGvizDate(lastUpdateCell);
-                document.getElementById('finanzasUpdate').textContent =
-                    fechaFinanzas
-                        ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR', { 
-                            day: '2-digit', 
-                            month: '2-digit', 
-                            year: 'numeric', 
-                            hour: '2-digit', 
-                            minute: '2-digit',
-                            hour12: false
-                          })
-                        : 'Última actualización: —';
+                document.getElementById('finanzasUpdate').textContent = fechaFinanzas
+                    ? 'Última actualización: ' + fechaFinanzas.toLocaleString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
+                    : 'Última actualización: —';
 
-                // Procesar SALDOS
                 const saldosRows = saldosJson.table.rows;
                 let totalDisponible = 0;
                 let saldosHTML = '';
-
-                // Saltar el encabezado si existe
                 const firstSaldoCell = (saldosRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-                const saldosDataRows = (firstSaldoCell === 'banco' || firstSaldoCell === 'columna 1') 
-                    ? saldosRows.slice(1) 
-                    : saldosRows;
+                const saldosDataRows = (firstSaldoCell === 'banco' || firstSaldoCell === 'columna 1') ? saldosRows.slice(1) : saldosRows;
 
                 saldosDataRows.forEach(row => {
                     const banco = (row.c?.[0]?.v || '').toString().trim();
-                    const referencia = (row.c?.[1]?.v !== null && row.c?.[1]?.v !== undefined) 
-                        ? row.c[1].v.toString().trim() 
-                        : '';
+                    const referencia = (row.c?.[1]?.v != null) ? row.c[1].v.toString().trim() : '';
                     const saldo = parseFloat(row.c?.[2]?.v || 0);
-
                     if (banco || referencia || saldo !== 0) {
                         totalDisponible += saldo;
                         saldosHTML += `
@@ -1056,21 +1181,15 @@
                     }
                 });
 
-                // Procesar MOVIMIENTOS
                 const movimientosRows = movimientosJson.table.rows;
                 let movimientosHTML = '';
-
-                // Saltar el encabezado si existe
                 const firstMovCell = (movimientosRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-                const movimientosDataRows = (firstMovCell === 'fecha' || firstMovCell === 'columna 1') 
-                    ? movimientosRows.slice(1) 
-                    : movimientosRows;
+                const movimientosDataRows = (firstMovCell === 'fecha' || firstMovCell === 'columna 1') ? movimientosRows.slice(1) : movimientosRows;
 
                 movimientosDataRows.forEach(row => {
                     const fecha = row.c?.[0]?.f || row.c?.[0]?.v || '';
                     const monto = parseFloat(row.c?.[1]?.v || 0);
                     const descripcion = row.c?.[2]?.v || '';
-
                     if (descripcion) {
                         const isPositive = monto >= 0;
                         movimientosHTML += `
@@ -1079,15 +1198,12 @@
                                     <div class="movement-desc">${descripcion}</div>
                                     <div class="movement-date">${fecha}</div>
                                 </div>
-                                <div class="movement-amount ${isPositive ? 'positive' : 'negative'}">
-                                    ${formatCurrency(Math.abs(monto))}
-                                </div>
+                                <div class="movement-amount ${isPositive ? 'positive' : 'negative'}">${formatCurrency(Math.abs(monto))}</div>
                             </div>
                         `;
                     }
                 });
 
-                // Actualizar UI
                 document.getElementById('saldosContainer').innerHTML = saldosHTML || '<div class="empty-state"><p>No hay saldos registrados</p></div>';
                 document.getElementById('movimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><p>No hay movimientos del día</p></div>';
                 document.getElementById('totalDisponible').textContent = formatCurrency(totalDisponible);
@@ -1096,10 +1212,140 @@
             } catch (err) {
                 console.error('Error al cargar finanzas:', err);
                 const errorDiv = document.getElementById('finanzasError');
-                errorDiv.textContent = 'Error al cargar estado financiero. Verifica que el Sheet "Estado Financiero" sea público.';
+                errorDiv.textContent = 'Error al cargar estado financiero. Verifica que el Sheet sea público.';
                 errorDiv.style.display = 'block';
             } finally {
                 document.getElementById('finanzasLoading').style.display = 'none';
+            }
+        }
+
+        // ============ FUNCIONES CAJA CHICA ============
+        function initCaja() {
+            loadCaja();
+        }
+
+        async function loadCaja() {
+            if (!CAJA_SHEET_ID) {
+                document.getElementById('cajaConfig').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('cajaLoading').style.display = 'block';
+            document.getElementById('cajaError').style.display = 'none';
+            document.getElementById('cajaContainer').style.display = 'none';
+            document.getElementById('cajaConfig').style.display = 'none';
+
+            try {
+                // Cargar hoja "Saldo" — saldo actual del efectivo
+                const saldoUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Saldo`;
+                const saldoResp = await fetch(saldoUrl);
+                const saldoText = await saldoResp.text();
+                const saldoJson = JSON.parse(saldoText.substring(saldoText.indexOf('(') + 1, saldoText.lastIndexOf(');')));
+
+                // Cargar hoja "Movimientos" — pagos y cobros en efectivo
+                const movUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Movimientos`;
+                const movResp = await fetch(movUrl);
+                const movText = await movResp.text();
+                const movJson = JSON.parse(movText.substring(movText.indexOf('(') + 1, movText.lastIndexOf(');')));
+
+                // --- Procesar Saldo ---
+                // Espera columna A=Concepto, B=Monto en hoja "Saldo"
+                // El saldo total está en la primera fila de datos (después del encabezado)
+                const saldoRows = saldoJson.table.rows;
+                let saldoActual = 0;
+                let lastUpdate = null;
+
+                const firstSaldoCell = (saldoRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const saldoDataRows = (firstSaldoCell === 'concepto' || firstSaldoCell === 'columna 1' || firstSaldoCell === 'saldo')
+                    ? saldoRows.slice(1) : saldoRows;
+
+                // Sumar todos los saldos (puede haber varias cajas/fondos)
+                saldoDataRows.forEach(row => {
+                    const monto = parseFloat(row.c?.[1]?.v || 0);
+                    saldoActual += monto;
+                    // Buscar fecha de actualización en columna C si existe
+                    if (!lastUpdate && row.c?.[2]?.v) lastUpdate = row.c[2].v;
+                });
+
+                // --- Procesar Movimientos ---
+                const movRows = movJson.table.rows;
+                const firstMovCell = (movRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const movDataRows = (firstMovCell === 'fecha' || firstMovCell === 'columna 1')
+                    ? movRows.slice(1) : movRows;
+
+                let totalIngresos = 0;
+                let totalEgresos = 0;
+                let movimientosHTML = '';
+
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+
+                movDataRows.forEach(row => {
+                    // Columnas esperadas: A=Fecha, B=Beneficiario/Descripción, C=Tipo (Proveedor/Servicio/Ingreso), D=Monto
+                    const fechaRaw = row.c?.[0]?.f || row.c?.[0]?.v || '';
+                    const beneficiario = (row.c?.[1]?.v || '').toString().trim();
+                    const tipo = (row.c?.[2]?.v || '').toString().trim();
+                    const monto = parseFloat(row.c?.[3]?.v || 0);
+
+                    if (!beneficiario && monto === 0) return;
+
+                    const isIngreso = monto >= 0;
+
+                    // Acumular totales del mes actual
+                    const fechaObj = parseGvizDate(row.c?.[0]?.v);
+                    if (fechaObj && fechaObj.getMonth() === currentMonth && fechaObj.getFullYear() === currentYear) {
+                        if (isIngreso) totalIngresos += monto;
+                        else totalEgresos += Math.abs(monto);
+                    }
+
+                    // Badge de tipo
+                    let tipoBadge = '';
+                    if (tipo) {
+                        const tipoLower = tipo.toLowerCase();
+                        let tipoClass = '';
+                        if (tipoLower.includes('proveedor')) tipoClass = 'proveedor';
+                        else if (tipoLower.includes('servicio')) tipoClass = 'servicio';
+                        tipoBadge = `<span class="caja-payment-type ${tipoClass}">${tipo}</span>`;
+                    }
+
+                    movimientosHTML += `
+                        <div class="caja-payment-item">
+                            <div class="caja-payment-header">
+                                <div class="caja-payment-beneficiary">${beneficiario || '—'}</div>
+                                ${tipoBadge}
+                            </div>
+                            <div class="caja-payment-amount" style="color: ${isIngreso ? '#10ac84' : '#ff6b6b'}">
+                                ${isIngreso ? '+' : '-'}${formatCurrency(Math.abs(monto))}
+                            </div>
+                            <div class="caja-payment-details">📅 ${fechaRaw || '—'}</div>
+                        </div>
+                    `;
+                });
+
+                // Última actualización
+                const fechaCaja = parseGvizDate(lastUpdate);
+                document.getElementById('cajaUpdate').textContent = fechaCaja
+                    ? 'Última actualización: ' + fechaCaja.toLocaleString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
+                    : 'Última actualización: —';
+
+                // Actualizar UI
+                document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
+                document.getElementById('cajaTotalIngresos').textContent = formatCurrency(totalIngresos);
+                document.getElementById('cajaTotalEgresos').textContent = formatCurrency(totalEgresos);
+                document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
+                document.getElementById('cajaContainer').style.display = 'block';
+
+            } catch (err) {
+                console.error('Error al cargar caja chica:', err);
+                const errorDiv = document.getElementById('cajaError');
+                errorDiv.innerHTML = `
+                    ❌ No se pudo cargar la Caja Chica.<br>
+                    <small>Verificá que el Sheet sea público ("Cualquier persona con el enlace puede ver") 
+                    y que tenga hojas llamadas <strong>Saldo</strong> y <strong>Movimientos</strong>.</small>
+                `;
+                errorDiv.style.display = 'block';
+            } finally {
+                document.getElementById('cajaLoading').style.display = 'none';
             }
         }
 
@@ -1107,7 +1353,6 @@
         window.addEventListener('load', () => {
             loadInvoices();
             loadFinanzas();
-            // Inicializar con montos ocultos
             document.body.classList.add('hide-amounts');
         });
     </script>
