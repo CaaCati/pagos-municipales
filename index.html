@@ -933,10 +933,16 @@
 
         function parseGvizDate(v) {
           if (!v) return null;
-          if (typeof v === 'string' && v.startsWith('Date(')) {
-            const match = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
-            if (match) {
-              return new Date(Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4]||0), Number(match[5]||0), Number(match[6]||0));
+          if (typeof v === 'string') {
+            // Formato Date(2026,1,23) con o sin hora
+            const matchGviz = v.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+            if (matchGviz) {
+              return new Date(Number(matchGviz[1]), Number(matchGviz[2]), Number(matchGviz[3]), Number(matchGviz[4]||0), Number(matchGviz[5]||0), Number(matchGviz[6]||0));
+            }
+            // Formato dd/mm/yyyy
+            const matchDMY = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            if (matchDMY) {
+              return new Date(Number(matchDMY[3]), Number(matchDMY[2]) - 1, Number(matchDMY[1]));
             }
           }
           return new Date(v);
@@ -1242,7 +1248,6 @@
                     saldoActual += monto;
                     if (!lastUpdate && row.c?.[1]?.v) lastUpdate = row.c[1].v;
                 });
-                console.log('lastUpdate raw value:', lastUpdate, typeof lastUpdate);
 
                 // --- Procesar Movimientos ---
                 // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
