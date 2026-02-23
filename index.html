@@ -1275,41 +1275,37 @@
                 const currentYear = new Date().getFullYear();
 
                 movDataRows.forEach(row => {
-                    // Columnas esperadas: A=Fecha, B=Beneficiario/Descripción, C=Tipo (Proveedor/Servicio/Ingreso), D=Monto
+                    // Columnas reales: A=Fecha, B=Tipo (Ingreso/Egreso), C=Descripcion, D=Monto (siempre positivo)
                     const fechaRaw = row.c?.[0]?.f || row.c?.[0]?.v || '';
-                    const beneficiario = (row.c?.[1]?.v || '').toString().trim();
-                    const tipo = (row.c?.[2]?.v || '').toString().trim();
+                    const tipo = (row.c?.[1]?.v || '').toString().trim();
+                    const descripcion = (row.c?.[2]?.v || '').toString().trim();
                     const monto = parseFloat(row.c?.[3]?.v || 0);
 
-                    if (!beneficiario && monto === 0) return;
+                    if (!descripcion && monto === 0) return;
 
-                    const isIngreso = monto >= 0;
+                    const isIngreso = tipo.toLowerCase() === 'ingreso';
 
                     // Acumular totales del mes actual
                     const fechaObj = parseGvizDate(row.c?.[0]?.v);
                     if (fechaObj && fechaObj.getMonth() === currentMonth && fechaObj.getFullYear() === currentYear) {
                         if (isIngreso) totalIngresos += monto;
-                        else totalEgresos += Math.abs(monto);
+                        else totalEgresos += monto;
                     }
 
                     // Badge de tipo
-                    let tipoBadge = '';
-                    if (tipo) {
-                        const tipoLower = tipo.toLowerCase();
-                        let tipoClass = '';
-                        if (tipoLower.includes('proveedor')) tipoClass = 'proveedor';
-                        else if (tipoLower.includes('servicio')) tipoClass = 'servicio';
-                        tipoBadge = `<span class="caja-payment-type ${tipoClass}">${tipo}</span>`;
-                    }
+                    const tipoClass = isIngreso ? '' : 'proveedor';
+                    const tipoBadge = tipo
+                        ? `<span class="caja-payment-type ${tipoClass}">${tipo}</span>`
+                        : '';
 
                     movimientosHTML += `
                         <div class="caja-payment-item">
                             <div class="caja-payment-header">
-                                <div class="caja-payment-beneficiary">${beneficiario || '—'}</div>
+                                <div class="caja-payment-beneficiary">${descripcion || '—'}</div>
                                 ${tipoBadge}
                             </div>
                             <div class="caja-payment-amount" style="color: ${isIngreso ? '#10ac84' : '#ff6b6b'}">
-                                ${isIngreso ? '+' : '-'}${formatCurrency(Math.abs(monto))}
+                                ${isIngreso ? '+' : '-'}${formatCurrency(monto)}
                             </div>
                             <div class="caja-payment-details">📅 ${fechaRaw || '—'}</div>
                         </div>
