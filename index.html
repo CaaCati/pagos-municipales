@@ -1242,6 +1242,7 @@
                     saldoActual += monto;
                     if (!lastUpdate && row.c?.[1]?.v) lastUpdate = row.c[1].v;
                 });
+                console.log('lastUpdate raw value:', lastUpdate, typeof lastUpdate);
 
                 // --- Procesar Movimientos ---
                 // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
