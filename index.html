@@ -1070,7 +1070,7 @@
             });
             const out = await res.json();
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-            alert(`✅ ${out.message}\nSe registró correctamente".`);
+            alert(`✅ ${out.message}\nSE REGISTRÓ CORRECTAMENTE`);
             await loadInvoices();
             invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
