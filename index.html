@@ -306,6 +306,48 @@
             border-color: #ff6b6b;
         }
 
+        .cuenta-selector {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .cuenta-btn {
+            flex: 1;
+            min-width: 70px;
+            padding: 7px 6px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: auto;
+        }
+
+        .cuenta-btn:hover {
+            border-color: #ff8e53;
+            color: #ff6b6b;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .cuenta-btn.selected {
+            background: linear-gradient(135deg, #4834df 0%, #0fbcf9 100%);
+            color: white;
+            border-color: #4834df;
+        }
+
+        .cuenta-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -1004,15 +1046,23 @@
 
         async function registerTodayPayments() {
           const items = [];
+          const sinCuenta = [];
           invoices.forEach(inv => {
             if (inv.selected) {
-              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "COMPLETO", monto: inv.amount });
+              if (!inv.cuenta) sinCuenta.push(inv.supplier);
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "COMPLETO", monto: inv.amount, cuenta: inv.cuenta || '' });
             } else if (inv.partial && inv.partialAmount > 0) {
-              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "PARCIAL", monto: inv.partialAmount });
+              if (!inv.cuenta) sinCuenta.push(inv.supplier);
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "PARCIAL", monto: inv.partialAmount, cuenta: inv.cuenta || '' });
             }
           });
 
           if (!items.length) { alert("⚠️ No hay pagos seleccionados."); return; }
+
+          if (sinCuenta.length > 0) {
+            const confirmar = confirm(`⚠️ Los siguientes proveedores no tienen cuenta seleccionada:\n\n${sinCuenta.join('\n')}\n\n¿Registrar igual?`);
+            if (!confirmar) return;
+          }
 
           const btn = document.getElementById('registerBtn');
           if (btn) btn.disabled = true;
@@ -1028,7 +1078,7 @@
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
             alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
             await loadInvoices();
-            invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; });
+            invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
             console.error(err);
             alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
@@ -1081,7 +1131,7 @@
                     amount: parseFloat(row.c?.[1]?.v || 0),
                     issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
                     payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
-                    estado, isPaid, selected: false, partial: false, partialAmount: 0
+                    estado, isPaid, selected: false, partial: false, partialAmount: 0, cuenta: ''
                   };
                 });
 
@@ -1125,6 +1175,13 @@
             updateStats();
         }
 
+        function selectCuenta(id, cuenta) {
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice) return;
+            invoice.cuenta = invoice.cuenta === cuenta ? '' : cuenta;
+            renderInvoices();
+        }
+
         function renderInvoices() {
             const container = document.getElementById('invoicesContainer');
             if (invoices.length === 0) {
@@ -1162,6 +1219,14 @@
                                    value="${inv.partialAmount || ''}"
                                    max="${inv.amount}"
                                    oninput="updatePartialAmount(${inv.id}, this.value)">
+                        ` : ''}
+                        ${(inv.selected || inv.partial) ? `
+                            <div class="cuenta-label">💳 Pagar con:</div>
+                            <div class="cuenta-selector">
+                                <button class="cuenta-btn ${inv.cuenta === 'Cuenta 4' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 4')">Cuenta 4</button>
+                                <button class="cuenta-btn ${inv.cuenta === 'Cuenta 6' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 6')">Cuenta 6</button>
+                                <button class="cuenta-btn ${inv.cuenta === 'BNA' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'BNA')">BNA</button>
+                            </div>
                         ` : ''}
                     ` : ''}
                 </div>
