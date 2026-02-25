@@ -1076,12 +1076,12 @@
             });
             const out = await res.json();
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-            alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
+            alert(`✅ ${out.message}\nSe registró correctamente.`);
             await loadInvoices();
             invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
             console.error(err);
-            alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
+            alert('❌ No se pudo registrar: ' + (err?.message || err));
           } finally {
             if (btn) btn.disabled = false;
           }
