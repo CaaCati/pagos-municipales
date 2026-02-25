@@ -1046,23 +1046,17 @@
 
         async function registerTodayPayments() {
           const items = [];
-          const sinCuenta = [];
           invoices.forEach(inv => {
             if (inv.selected) {
-              if (!inv.cuenta) sinCuenta.push(inv.supplier);
-              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "COMPLETO", monto: inv.amount, cuenta: inv.cuenta || '' });
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "COMPLETO", monto: inv.amount, cuenta: inv.cuenta || 'Cuenta 4' });
             } else if (inv.partial && inv.partialAmount > 0) {
-              if (!inv.cuenta) sinCuenta.push(inv.supplier);
-              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "PARCIAL", monto: inv.partialAmount, cuenta: inv.cuenta || '' });
+              items.push({ sheetRow: inv.sheetRow, proveedor: inv.supplier, tipo: "PARCIAL", monto: inv.partialAmount, cuenta: inv.cuenta || 'Cuenta 4' });
             }
           });
 
           if (!items.length) { alert("⚠️ No hay pagos seleccionados."); return; }
 
-          if (sinCuenta.length > 0) {
-            const confirmar = confirm(`⚠️ Los siguientes proveedores no tienen cuenta seleccionada:\n\n${sinCuenta.join('\n')}\n\n¿Registrar igual?`);
-            if (!confirmar) return;
-          }
+
 
           const btn = document.getElementById('registerBtn');
           if (btn) btn.disabled = true;
@@ -1076,12 +1070,12 @@
             });
             const out = await res.json();
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-            alert(`✅ ${out.message}\nSe registró correctamente.`);
+            alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
             await loadInvoices();
             invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
             console.error(err);
-            alert('❌ No se pudo registrar: ' + (err?.message || err));
+            alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
           } finally {
             if (btn) btn.disabled = false;
           }
@@ -1221,12 +1215,12 @@
                                    oninput="updatePartialAmount(${inv.id}, this.value)">
                         ` : ''}
                         ${(inv.selected || inv.partial) ? `
-                            <div class="cuenta-label">💳 Pagar con:</div>
+                            <div class="cuenta-label">💳 Excepción de cuenta (opcional):</div>
                             <div class="cuenta-selector">
-                                <button class="cuenta-btn ${inv.cuenta === 'Cuenta 4' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 4')">Cuenta 4</button>
                                 <button class="cuenta-btn ${inv.cuenta === 'Cuenta 6' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 6')">Cuenta 6</button>
                                 <button class="cuenta-btn ${inv.cuenta === 'BNA' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'BNA')">BNA</button>
                             </div>
+                            ${!inv.cuenta ? `<div style="font-size:11px; color:#aaa; margin-top:4px;">Sin selección = Cuenta 4</div>` : ''}
                         ` : ''}
                     ` : ''}
                 </div>
