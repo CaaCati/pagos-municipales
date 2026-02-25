@@ -1070,12 +1070,12 @@
             });
             const out = await res.json();
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-            alert(`✅ ${out.message}\nSe registró en la hoja "Pagos_Hoy".`);
+            alert(`✅ ${out.message}\nSe registró correctamente".`);
             await loadInvoices();
             invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
             console.error(err);
-            alert('❌ No se pudo registrar en el Sheet: ' + (err?.message || err));
+            alert('❌ No se pudo registrar: ' + (err?.message || err));
           } finally {
             if (btn) btn.disabled = false;
           }
@@ -1215,12 +1215,11 @@
                                    oninput="updatePartialAmount(${inv.id}, this.value)">
                         ` : ''}
                         ${(inv.selected || inv.partial) ? `
-                            <div class="cuenta-label">💳 Excepción de cuenta (opcional):</div>
+                            <div class="cuenta-label">💳 Usar otra cuenta:</div>
                             <div class="cuenta-selector">
                                 <button class="cuenta-btn ${inv.cuenta === 'Cuenta 6' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 6')">Cuenta 6</button>
                                 <button class="cuenta-btn ${inv.cuenta === 'BNA' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'BNA')">BNA</button>
-                            </div>
-                            ${!inv.cuenta ? `<div style="font-size:11px; color:#aaa; margin-top:4px;">Sin selección = Cuenta 4</div>` : ''}
+                            </div>                           
                         ` : ''}
                     ` : ''}
                 </div>
