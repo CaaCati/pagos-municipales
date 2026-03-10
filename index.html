@@ -1123,8 +1123,8 @@
                     id: idx + 1, sheetRow,
                     supplier: row.c?.[0]?.v || '',
                     amount: parseFloat(row.c?.[1]?.v || 0),
-                    issueDate: row.c?.[2]?.f || row.c?.[2]?.v || '-',
-                    payDate: row.c?.[3]?.f || row.c?.[3]?.v || '-',
+                    issueDate: row.c?.[2]?.v || '-',
+                    payDate: row.c?.[3]?.v || '-',
                     estado, isPaid, selected: false, partial: false, partialAmount: 0, cuenta: ''
                   };
                 });
