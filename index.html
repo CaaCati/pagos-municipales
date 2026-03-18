@@ -1167,9 +1167,9 @@
                 <div class="accordion-section">
                     <button class="accordion-header" onclick="toggleAccordion('movimientos')">
                         <span class="accordion-title">📋 Movimientos de Caja</span>
-                        <span class="accordion-arrow open" id="arrow-movimientos">▼</span>
+                        <span class="accordion-arrow" id="arrow-movimientos">▼</span>
                     </button>
-                    <div class="accordion-body open" id="body-movimientos">
+                    <div class="accordion-body" id="body-movimientos">
                         <div id="cajaMovimientosContainer" class="caja-container" style="box-shadow:none; border-radius:0;"></div>
                     </div>
                 </div>
@@ -1181,9 +1181,9 @@
                             ✅ Pagos a Autorizar
                             <span class="accordion-badge" id="autorizacionesBadge" style="display:none;">0</span>
                         </span>
-                        <span class="accordion-arrow open" id="arrow-autorizaciones">▼</span>
+                        <span class="accordion-arrow" id="arrow-autorizaciones">▼</span>
                     </button>
-                    <div class="accordion-body open" id="body-autorizaciones">
+                    <div class="accordion-body" id="body-autorizaciones">
                         <div id="autorizacionesContainer"></div>
                         <div id="authTotalCard" class="auth-total-card" style="display:none;">
                             <span class="auth-total-label">Total a autorizar</span>
@@ -1659,14 +1659,13 @@
 
                 // --- Procesar Autorizaciones ---
                 // Columnas hoja "Autorizaciones": A=Beneficiario, B=Monto, C=Concepto, D=Autorizado (checkbox)
+                // GViz siempre omite el encabezado → índice 0 = fila 2 del sheet
                 const authRows = authJson.table.rows;
-                const firstAuthCell = (authRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
-                const authDataRows = (firstAuthCell === 'beneficiario' || firstAuthCell === 'columna 1') ? authRows.slice(1) : authRows;
 
-                autorizaciones = authDataRows
+                autorizaciones = authRows
                     .map((r, i) => ({
                         id: i + 1,
-                        sheetRow: (firstAuthCell === 'beneficiario' || firstAuthCell === 'columna 1') ? i + 2 : i + 1,
+                        sheetRow: i + 2,
                         beneficiario: (r.c?.[0]?.v || '').toString().trim(),
                         monto: parseFloat(r.c?.[1]?.v || 0),
                         concepto: (r.c?.[2]?.v || '').toString().trim(),
