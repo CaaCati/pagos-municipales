@@ -753,6 +753,234 @@
             box-shadow: 0 4px 12px rgba(16,172,132,0.3);
         }
 
+        /* ===== ACCORDION CAJA CHICA ===== */
+        .accordion-section {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
+            background: white;
+            border: none;
+            width: 100%;
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #f0fff9;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .accordion-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .accordion-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .accordion-arrow {
+            font-size: 12px;
+            color: #10ac84;
+            transition: transform 0.3s;
+        }
+
+        .accordion-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            display: none;
+            border-top: 1px solid #e8f8f4;
+        }
+
+        .accordion-body.open {
+            display: block;
+        }
+
+        /* ===== ITEMS DE AUTORIZACIÓN ===== */
+        .autorizacion-item {
+            padding: 15px;
+            border-bottom: 1px solid #e8f8f4;
+            transition: background 0.2s;
+        }
+
+        .autorizacion-item:last-child {
+            border-bottom: none;
+        }
+
+        .autorizacion-item.autorizado {
+            opacity: 0.5;
+            background: #f5f5f5;
+        }
+
+        .autorizacion-item.selected-auth {
+            background: linear-gradient(135deg, #f0fff9 0%, #e0fdf4 100%);
+        }
+
+        .auth-beneficiary {
+            font-weight: 700;
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .auth-concepto {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .auth-amount {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .hide-amounts .auth-amount {
+            visibility: hidden !important;
+            position: relative !important;
+        }
+
+        .hide-amounts .auth-amount::after {
+            content: '••••••';
+            visibility: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #999;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .btn-auth {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #10ac84;
+            background: white;
+            color: #10ac84;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-auth.active {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: white;
+            border-color: #10ac84;
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .auth-partial-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #10ac84;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .auth-partial-input:focus {
+            outline: none;
+            border-color: #1dd1a1;
+        }
+
+        .auth-total-card {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            margin: 12px 16px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .auth-total-label {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .auth-total-value {
+            font-size: 20px;
+            font-weight: 800;
+            position: relative;
+        }
+
+        .hide-amounts .auth-total-value {
+            visibility: hidden !important;
+            position: relative !important;
+        }
+
+        .hide-amounts .auth-total-value::after {
+            content: '••••••';
+            visibility: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: rgba(255,255,255,0.6);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-autorizar-todo {
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: calc(100% - 32px);
+            margin: 0 16px 16px;
+            transition: all 0.3s;
+        }
+
+        .btn-autorizar-todo:hover {
+            background: linear-gradient(135deg, #0d9e79 0%, #1abc9c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16,172,132,0.3);
+        }
+
+        .btn-autorizar-todo:disabled {
+            background: #b2dfdb;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* ===== HEADER INSTITUCIONAL ===== */
         .main-header{
             position:fixed;
@@ -935,13 +1163,39 @@
                     <div style="font-size:13px; opacity:0.85; margin-top:6px;" id="cajaFechaActual">—</div>
                 </div>
 
-                <!-- MOVIMIENTOS DE CAJA -->
-                <div class="balance-section green-section">
-                    <div class="balance-title">📋 Movimientos de Caja</div>
-                    <div id="cajaMovimientosContainer" class="caja-container" style="box-shadow:none; border-radius:0;"></div>
+                <!-- ACCORDION: MOVIMIENTOS DE CAJA -->
+                <div class="accordion-section">
+                    <button class="accordion-header" onclick="toggleAccordion('movimientos')">
+                        <span class="accordion-title">📋 Movimientos de Caja</span>
+                        <span class="accordion-arrow open" id="arrow-movimientos">▼</span>
+                    </button>
+                    <div class="accordion-body open" id="body-movimientos">
+                        <div id="cajaMovimientosContainer" class="caja-container" style="box-shadow:none; border-radius:0;"></div>
+                    </div>
                 </div>
 
-                <button class="refresh-btn green-btn" onclick="loadCaja()">🔄 Actualizar Caja</button>
+                <!-- ACCORDION: PAGOS A AUTORIZAR -->
+                <div class="accordion-section">
+                    <button class="accordion-header" onclick="toggleAccordion('autorizaciones')">
+                        <span class="accordion-title">
+                            ✅ Pagos a Autorizar
+                            <span class="accordion-badge" id="autorizacionesBadge" style="display:none;">0</span>
+                        </span>
+                        <span class="accordion-arrow open" id="arrow-autorizaciones">▼</span>
+                    </button>
+                    <div class="accordion-body open" id="body-autorizaciones">
+                        <div id="autorizacionesContainer"></div>
+                        <div id="authTotalCard" class="auth-total-card" style="display:none;">
+                            <span class="auth-total-label">Total a autorizar</span>
+                            <span class="auth-total-value" id="authTotalValue">$0</span>
+                        </div>
+                        <button class="btn-autorizar-todo" id="btnAutorizarTodo" onclick="registrarAutorizaciones()" style="display:none;">
+                            ✅ Confirmar autorizaciones
+                        </button>
+                    </div>
+                </div>
+
+                <button class="refresh-btn green-btn" onclick="loadCaja()" style="margin-bottom:12px;">🔄 Actualizar Caja</button>
             </div>
         </div>
     </div>
@@ -957,6 +1211,7 @@
 
         // CONFIGURACIÓN CAJA CHICA
         const CAJA_SHEET_ID = '1lVLmlRjNpakbv13qZ_o8fwuFy14JkxUqq8EeuaTHUjg';
+        const CAJA_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzactjwkmdHKtfF-pEXa4TqZdGmtKSUlXC33yNNVEzE2r_qHBp6Vs78E0JZWVJZK03XTA/exec';
 
         let currentTab = 'proveedores';
         let amountsHidden = true;
@@ -1323,7 +1578,18 @@
             }
         }
 
+        // ============ ACCORDION ============
+        function toggleAccordion(id) {
+            const body = document.getElementById('body-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            const isOpen = body.classList.contains('open');
+            body.classList.toggle('open', !isOpen);
+            arrow.classList.toggle('open', !isOpen);
+        }
+
         // ============ FUNCIONES CAJA CHICA ============
+        let autorizaciones = [];
+
         function initCaja() {
             loadCaja();
         }
@@ -1334,27 +1600,28 @@
             document.getElementById('cajaContainer').style.display = 'none';
 
             try {
-                // Cargar hoja "Saldo" — saldo actual del efectivo
+                // Saldo
                 const saldoUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Saldo`;
                 const saldoResp = await fetch(saldoUrl);
                 const saldoText = await saldoResp.text();
                 const saldoJson = JSON.parse(saldoText.substring(saldoText.indexOf('(') + 1, saldoText.lastIndexOf(');')));
 
-                // Cargar hoja "Movimientos" — pagos y cobros en efectivo
+                // Movimientos
                 const movUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Movimientos`;
                 const movResp = await fetch(movUrl);
                 const movText = await movResp.text();
                 const movJson = JSON.parse(movText.substring(movText.indexOf('(') + 1, movText.lastIndexOf(');')));
 
+                // Autorizaciones
+                const authUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Autorizaciones`;
+                const authResp = await fetch(authUrl);
+                const authText = await authResp.text();
+                const authJson = JSON.parse(authText.substring(authText.indexOf('(') + 1, authText.lastIndexOf(');')));
+
                 // --- Procesar Saldo ---
-                // Espera columna A=Concepto, B=Monto en hoja "Saldo"
-                // El saldo total está en la primera fila de datos (después del encabezado)
                 const saldoRows = saldoJson.table.rows;
                 let saldoActual = 0;
                 let lastUpdate = null;
-
-                // Estructura real: col A = Saldo Actual (número), col B = Última Actualización (fecha)
-                // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
                 saldoRows.forEach(row => {
                     const monto = parseFloat(row.c?.[0]?.v || 0);
                     saldoActual += monto;
@@ -1362,40 +1629,20 @@
                 });
 
                 // --- Procesar Movimientos ---
-                // GViz ya salta el encabezado automáticamente con parsedNumHeaders:1
                 const movDataRows = movJson.table.rows;
-
-                let totalIngresos = 0;
-                let totalEgresos = 0;
                 let movimientosHTML = '';
-
                 const currentMonth = new Date().getMonth();
                 const currentYear = new Date().getFullYear();
 
                 movDataRows.forEach(row => {
-                    // Columnas reales: A=Fecha, B=Tipo (Ingreso/Egreso), C=Descripcion, D=Monto (siempre positivo)
                     const fechaRaw = row.c?.[0]?.f || row.c?.[0]?.v || '';
                     const tipo = (row.c?.[1]?.v || '').toString().trim();
                     const descripcion = (row.c?.[2]?.v || '').toString().trim();
                     const monto = parseFloat(row.c?.[3]?.v || 0);
-
                     if (!descripcion && monto === 0) return;
-
                     const isIngreso = tipo.toLowerCase() === 'ingreso';
-
-                    // Acumular totales del mes actual
-                    const fechaObj = parseGvizDate(row.c?.[0]?.v);
-                    if (fechaObj && fechaObj.getMonth() === currentMonth && fechaObj.getFullYear() === currentYear) {
-                        if (isIngreso) totalIngresos += monto;
-                        else totalEgresos += monto;
-                    }
-
-                    // Badge de tipo
                     const tipoClass = isIngreso ? '' : 'proveedor';
-                    const tipoBadge = tipo
-                        ? `<span class="caja-payment-type ${tipoClass}">${tipo}</span>`
-                        : '';
-
+                    const tipoBadge = tipo ? `<span class="caja-payment-type ${tipoClass}">${tipo}</span>` : '';
                     movimientosHTML += `
                         <div class="caja-payment-item">
                             <div class="caja-payment-header">
@@ -1410,29 +1657,176 @@
                     `;
                 });
 
-                // Última actualización desde col B de Saldo
+                // --- Procesar Autorizaciones ---
+                // Columnas hoja "Autorizaciones": A=Beneficiario, B=Monto, C=Concepto, D=Autorizado (checkbox)
+                const authRows = authJson.table.rows;
+                const firstAuthCell = (authRows[0]?.c?.[0]?.v ?? '').toString().trim().toLowerCase();
+                const authDataRows = (firstAuthCell === 'beneficiario' || firstAuthCell === 'columna 1') ? authRows.slice(1) : authRows;
+
+                autorizaciones = authDataRows
+                    .map((r, i) => ({
+                        id: i + 1,
+                        sheetRow: (firstAuthCell === 'beneficiario' || firstAuthCell === 'columna 1') ? i + 2 : i + 1,
+                        beneficiario: (r.c?.[0]?.v || '').toString().trim(),
+                        monto: parseFloat(r.c?.[1]?.v || 0),
+                        concepto: (r.c?.[2]?.v || '').toString().trim(),
+                        autorizado: r.c?.[3]?.v === true,
+                        selected: false,
+                        partial: false,
+                        partialAmount: 0,
+                    }))
+                    .filter(a => a.beneficiario || a.monto);
+
+                // UI
                 const fechaCaja = parseGvizDate(lastUpdate);
                 const fechaStr = fechaCaja
                     ? fechaCaja.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
                     : '—';
 
-                // Actualizar UI
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
+
+                renderAutorizaciones();
 
             } catch (err) {
                 console.error('Error al cargar caja chica:', err);
                 const errorDiv = document.getElementById('cajaError');
                 errorDiv.innerHTML = `
                     ❌ No se pudo cargar la Caja Chica.<br>
-                    <small>Verificá que el Sheet sea público ("Cualquier persona con el enlace puede ver") 
-                    y que tenga hojas llamadas <strong>Saldo</strong> y <strong>Movimientos</strong>.</small>
+                    <small>Verificá que el Sheet sea público y que tenga hojas llamadas <strong>Saldo</strong>, <strong>Movimientos</strong> y <strong>Autorizaciones</strong>.</small>
                 `;
                 errorDiv.style.display = 'block';
             } finally {
                 document.getElementById('cajaLoading').style.display = 'none';
+            }
+        }
+
+        function renderAutorizaciones() {
+            const container = document.getElementById('autorizacionesContainer');
+            const pendientes = autorizaciones.filter(a => !a.autorizado);
+            const badge = document.getElementById('autorizacionesBadge');
+
+            if (pendientes.length > 0) {
+                badge.textContent = pendientes.length;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            if (autorizaciones.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><p>No hay gastos para autorizar</p></div>';
+                document.getElementById('authTotalCard').style.display = 'none';
+                document.getElementById('btnAutorizarTodo').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = autorizaciones.map(a => `
+                <div class="autorizacion-item ${a.autorizado ? 'autorizado' : ''} ${(a.selected || a.partial) ? 'selected-auth' : ''}">
+                    <div class="auth-beneficiary">${a.beneficiario || '—'}</div>
+                    ${a.concepto ? `<div class="auth-concepto">📝 ${a.concepto}</div>` : ''}
+                    <div class="auth-amount">${formatCurrency(a.monto)}</div>
+                    ${!a.autorizado ? `
+                        <div class="invoice-actions">
+                            <button class="btn-auth ${a.selected ? 'active' : ''}"
+                                    onclick="toggleAuth(${a.id}, 'full')"
+                                    ${a.partial ? 'disabled' : ''}>
+                                ${a.selected ? '✓ Total' : 'Autorizar Total'}
+                            </button>
+                            <button class="btn-auth ${a.partial ? 'active' : ''}"
+                                    onclick="toggleAuth(${a.id}, 'partial')"
+                                    ${a.selected ? 'disabled' : ''}>
+                                ${a.partial ? '✓ Parcial' : 'Autorizar Parcial'}
+                            </button>
+                        </div>
+                        ${a.partial ? `
+                            <input type="number" class="auth-partial-input"
+                                   placeholder="Monto a autorizar"
+                                   value="${a.partialAmount || ''}"
+                                   max="${a.monto}"
+                                   oninput="updateAuthPartial(${a.id}, this.value)">
+                        ` : ''}
+                    ` : `<div style="font-size:12px;color:#10ac84;font-weight:600;">✅ Ya autorizado</div>`}
+                </div>
+            `).join('');
+
+            updateAuthTotal();
+        }
+
+        function toggleAuth(id, type) {
+            const item = autorizaciones.find(a => a.id === id);
+            if (!item || item.autorizado) return;
+            if (type === 'full') {
+                item.selected = !item.selected;
+                item.partial = false;
+                item.partialAmount = 0;
+            } else {
+                item.partial = !item.partial;
+                item.selected = false;
+                if (!item.partial) item.partialAmount = 0;
+            }
+            renderAutorizaciones();
+        }
+
+        function updateAuthPartial(id, value) {
+            const item = autorizaciones.find(a => a.id === id);
+            if (!item) return;
+            item.partialAmount = Math.min(parseFloat(value) || 0, item.monto);
+            updateAuthTotal();
+        }
+
+        function updateAuthTotal() {
+            const total = autorizaciones.reduce((sum, a) => {
+                if (a.selected) return sum + a.monto;
+                if (a.partial) return sum + a.partialAmount;
+                return sum;
+            }, 0);
+
+            const haySeleccion = autorizaciones.some(a => a.selected || (a.partial && a.partialAmount > 0));
+            const totalCard = document.getElementById('authTotalCard');
+            const btnTodo = document.getElementById('btnAutorizarTodo');
+
+            totalCard.style.display = haySeleccion ? 'flex' : 'none';
+            btnTodo.style.display = haySeleccion ? 'block' : 'none';
+            document.getElementById('authTotalValue').textContent = formatCurrency(total);
+        }
+
+        async function registrarAutorizaciones() {
+            const items = [];
+            autorizaciones.forEach(a => {
+                if (a.selected) {
+                    items.push({ sheetRow: a.sheetRow, beneficiario: a.beneficiario, concepto: a.concepto, tipo: 'TOTAL', monto: a.monto });
+                } else if (a.partial && a.partialAmount > 0) {
+                    items.push({ sheetRow: a.sheetRow, beneficiario: a.beneficiario, concepto: a.concepto, tipo: 'PARCIAL', monto: a.partialAmount });
+                }
+            });
+
+            if (!items.length) { alert('⚠️ No hay autorizaciones seleccionadas.'); return; }
+
+            const btn = document.getElementById('btnAutorizarTodo');
+            btn.disabled = true;
+
+            try {
+                const payload = {
+                    spreadsheetId: CAJA_SHEET_ID,
+                    accion: 'autorizarCaja',
+                    items
+                };
+                const res = await fetch(CAJA_WEBAPP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const out = await res.json();
+                if (!out.ok) throw new Error(out.message || 'Error al autorizar');
+                alert(`✅ ${out.message}`);
+                await loadCaja();
+            } catch (err) {
+                console.error(err);
+                alert('❌ No se pudo registrar: ' + (err?.message || err));
+            } finally {
+                btn.disabled = false;
             }
         }
 
