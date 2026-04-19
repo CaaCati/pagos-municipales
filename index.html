@@ -1163,6 +1163,12 @@
                     <div style="font-size:13px; opacity:0.85; margin-top:6px;" id="cajaFechaActual">—</div>
                 </div>
 
+                <!-- EFECTIVO SIN REGISTRAR -->
+                <div class="total-disponible" style="background: linear-gradient(135deg, #f9ca24 0%, #f0932b 100%); margin-bottom: 20px;">
+                    <div class="total-disponible-label">⚠️ EFECTIVO SIN REGISTRAR</div>
+                    <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
+                </div>
+
                 <!-- ACCORDION: MOVIMIENTOS DE CAJA -->
                 <div class="accordion-section">
                     <button class="accordion-header" onclick="toggleAccordion('movimientos')">
@@ -1621,12 +1627,18 @@
                 // --- Procesar Saldo ---
                 const saldoRows = saldoJson.table.rows;
                 let saldoActual = 0;
+                let saldoSinRegistrar = 0;
                 let lastUpdate = null;
-                saldoRows.forEach(row => {
-                    const monto = parseFloat(row.c?.[0]?.v || 0);
-                    saldoActual += monto;
-                    if (!lastUpdate && row.c?.[1]?.v) lastUpdate = row.c[1].v;
-                });
+
+                // Fila 0 (A2 del sheet) = Efectivo Disponible
+                if (saldoRows[0]) {
+                    saldoActual = parseFloat(saldoRows[0].c?.[0]?.v || 0);
+                    if (saldoRows[0].c?.[1]?.v) lastUpdate = saldoRows[0].c[1].v;
+                }
+                // Fila 1 (A3 del sheet) = Efectivo Sin Registrar
+                if (saldoRows[1]) {
+                    saldoSinRegistrar = parseFloat(saldoRows[1].c?.[0]?.v || 0);
+                }
 
                 // --- Procesar Movimientos ---
                 const movDataRows = movJson.table.rows;
@@ -1683,6 +1695,7 @@
                     : '—';
 
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
+                document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
