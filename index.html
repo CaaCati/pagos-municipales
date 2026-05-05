@@ -1169,6 +1169,12 @@
                     <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
                 </div>
 
+                <!-- EFECTIVO EN DÓLARES -->
+                <div class="total-disponible" style="background: linear-gradient(135deg, #1a9c3e 0%, #0a7a2e 100%); margin-bottom: 20px;">
+                    <div class="total-disponible-label">💵 EFECTIVO EN DÓLARES</div>
+                    <div class="total-disponible-value" id="cajaSaldoUSD">U$S 0</div>
+                </div>
+
                 <!-- ACCORDION: MOVIMIENTOS DE CAJA -->
                 <div class="accordion-section">
                     <button class="accordion-header" onclick="toggleAccordion('movimientos')">
@@ -1639,6 +1645,11 @@
                 if (saldoRows[1]) {
                     saldoSinRegistrar = parseFloat(saldoRows[1].c?.[0]?.v || 0);
                 }
+                // Fila 2 (A4 del sheet) = Efectivo en dólares
+                let saldoUSD = 0;
+                if (saldoRows[2]) {
+                    saldoUSD = parseFloat(saldoRows[2].c?.[0]?.v || 0);
+                }
 
                 // --- Procesar Movimientos ---
                 const movDataRows = movJson.table.rows;
@@ -1696,6 +1707,7 @@
 
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
                 document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
+                document.getElementById('cajaSaldoUSD').textContent = 'U$S ' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 0 }).format(saldoUSD);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
