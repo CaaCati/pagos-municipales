@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
+            background: #F1F3F5;
             min-height: 100vh;
             padding: 0;
             padding-bottom: 80px;
@@ -65,15 +65,15 @@
         }
 
         .tab.active {
-            color: #ff6b6b;
-            border-top: 3px solid #ff6b6b;
-            background: linear-gradient(to bottom, #fff5f5 0%, white 100%);
+            color: #E07830;
+            border-top: 3px solid #E07830;
+            background: #FDF0E7;
         }
 
         .tab.active-green {
-            color: #10ac84;
-            border-top: 3px solid #10ac84;
-            background: linear-gradient(to bottom, #f0fff9 0%, white 100%);
+            color: #E07830;
+            border-top: 3px solid #E07830;
+            background: #FDF0E7;
         }
 
         .tab:not(.active):not(.active-green):hover {
@@ -94,11 +94,11 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
 
         .header.green-header {
-            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
 
         h1 {
@@ -134,7 +134,7 @@
         }
 
         button {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            background: #E07830;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -147,13 +147,14 @@
         }
 
         button:hover {
-            background: linear-gradient(135deg, #ff5252 0%, #ff7043 100%);
+            background: #C06520;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            box-shadow: 0 5px 15px rgba(224,120,48,0.3);
         }
 
         button:disabled {
-            background: #ffcccc;
+            background: #DEE2E6;
+            color: #ADB5BD;
             cursor: not-allowed;
             transform: none;
         }
@@ -165,20 +166,31 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            background: white;
+            border: 1px solid #E9ECEF;
             padding: 15px;
             border-radius: 10px;
-            color: white;
+            color: #212529;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         .stat-card.total {
-            background: linear-gradient(135deg, #c23616 0%, #8e44ad 100%);
+            background: #E07830;
+            border-color: #E07830;
+            color: white;
         }
 
         .stat-label {
             font-size: 12px;
-            opacity: 0.9;
+            color: #6C757D;
             margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-card.total .stat-label {
+            color: rgba(255,255,255,0.8);
         }
 
         .stat-value {
@@ -191,12 +203,13 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid #E9ECEF;
         }
 
         .invoice-item {
             padding: 15px;
-            border-bottom: 1px solid #ffe0e0;
+            border-bottom: 1px solid #F1F3F5;
             transition: background 0.2s;
         }
 
@@ -205,12 +218,12 @@
         }
 
         .invoice-item.selected {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            background: #FDF0E7;
         }
 
         .invoice-item.paid {
-            opacity: 0.5;
-            background: #f5f5f5;
+            opacity: 0.45;
+            background: #F8F9FA;
         }
 
         .invoice-header {
@@ -234,13 +247,15 @@
         }
 
         .badge-pending {
-            background: linear-gradient(135deg, #ff8c00 0%, #ff6f00 100%);
-            color: #ffffff;
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FDE68A;
         }
 
         .badge-paid {
-            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
-            color: white;
+            background: #E8F5F1;
+            color: #1A8A6A;
+            border: 1px solid #A8D8CB;
         }
 
         .invoice-details {
@@ -255,10 +270,7 @@
         .invoice-amount {
             font-size: 20px;
             font-weight: bold;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #212529;
             margin-bottom: 10px;
             position: relative;
         }
@@ -271,9 +283,9 @@
         .btn-mark {
             flex: 1;
             padding: 10px;
-            border: 2px solid #ff8e53;
+            border: 1.5px solid #DEE2E6;
             background: white;
-            color: #ff6b6b;
+            color: #495057;
             border-radius: 8px;
             font-weight: 600;
             font-size: 13px;
@@ -282,9 +294,9 @@
         }
 
         .btn-mark.active {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            background: #E07830;
             color: white;
-            border-color: #ff6b6b;
+            border-color: #E07830;
         }
 
         .btn-mark:disabled {
@@ -295,15 +307,16 @@
         .partial-input {
             width: 100%;
             padding: 8px;
-            border: 2px solid #ff8e53;
+            border: 1.5px solid #F0C9A0;
             border-radius: 8px;
             font-size: 14px;
             margin-top: 8px;
+            background: #FDF0E7;
         }
 
         .partial-input:focus {
             outline: none;
-            border-color: #ff6b6b;
+            border-color: #E07830;
         }
 
         .cuenta-selector {
@@ -329,16 +342,16 @@
         }
 
         .cuenta-btn:hover {
-            border-color: #ff8e53;
-            color: #ff6b6b;
+            border-color: #2563EB;
+            color: #2563EB;
             transform: none;
             box-shadow: none;
         }
 
         .cuenta-btn.selected {
-            background: linear-gradient(135deg, #4834df 0%, #0fbcf9 100%);
+            background: #2563EB;
             color: white;
-            border-color: #4834df;
+            border-color: #2563EB;
         }
 
         .cuenta-label {
@@ -355,8 +368,8 @@
         }
 
         .spinner {
-            border: 3px solid #ffe0e0;
-            border-top: 3px solid #ff6b6b;
+            border: 3px solid #E9ECEF;
+            border-top: 3px solid #E07830;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -375,10 +388,11 @@
         }
 
         .error {
-            background: linear-gradient(135deg, #ffcccc 0%, #ffb3b3 100%);
-            color: #cc0000;
+            background: #FDECEA;
+            color: #C0392B;
             padding: 15px;
             border-radius: 10px;
+            border: 1px solid #F0B8B3;
             margin-bottom: 15px;
         }
 
@@ -399,11 +413,12 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid #E9ECEF;
         }
 
         .balance-section.green-section {
-            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
 
         .balance-title {
@@ -443,31 +458,27 @@
         .balance-amount {
             font-weight: 700;
             font-size: 16px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #212529;
             position: relative;
         }
 
         .balance-amount.green {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1A8A6A;
         }
 
         .total-disponible {
-            background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
+            background: #E07830;
             color: white;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
+            box-shadow: 0 4px 16px rgba(224,120,48,0.2);
         }
 
         .total-disponible.green {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            background: #1A8A6A;
+            box-shadow: 0 4px 16px rgba(26,138,106,0.2);
         }
 
         .total-disponible-label {
@@ -485,14 +496,14 @@
 
         .movement-item {
             padding: 15px;
-            border-bottom: 1px solid #ffe0e0;
+            border-bottom: 1px solid #F1F3F5;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .movement-item.green-border {
-            border-bottom: 1px solid #d5f5ef;
+            border-bottom: 1px solid #F1F3F5;
         }
 
         .movement-item:last-child {
@@ -534,15 +545,30 @@
             padding: 10px 20px;
             font-size: 13px;
             margin-top: 10px;
+            background: white;
+            border: 1.5px solid #DEE2E6;
+            color: #495057;
+        }
+
+        .refresh-btn:hover {
+            background: #FDF0E7;
+            border-color: #E07830;
+            color: #E07830;
+            transform: none;
+            box-shadow: none;
         }
 
         .refresh-btn.green-btn {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            background: white;
+            border: 1.5px solid #DEE2E6;
+            color: #495057;
         }
 
         .refresh-btn.green-btn:hover {
-            background: linear-gradient(135deg, #0d9e79 0%, #1abc9c 100%);
-            box-shadow: 0 5px 15px rgba(16,172,132,0.3);
+            background: #FDF0E7;
+            border-color: #E07830;
+            color: #E07830;
+            box-shadow: none;
         }
 
         /* CAJA CHICA SPECIFIC STYLES */
@@ -579,7 +605,7 @@
 
         .caja-payment-item {
             padding: 15px;
-            border-bottom: 1px solid #d5f5ef;
+            border-bottom: 1px solid #F1F3F5;
             transition: background 0.2s;
         }
 
@@ -605,16 +631,21 @@
             padding: 3px 8px;
             border-radius: 12px;
             font-weight: 600;
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
-            color: white;
+            background: #E8F5F1;
+            color: #1A8A6A;
+            border: 1px solid #A8D8CB;
         }
 
         .caja-payment-type.proveedor {
-            background: linear-gradient(135deg, #ff8c00 0%, #ff6f00 100%);
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FDE68A;
         }
 
         .caja-payment-type.servicio {
-            background: linear-gradient(135deg, #0fbcf9 0%, #4834df 100%);
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #BFDBFE;
         }
 
         .caja-payment-amount {
@@ -634,7 +665,8 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid #E9ECEF;
         }
 
         /* OCULTAR MONTOS */
@@ -758,7 +790,8 @@
             background: white;
             border-radius: 15px;
             margin-bottom: 16px;
-            box-shadow: 0 10px 30px rgba(16,172,132,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border: 1px solid #E9ECEF;
             overflow: hidden;
         }
 
@@ -777,7 +810,7 @@
         }
 
         .accordion-header:hover {
-            background: #f0fff9;
+            background: #F8F9FA;
             transform: none;
             box-shadow: none;
         }
@@ -792,7 +825,7 @@
         }
 
         .accordion-badge {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            background: #E07830;
             color: white;
             font-size: 11px;
             font-weight: 700;
@@ -802,7 +835,7 @@
 
         .accordion-arrow {
             font-size: 12px;
-            color: #10ac84;
+            color: #ADB5BD;
             transition: transform 0.3s;
         }
 
@@ -812,7 +845,7 @@
 
         .accordion-body {
             display: none;
-            border-top: 1px solid #e8f8f4;
+            border-top: 1px solid #F1F3F5;
         }
 
         .accordion-body.open {
@@ -822,7 +855,7 @@
         /* ===== ITEMS DE AUTORIZACIÓN ===== */
         .autorizacion-item {
             padding: 15px;
-            border-bottom: 1px solid #e8f8f4;
+            border-bottom: 1px solid #F1F3F5;
             transition: background 0.2s;
         }
 
@@ -831,12 +864,12 @@
         }
 
         .autorizacion-item.autorizado {
-            opacity: 0.5;
-            background: #f5f5f5;
+            opacity: 0.45;
+            background: #F8F9FA;
         }
 
         .autorizacion-item.selected-auth {
-            background: linear-gradient(135deg, #f0fff9 0%, #e0fdf4 100%);
+            background: #E8F5F1;
         }
 
         .auth-beneficiary {
@@ -855,10 +888,7 @@
         .auth-amount {
             font-size: 20px;
             font-weight: bold;
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #212529;
             margin-bottom: 10px;
             position: relative;
         }
@@ -874,7 +904,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            color: #999;
+            color: #ADB5BD;
             font-weight: bold;
             font-size: 20px;
         }
@@ -882,9 +912,9 @@
         .btn-auth {
             flex: 1;
             padding: 10px;
-            border: 2px solid #10ac84;
+            border: 1.5px solid #A8D8CB;
             background: white;
-            color: #10ac84;
+            color: #1A8A6A;
             border-radius: 8px;
             font-weight: 600;
             font-size: 13px;
@@ -893,9 +923,9 @@
         }
 
         .btn-auth.active {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            background: #1A8A6A;
             color: white;
-            border-color: #10ac84;
+            border-color: #1A8A6A;
         }
 
         .btn-auth:disabled {
@@ -918,7 +948,7 @@
         }
 
         .auth-total-card {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            background: #1A8A6A;
             color: white;
             padding: 14px 20px;
             border-radius: 10px;
@@ -956,7 +986,7 @@
         }
 
         .btn-autorizar-todo {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            background: #1A8A6A;
             color: white;
             border: none;
             padding: 12px 20px;
@@ -970,13 +1000,13 @@
         }
 
         .btn-autorizar-todo:hover {
-            background: linear-gradient(135deg, #0d9e79 0%, #1abc9c 100%);
+            background: #157A5C;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(16,172,132,0.3);
+            box-shadow: 0 5px 15px rgba(26,138,106,0.25);
         }
 
         .btn-autorizar-todo:disabled {
-            background: #b2dfdb;
+            background: #A8D8CB;
             cursor: not-allowed;
             transform: none;
         }
@@ -1014,11 +1044,24 @@
         }
 
         .eye-btn{
-            background:none;
-            border:none;
-            font-size:26px;
-            cursor:pointer;
-            color:white;
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .eye-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: none;
+            box-shadow: none;
         }
 
         /* Para que no tape contenido */
@@ -1038,7 +1081,9 @@
       </div>
 
       <div class="header-right">
-        <button class="eye-btn" onclick="toggleAmounts()" id="toggleBtn">👀</button>
+        <button class="eye-btn" onclick="toggleAmounts()" id="toggleBtn" title="Mostrar/ocultar montos">
+          <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
       </div>
     </header>
 
@@ -1164,13 +1209,13 @@
                 </div>
 
                 <!-- EFECTIVO SIN REGISTRAR -->
-                <div class="total-disponible" style="background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 100%);">
+                <div class="total-disponible" style="background: #C0392B; box-shadow: 0 4px 16px rgba(192,57,43,0.15);">
                     <div class="total-disponible-label">⚠️ EFECTIVO SIN REGISTRAR</div>
                     <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
                 </div>
 
                 <!-- EFECTIVO EN DÓLARES -->
-                <div class="total-disponible" style="background: linear-gradient(135deg, #1a9c3e 0%, #0a7a2e 100%); margin-bottom: 20px;">
+                <div class="total-disponible" style="background: #1A5C2F; box-shadow: 0 4px 16px rgba(26,92,47,0.15); margin-bottom: 20px;">
                     <div class="total-disponible-label">💵 EFECTIVO EN DÓLARES</div>
                     <div class="total-disponible-value" id="cajaSaldoUSD">U$S 0</div>
                 </div>
@@ -1231,13 +1276,13 @@
         // ============ OCULTAR/MOSTRAR MONTOS ============
         function toggleAmounts() {
             amountsHidden = !amountsHidden;
-            const btn = document.getElementById('toggleBtn');
+            const icon = document.getElementById('eyeIcon');
             if (amountsHidden) {
                 document.body.classList.add('hide-amounts');
-                btn.textContent = '👀';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
             } else {
                 document.body.classList.remove('hide-amounts');
-                btn.textContent = '⛔';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
             }
         }
 
@@ -1251,11 +1296,7 @@
             });
 
             const clickedTab = event.target.closest('.tab');
-            if (tabName === 'caja') {
-                clickedTab.classList.add('active-green');
-            } else {
-                clickedTab.classList.add('active');
-            }
+            clickedTab.classList.add('active');
 
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
@@ -1275,7 +1316,7 @@
             return new Intl.NumberFormat('es-AR', {
                 style: 'currency',
                 currency: 'ARS',
-                minimumFractionDigits: 0
+                minimumFractionDigits: 2
             }).format(amount);
         }
 
@@ -1672,7 +1713,7 @@
                                 <div class="caja-payment-beneficiary">${descripcion || '—'}</div>
                                 ${tipoBadge}
                             </div>
-                            <div class="caja-payment-amount" style="color: ${isIngreso ? '#10ac84' : '#ff6b6b'}">
+                            <div class="caja-payment-amount" style="color: ${isIngreso ? '#1A8A6A' : '#C0392B'}">
                                 ${isIngreso ? '+' : '-'}${formatCurrency(monto)}
                             </div>
                             <div class="caja-payment-details">📅 ${fechaRaw || '—'}</div>
@@ -1707,7 +1748,7 @@
 
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
                 document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
-                document.getElementById('cajaSaldoUSD').textContent = 'U$S ' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 0 }).format(saldoUSD);
+                document.getElementById('cajaSaldoUSD').textContent = 'U$S ' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(saldoUSD);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
@@ -1771,7 +1812,7 @@
                                    max="${a.monto}"
                                    oninput="updateAuthPartial(${a.id}, this.value)">
                         ` : ''}
-                    ` : `<div style="font-size:12px;color:#10ac84;font-weight:600;">✅ Ya autorizado</div>`}
+                    ` : `<div style="font-size:12px;color:#1A8A6A;font-weight:600;">✅ Ya autorizado</div>`}
                 </div>
             `).join('');
 
