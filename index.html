@@ -469,9 +469,9 @@
         .total-disponible {
             background: #E07830;
             color: white;
-            padding: 20px;
+            padding: 12px 16px;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             text-align: center;
             box-shadow: 0 4px 16px rgba(224,120,48,0.2);
         }
@@ -482,14 +482,16 @@
         }
 
         .total-disponible-label {
-            font-size: 14px;
+            font-size: 11px;
             opacity: 0.9;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .total-disponible-value {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 800;
             position: relative;
         }
@@ -1214,6 +1216,18 @@
                     <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
                 </div>
 
+                <!-- KUNU'U -->
+                <div class="total-disponible" style="background: #6741D9; box-shadow: 0 4px 16px rgba(103,65,217,0.15);">
+                    <div class="total-disponible-label">🏥 KUNU'U</div>
+                    <div class="total-disponible-value" id="cajaSaldoKunuu">$ 0,00</div>
+                </div>
+
+                <!-- TRASLADO ÑANDE ROGA -->
+                <div class="total-disponible" style="background: #1971C2; box-shadow: 0 4px 16px rgba(25,113,194,0.15);">
+                    <div class="total-disponible-label">🚐 TRASLADO ÑANDE ROGA</div>
+                    <div class="total-disponible-value" id="cajaSaldoNandeRoga">$ 0,00</div>
+                </div>
+
                 <!-- EFECTIVO EN DÓLARES -->
                 <div class="total-disponible" style="background: #1A5C2F; box-shadow: 0 4px 16px rgba(26,92,47,0.15); margin-bottom: 20px;">
                     <div class="total-disponible-label">💵 EFECTIVO EN DÓLARES</div>
@@ -1691,6 +1705,16 @@
                 if (saldoRows[2]) {
                     saldoUSD = parseFloat(saldoRows[2].c?.[0]?.v || 0);
                 }
+                // Fila 3 (A5 del sheet) = Kunu'u
+                let saldoKunuu = 0;
+                if (saldoRows[3]) {
+                    saldoKunuu = parseFloat(saldoRows[3].c?.[0]?.v || 0);
+                }
+                // Fila 4 (A6 del sheet) = Traslado Ñande Roga
+                let saldoNandeRoga = 0;
+                if (saldoRows[4]) {
+                    saldoNandeRoga = parseFloat(saldoRows[4].c?.[0]?.v || 0);
+                }
 
                 // --- Procesar Movimientos ---
                 const movDataRows = movJson.table.rows;
@@ -1749,6 +1773,8 @@
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
                 document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
                 document.getElementById('cajaSaldoUSD').textContent = 'U$S ' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(saldoUSD);
+                document.getElementById('cajaSaldoKunuu').textContent = formatCurrency(saldoKunuu);
+                document.getElementById('cajaSaldoNandeRoga').textContent = formatCurrency(saldoNandeRoga);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
