@@ -1715,7 +1715,7 @@
                 const movJson = JSON.parse(movText.substring(movText.indexOf('(') + 1, movText.lastIndexOf(');')));
 
                 // Autorizaciones
-                const authUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Autorizaciones`;
+                const authUrl = `https://docs.google.com/spreadsheets/d/${CAJA_SHEET_ID}/gviz/tq?tqx=out:json&sheet=Autorizaciones&headers=1`;
                 const authResp = await fetch(authUrl);
                 const authText = await authResp.text();
                 const authJson = JSON.parse(authText.substring(authText.indexOf('(') + 1, authText.lastIndexOf(');')));
@@ -1801,7 +1801,8 @@
                         }))
                         .filter(a => {
                             // Solo incluir si tiene beneficiario, monto > 0, o concepto
-                            // (ignorar filas completamente vacías)
+                            // (ignorar filas completamente vacías o con datos corruptos)
+                            if (isNaN(a.monto)) return false;
                             return a.beneficiario || a.monto > 0 || a.concepto;
                         });
                 }
