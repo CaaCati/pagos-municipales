@@ -1777,19 +1777,26 @@
                 // GViz siempre omite el encabezado → índice 0 = fila 2 del sheet
                 const authRows = authJson.table.rows;
 
-                autorizaciones = authRows
-                    .map((r, i) => ({
-                        id: i + 1,
-                        sheetRow: i + 2,
-                        beneficiario: (r.c?.[0]?.v || '').toString().trim(),
-                        monto: parseFloat(r.c?.[1]?.v || 0),
-                        concepto: (r.c?.[2]?.v || '').toString().trim(),
-                        autorizado: r.c?.[3]?.v === true,
-                        selected: false,
-                        partial: false,
-                        partialAmount: 0,
-                    }))
-                    .filter(a => a.beneficiario || a.monto);
+                autorizaciones = [];
+                if (authRows && authRows.length > 0) {
+                    autorizaciones = authRows
+                        .map((r, i) => ({
+                            id: i + 1,
+                            sheetRow: i + 2,
+                            beneficiario: (r.c?.[0]?.v || '').toString().trim(),
+                            monto: parseFloat(r.c?.[1]?.v || 0),
+                            concepto: (r.c?.[2]?.v || '').toString().trim(),
+                            autorizado: r.c?.[3]?.v === true,
+                            selected: false,
+                            partial: false,
+                            partialAmount: 0,
+                        }))
+                        .filter(a => {
+                            // Solo incluir si tiene beneficiario, monto > 0, o concepto
+                            // (ignorar filas completamente vacías)
+                            return a.beneficiario || a.monto > 0 || a.concepto;
+                        });
+                }
 
                 // UI
                 const fechaCaja = parseGvizDate(lastUpdate);
