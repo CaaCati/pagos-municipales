@@ -1245,6 +1245,33 @@
                     </div>
                 </div>
 
+                <!-- ACCORDION: CARGAR GASTO PROPIO (INTENDENTE) -->
+                <div class="accordion-section">
+                    <button class="accordion-header" onclick="toggleAccordion('gastoPropio')">
+                        <span class="accordion-title">➕ Cargar Gasto</span>
+                        <span class="accordion-arrow" id="arrow-gastoPropio">▼</span>
+                    </button>
+                    <div class="accordion-body" id="body-gastoPropio">
+                        <div class="input-group">
+                            <label>Beneficiario</label>
+                            <input type="text" id="intBeneficiario" placeholder="Nombre del beneficiario">
+                        </div>
+                        <div class="input-group">
+                            <label>Concepto</label>
+                            <input type="text" id="intConcepto" placeholder="Motivo del gasto">
+                        </div>
+                        <div class="input-group">
+                            <label>Monto</label>
+                            <input type="number" id="intMonto" placeholder="0">
+                        </div>
+                        <div class="input-group" style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" id="intAutorizarAhora" style="width:auto;">
+                            <label style="margin:0;">Autorizar ahora</label>
+                        </div>
+                        <button id="btnAgregarGastoPropio" onclick="agregarGastoPropio()">💾 Guardar gasto</button>
+                    </div>
+                </div>
+
                 <!-- ACCORDION: PAGOS A AUTORIZAR -->
                 <div class="accordion-section">
                     <button class="accordion-header" onclick="toggleAccordion('autorizaciones')">
@@ -1916,6 +1943,47 @@
             } catch (err) {
                 console.error(err);
                 alert('❌ No se pudo registrar: ' + (err?.message || err));
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function agregarGastoPropio() {
+            const beneficiario = document.getElementById('intBeneficiario').value.trim();
+            const concepto = document.getElementById('intConcepto').value.trim();
+            const monto = parseFloat(document.getElementById('intMonto').value);
+            const autorizarAhora = document.getElementById('intAutorizarAhora').checked;
+
+            if (!beneficiario || !monto || monto <= 0) {
+                alert('⚠️ Completá beneficiario y un monto válido.');
+                return;
+            }
+
+            const btn = document.getElementById('btnAgregarGastoPropio');
+            btn.disabled = true;
+
+            try {
+                const payload = {
+                    spreadsheetId: CAJA_SHEET_ID,
+                    accion: 'agregarGastoIntendente',
+                    beneficiario, concepto, monto, autorizarAhora
+                };
+                const res = await fetch(CAJA_WEBAPP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const out = await res.json();
+                if (!out.ok) throw new Error(out.message || 'Error al cargar gasto');
+                alert(`✅ ${out.message}`);
+                document.getElementById('intBeneficiario').value = '';
+                document.getElementById('intConcepto').value = '';
+                document.getElementById('intMonto').value = '';
+                document.getElementById('intAutorizarAhora').checked = false;
+                await loadCaja();
+            } catch (err) {
+                console.error(err);
+                alert('❌ No se pudo cargar: ' + (err?.message || err));
             } finally {
                 btn.disabled = false;
             }
