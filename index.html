@@ -352,6 +352,7 @@
             background: #2563EB;
             color: white;
             border-color: #2563EB;
+            box-shadow: inset 3px 3px 6px #1d4ed8, inset -3px -3px 6px #3b82f6;
         }
 
         .cuenta-label {
@@ -1180,7 +1181,7 @@
         }
 
         /* Botones generales del módulo (no los de arriba) */
-        #proveedores-content button {
+        #proveedores-content button:not(.cuenta-btn) {
             background: #F1F3F5;
             color: #E07830;
             border: none;
@@ -1188,7 +1189,7 @@
             box-shadow: 6px 6px 12px #d1d5da, -6px -6px 12px #ffffff;
         }
 
-        #proveedores-content button:hover {
+        #proveedores-content button:hover:not(.cuenta-btn) {
             background: #F1F3F5;
             color: #C06520;
             box-shadow: 4px 4px 8px #d1d5da, -4px -4px 8px #ffffff;
