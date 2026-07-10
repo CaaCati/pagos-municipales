@@ -1070,6 +1070,172 @@
             body{
             padding-top:90px;
         }
+
+        /* =========================================================
+           NEUMORFISMO — Módulo Proveedores (solo este módulo)
+           ========================================================= */
+        #proveedores-content .container {
+            background: #F1F3F5;
+        }
+
+        #proveedores-content .header {
+            background: #F1F3F5;
+            border: none;
+            border-radius: 22px;
+            box-shadow: 9px 9px 18px #d1d5da, -9px -9px 18px #ffffff;
+        }
+
+        #proveedores-content .error {
+            border-radius: 16px;
+            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
+            border: none;
+        }
+
+        /* Paneles principales (acordeones de nivel superior) */
+        #proveedores-content .accordion-section {
+            background: #F1F3F5;
+            border: none;
+            border-radius: 22px;
+            box-shadow: 9px 9px 18px #d1d5da, -9px -9px 18px #ffffff;
+        }
+
+        #proveedores-content .accordion-header {
+            background: transparent;
+        }
+
+        #proveedores-content .accordion-header:hover {
+            background: transparent;
+        }
+
+        #proveedores-content .accordion-body {
+            border-top: none;
+        }
+
+        /* Panel anidado (Resumen dentro de Detalle de Facturas) — efecto "hundido" */
+        #proveedores-content .accordion-section.neu-nested {
+            box-shadow: inset 6px 6px 12px #d1d5da, inset -6px -6px 12px #ffffff;
+            border-radius: 18px;
+            margin: 0 0 18px 0;
+        }
+
+        #proveedores-content .accordion-section.neu-nested .accordion-header {
+            padding: 14px 18px;
+        }
+
+        #proveedores-content .accordion-section.neu-nested .accordion-title {
+            font-size: 14px;
+        }
+
+        /* Tarjetas de estadísticas */
+        #proveedores-content .stats {
+            padding: 4px 4px 16px 4px;
+            gap: 14px;
+        }
+
+        #proveedores-content .stat-card {
+            background: #F1F3F5;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
+            padding: 18px;
+        }
+
+        #proveedores-content .stat-card.total {
+            background: #F1F3F5;
+            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
+            color: #E07830;
+        }
+
+        #proveedores-content .stat-card.total .stat-label {
+            color: #C06520;
+        }
+
+        #proveedores-content .stat-value {
+            font-size: 26px;
+        }
+
+        /* Botones grandes y neumórficos dentro del panel de Resumen */
+        #proveedores-content #stats button,
+        #proveedores-content .btn-autorizar-todo {
+            background: #F1F3F5;
+            color: #E07830;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
+            padding: 20px 24px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        #proveedores-content #stats button:hover,
+        #proveedores-content .btn-autorizar-todo:hover {
+            background: #F1F3F5;
+            color: #C06520;
+            box-shadow: 5px 5px 10px #d1d5da, -5px -5px 10px #ffffff;
+            transform: none;
+        }
+
+        #proveedores-content #stats button:active {
+            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
+        }
+
+        /* Botones generales del módulo (no los de arriba) */
+        #proveedores-content button {
+            background: #F1F3F5;
+            color: #E07830;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 6px 6px 12px #d1d5da, -6px -6px 12px #ffffff;
+        }
+
+        #proveedores-content button:hover {
+            background: #F1F3F5;
+            color: #C06520;
+            box-shadow: 4px 4px 8px #d1d5da, -4px -4px 8px #ffffff;
+            transform: none;
+        }
+
+        #proveedores-content button:active {
+            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
+        }
+
+        #proveedores-content button:disabled {
+            color: #ADB5BD;
+            background: #F1F3F5;
+            box-shadow: inset 3px 3px 6px #d1d5da, inset -3px -3px 6px #ffffff;
+        }
+
+        /* Inputs con efecto hundido */
+        #proveedores-content input[type="text"] {
+            border: none;
+            background: #F1F3F5;
+            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
+            border-radius: 12px;
+        }
+
+        #proveedores-content input[type="text"]:focus {
+            box-shadow: inset 5px 5px 10px #d1d5da, inset -5px -5px 10px #ffffff;
+            border-color: transparent;
+        }
+
+        /* Contenedor de facturas e items */
+        #proveedores-content .invoices-container {
+            background: #F1F3F5;
+            border: none;
+            border-radius: 18px;
+            box-shadow: inset 5px 5px 10px #d1d5da, inset -5px -5px 10px #ffffff;
+        }
+
+        #proveedores-content .invoice-item {
+            border-bottom: 1px solid #e3e6e9;
+        }
+
+        #proveedores-content .auth-total-card {
+            background: #F1F3F5;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 6px 6px 12px #d1d5da, -6px -6px 12px #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -1112,30 +1278,6 @@
         <div class="container">
             <div class="header">
                 <h1>💳 Pagos Proveedores</h1>
-                
-                <div id="stats" style="display: none;">
-                    <div class="stats">
-                        <div class="stat-card">
-                            <div class="stat-label">Deuda Total</div>
-                            <div class="stat-value" id="totalDebt">$0</div>
-                        </div>
-                        <div class="stat-card total">
-                            <div class="stat-label">💳 Total a Pagar Hoy</div>
-                            <div class="stat-value" id="todayTotal">$0</div>
-                        </div>
-
-                        <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
-                          🧾 Autorizar transferencias de hoy
-                        </button>
-
-                        <div id="sheetUpdate" style="
-                             text-align:center;
-                             margin-top:8px;
-                             font-size:13px;
-                             color:#999;">
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div id="error" class="error" style="display: none;"></div>
@@ -1147,6 +1289,40 @@
                     <span class="accordion-arrow" id="arrow-facturas">▼</span>
                 </button>
                 <div class="accordion-body" id="body-facturas">
+
+                    <!-- SUB-ACORDEÓN: RESUMEN (Deuda Total / Total a Pagar / Autorizar) — siempre minimizado -->
+                    <div id="stats" style="display: none;">
+                        <div class="accordion-section neu-nested">
+                            <button class="accordion-header" onclick="toggleAccordion('resumenProveedores')">
+                                <span class="accordion-title">📊 Resumen</span>
+                                <span class="accordion-arrow" id="arrow-resumenProveedores">▼</span>
+                            </button>
+                            <div class="accordion-body" id="body-resumenProveedores">
+                                <div class="stats">
+                                    <div class="stat-card">
+                                        <div class="stat-label">Deuda Total</div>
+                                        <div class="stat-value" id="totalDebt">$0</div>
+                                    </div>
+                                    <div class="stat-card total">
+                                        <div class="stat-label">💳 Total a Pagar Hoy</div>
+                                        <div class="stat-value" id="todayTotal">$0</div>
+                                    </div>
+
+                                    <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
+                                      🧾 Autorizar transferencias de hoy
+                                    </button>
+
+                                    <div id="sheetUpdate" style="
+                                         text-align:center;
+                                         margin-top:8px;
+                                         font-size:13px;
+                                         color:#999;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="loading" class="loading" style="display: block;">
                         <div class="spinner"></div>
                         <div>Cargando facturas...</div>
