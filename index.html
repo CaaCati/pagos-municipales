@@ -1290,35 +1290,27 @@
                 </button>
                 <div class="accordion-body" id="body-facturas">
 
-                    <!-- SUB-ACORDEÓN: RESUMEN (Deuda Total / Total a Pagar / Autorizar) — siempre minimizado -->
+                    <!-- RESUMEN (Deuda Total / Total a Pagar / Autorizar) — dentro del mismo panel, sin sub-acordeón -->
                     <div id="stats" style="display: none;">
-                        <div class="accordion-section neu-nested">
-                            <button class="accordion-header" onclick="toggleAccordion('resumenProveedores')">
-                                <span class="accordion-title">📊 Resumen</span>
-                                <span class="accordion-arrow" id="arrow-resumenProveedores">▼</span>
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-label">Deuda Total</div>
+                                <div class="stat-value" id="totalDebt">$0</div>
+                            </div>
+                            <div class="stat-card total">
+                                <div class="stat-label">💳 Total a Pagar Hoy</div>
+                                <div class="stat-value" id="todayTotal">$0</div>
+                            </div>
+
+                            <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
+                              🧾 Autorizar transferencias de hoy
                             </button>
-                            <div class="accordion-body" id="body-resumenProveedores">
-                                <div class="stats">
-                                    <div class="stat-card">
-                                        <div class="stat-label">Deuda Total</div>
-                                        <div class="stat-value" id="totalDebt">$0</div>
-                                    </div>
-                                    <div class="stat-card total">
-                                        <div class="stat-label">💳 Total a Pagar Hoy</div>
-                                        <div class="stat-value" id="todayTotal">$0</div>
-                                    </div>
 
-                                    <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
-                                      🧾 Autorizar transferencias de hoy
-                                    </button>
-
-                                    <div id="sheetUpdate" style="
-                                         text-align:center;
-                                         margin-top:8px;
-                                         font-size:13px;
-                                         color:#999;">
-                                    </div>
-                                </div>
+                            <div id="sheetUpdate" style="
+                                 text-align:center;
+                                 margin-top:8px;
+                                 font-size:13px;
+                                 color:#999;">
                             </div>
                         </div>
                     </div>
