@@ -1441,22 +1441,10 @@
                     <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
                 </div>
 
-                <!-- KUNU'U -->
-                <div class="total-disponible" style="background: #6741D9; box-shadow: 0 4px 16px rgba(103,65,217,0.15);">
-                    <div class="total-disponible-label">🏥 KUNU'U</div>
+                <!-- KUNU'U / ÑANDE ROGA -->
+                <div class="total-disponible" style="background: #6741D9; box-shadow: 0 4px 16px rgba(103,65,217,0.15); margin-bottom: 20px;">
+                    <div class="total-disponible-label">🏥 KUNU'U/ÑANDE ROGA</div>
                     <div class="total-disponible-value" id="cajaSaldoKunuu">$ 0,00</div>
-                </div>
-
-                <!-- TRASLADO ÑANDE ROGA -->
-                <div class="total-disponible" style="background: #1971C2; box-shadow: 0 4px 16px rgba(25,113,194,0.15);">
-                    <div class="total-disponible-label">🚐 TRASLADO ÑANDE ROGA</div>
-                    <div class="total-disponible-value" id="cajaSaldoNandeRoga">$ 0,00</div>
-                </div>
-
-                <!-- EFECTIVO EN DÓLARES -->
-                <div class="total-disponible" style="background: #1A5C2F; box-shadow: 0 4px 16px rgba(26,92,47,0.15); margin-bottom: 20px;">
-                    <div class="total-disponible-label">💵 EFECTIVO EN DÓLARES</div>
-                    <div class="total-disponible-value" id="cajaSaldoUSD">U$S 0</div>
                 </div>
 
                 <!-- ACCORDION: MOVIMIENTOS DE CAJA -->
@@ -1904,20 +1892,15 @@
                 if (saldoRows[1]) {
                     saldoSinRegistrar = parseFloat(saldoRows[1].c?.[0]?.v || 0);
                 }
-                // Fila 2 (A4 del sheet) = Efectivo en dólares
-                let saldoUSD = 0;
-                if (saldoRows[2]) {
-                    saldoUSD = parseFloat(saldoRows[2].c?.[0]?.v || 0);
-                }
-                // Fila 3 (A5 del sheet) = Kunu'u
+                // Fila 2 (A4 del sheet) = Kunu'u
+                // Fila 3 (A5 del sheet) = Traslado Ñande Roga
+                // Se muestran sumadas en una sola tarjeta
                 let saldoKunuu = 0;
-                if (saldoRows[3]) {
-                    saldoKunuu = parseFloat(saldoRows[3].c?.[0]?.v || 0);
+                if (saldoRows[2]) {
+                    saldoKunuu += parseFloat(saldoRows[2].c?.[0]?.v || 0);
                 }
-                // Fila 4 (A6 del sheet) = Traslado Ñande Roga
-                let saldoNandeRoga = 0;
-                if (saldoRows[4]) {
-                    saldoNandeRoga = parseFloat(saldoRows[4].c?.[0]?.v || 0);
+                if (saldoRows[3]) {
+                    saldoKunuu += parseFloat(saldoRows[3].c?.[0]?.v || 0);
                 }
 
                 // --- Procesar Movimientos ---
@@ -1984,9 +1967,7 @@
 
                 document.getElementById('cajaSaldoActual').textContent = formatCurrency(saldoActual);
                 document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
-                document.getElementById('cajaSaldoUSD').textContent = 'U$S ' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(saldoUSD);
                 document.getElementById('cajaSaldoKunuu').textContent = formatCurrency(saldoKunuu);
-                document.getElementById('cajaSaldoNandeRoga').textContent = formatCurrency(saldoNandeRoga);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
                 document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
