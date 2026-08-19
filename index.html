@@ -1559,6 +1559,10 @@
         }
 
         async function registerTodayPayments() {
+          const btnCheck = document.getElementById('registerBtn');
+          if (btnCheck && btnCheck.disabled) return;
+          if (btnCheck) btnCheck.disabled = true;
+
           const items = [];
           invoices.forEach(inv => {
             if (inv.selected) {
@@ -1568,12 +1572,9 @@
             }
           });
 
-          if (!items.length) { alert("⚠️ No hay pagos seleccionados."); return; }
+          if (!items.length) { alert("⚠️ No hay pagos seleccionados."); if (btnCheck) btnCheck.disabled = false; return; }
 
-
-
-          const btn = document.getElementById('registerBtn');
-          if (btn) btn.disabled = true;
+          const btn = btnCheck;
 
           try {
             const payload = { spreadsheetId: SHEET_ID, targetSheetName: "Pagos_Hoy", items };
@@ -2120,6 +2121,9 @@
         }
 
         async function agregarGastoPropio() {
+            const btn = document.getElementById('btnAgregarGastoPropio');
+            if (btn.disabled) return;
+
             const beneficiario = document.getElementById('intBeneficiario').value.trim();
             const concepto = document.getElementById('intConcepto').value.trim();
             const monto = parseFloat(document.getElementById('intMonto').value);
@@ -2130,7 +2134,6 @@
                 return;
             }
 
-            const btn = document.getElementById('btnAgregarGastoPropio');
             btn.disabled = true;
 
             try {
