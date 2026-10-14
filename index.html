@@ -2,1247 +2,626 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#100E0C">
     <title>Sistema Municipal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;650;700&family=Space+Grotesk:wght@500;600;700&display=swap">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #F1F3F5;
-            min-height: 100vh;
-            padding: 0;
-            padding-bottom: 80px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        /* TABS NAVEGACIÓN */
-        .tabs-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-            z-index: 1000;
-        }
-
-        .tabs {
-            display: flex;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px 8px;
-            text-align: center;
-            border: none;
-            background: white;
-            color: #999;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-top: 3px solid transparent;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .tab-icon {
-            font-size: 20px;
-        }
-
-        .tab.active {
-            color: #E07830;
-            border-top: 3px solid #E07830;
-            background: #FDF0E7;
-        }
-
-        .tab.active-green {
-            color: #E07830;
-            border-top: 3px solid #E07830;
-            background: #FDF0E7;
-        }
-
-        .tab:not(.active):not(.active-green):hover {
-            background: #fafafa;
-        }
-
-        /* CONTENT SECTIONS */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .header {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-
-        .header.green-header {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .input-group {
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ffe0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #ff6b6b;
-        }
-
-        button {
-            background: #E07830;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #C06520;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(224,120,48,0.3);
-        }
-
-        button:disabled {
-            background: #DEE2E6;
-            color: #ADB5BD;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .stats {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .stat-card {
-            background: white;
-            border: 1px solid #E9ECEF;
-            padding: 15px;
-            border-radius: 10px;
-            color: #212529;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        }
-
-        .stat-card.total {
-            background: #E07830;
-            border-color: #E07830;
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6C757D;
-            margin-bottom: 5px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .stat-card.total .stat-label {
-            color: rgba(255,255,255,0.8);
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .invoices-container {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            border: 1px solid #E9ECEF;
-        }
-
-        .invoice-item {
-            padding: 15px;
-            border-bottom: 1px solid #F1F3F5;
-            transition: background 0.2s;
-        }
-
-        .invoice-item:last-child {
-            border-bottom: none;
-        }
-
-        .invoice-item.selected {
-            background: #FDF0E7;
-        }
-
-        .invoice-item.paid {
-            opacity: 0.45;
-            background: #F8F9FA;
-        }
-
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .invoice-supplier {
-            font-weight: 600;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .invoice-badge {
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .badge-pending {
-            background: #FEF3C7;
-            color: #92400E;
-            border: 1px solid #FDE68A;
-        }
-
-        .badge-paid {
-            background: #E8F5F1;
-            color: #1A8A6A;
-            border: 1px solid #A8D8CB;
-        }
-
-        .invoice-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .invoice-amount {
-            font-size: 20px;
-            font-weight: bold;
-            color: #212529;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .invoice-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-mark {
-            flex: 1;
-            padding: 10px;
-            border: 1.5px solid #DEE2E6;
-            background: white;
-            color: #495057;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-mark.active {
-            background: #E07830;
-            color: white;
-            border-color: #E07830;
-        }
-
-        .btn-mark:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .partial-input {
-            width: 100%;
-            padding: 8px;
-            border: 1.5px solid #F0C9A0;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 8px;
-            background: #FDF0E7;
-        }
-
-        .partial-input:focus {
-            outline: none;
-            border-color: #E07830;
-        }
-
-        .cuenta-selector {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .cuenta-btn {
-            flex: 1;
-            min-width: 70px;
-            padding: 7px 6px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            color: #666;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: auto;
-        }
-
-        .cuenta-btn:hover {
-            border-color: #2563EB;
-            color: #2563EB;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .cuenta-btn.selected {
-            background: #2563EB;
-            color: white;
-            border-color: #2563EB;
-            box-shadow: inset 3px 3px 6px #1d4ed8, inset -3px -3px 6px #3b82f6;
-        }
-
-        .cuenta-label {
-            font-size: 11px;
-            color: #999;
-            margin-top: 6px;
-            font-weight: 600;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .spinner {
-            border: 3px solid #E9ECEF;
-            border-top: 3px solid #E07830;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        .spinner.green {
-            border: 3px solid #d5f5ef;
-            border-top: 3px solid #10ac84;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .error {
-            background: #FDECEA;
-            color: #C0392B;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #F0B8B3;
-            margin-bottom: 15px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        /* ESTADO FINANCIERO STYLES */
-        .balance-section {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            border: 1px solid #E9ECEF;
-        }
-
-        .balance-section.green-section {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-
-        .balance-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .balance-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .balance-item:last-child {
-            border-bottom: none;
-        }
-
-        .balance-bank {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .balance-ref {
-            font-size: 12px;
-            color: #999;
-            margin-left: 8px;
-        }
-
-        .balance-amount {
-            font-weight: 700;
-            font-size: 16px;
-            color: #212529;
-            position: relative;
-        }
-
-        .balance-amount.green {
-            color: #1A8A6A;
-        }
-
-        .total-disponible {
-            background: #E07830;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            text-align: center;
-            box-shadow: 0 4px 16px rgba(224,120,48,0.2);
-        }
-
-        .total-disponible.green {
-            background: #1A8A6A;
-            box-shadow: 0 4px 16px rgba(26,138,106,0.2);
-        }
-
-        .total-disponible-label {
-            font-size: 11px;
-            opacity: 0.9;
-            margin-bottom: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .total-disponible-value {
-            font-size: 24px;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .movement-item {
-            padding: 15px;
-            border-bottom: 1px solid #F1F3F5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .movement-item.green-border {
-            border-bottom: 1px solid #F1F3F5;
-        }
-
-        .movement-item:last-child {
-            border-bottom: none;
-        }
-
-        .movement-info {
-            flex: 1;
-        }
-
-        .movement-desc {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .movement-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .movement-amount {
-            font-weight: 700;
-            font-size: 16px;
-            position: relative;
-        }
-
-        .movement-amount.positive {
-            color: #10ac84;
-        }
-
-        .movement-amount.negative {
-            color: #ff6b6b;
-        }
-
-        .refresh-btn {
-            width: auto;
-            padding: 10px 20px;
-            font-size: 13px;
-            margin-top: 10px;
-            background: white;
-            border: 1.5px solid #DEE2E6;
-            color: #495057;
-        }
-
-        .refresh-btn:hover {
-            background: #FDF0E7;
-            border-color: #E07830;
-            color: #E07830;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .refresh-btn.green-btn {
-            background: white;
-            border: 1.5px solid #DEE2E6;
-            color: #495057;
-        }
-
-        .refresh-btn.green-btn:hover {
-            background: #FDF0E7;
-            border-color: #E07830;
-            color: #E07830;
-            box-shadow: none;
-        }
-
-        /* CAJA CHICA SPECIFIC STYLES */
-        .caja-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .caja-stat {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            text-align: center;
-        }
-
-        .caja-stat.outflow {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-        }
-
-        .caja-stat-label {
-            font-size: 11px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        .caja-stat-value {
-            font-size: 20px;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .caja-payment-item {
-            padding: 15px;
-            border-bottom: 1px solid #F1F3F5;
-            transition: background 0.2s;
-        }
-
-        .caja-payment-item:last-child {
-            border-bottom: none;
-        }
-
-        .caja-payment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .caja-payment-beneficiary {
-            font-weight: 600;
-            color: #333;
-            font-size: 15px;
-        }
-
-        .caja-payment-type {
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-            background: #E8F5F1;
-            color: #1A8A6A;
-            border: 1px solid #A8D8CB;
-        }
-
-        .caja-payment-type.proveedor {
-            background: #FEF3C7;
-            color: #92400E;
-            border: 1px solid #FDE68A;
-        }
-
-        .caja-payment-type.servicio {
-            background: #EFF6FF;
-            color: #2563EB;
-            border: 1px solid #BFDBFE;
-        }
-
-        .caja-payment-amount {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 6px;
-            position: relative;
-        }
-
-        .caja-payment-details {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .caja-container {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            border: 1px solid #E9ECEF;
-        }
-
-        /* OCULTAR MONTOS */
-        .hide-amounts .stat-value,
-        .hide-amounts .invoice-amount,
-        .hide-amounts .balance-amount,
-        .hide-amounts .total-disponible-value,
-        .hide-amounts .movement-amount,
-        .hide-amounts .caja-stat-value,
-        .hide-amounts .caja-payment-amount {
-            visibility: hidden !important;
-            position: relative !important;
-        }
-
-        .hide-amounts .stat-value::after,
-        .hide-amounts .invoice-amount::after,
-        .hide-amounts .balance-amount::after,
-        .hide-amounts .total-disponible-value::after,
-        .hide-amounts .movement-amount::after,
-        .hide-amounts .caja-stat-value::after,
-        .hide-amounts .caja-payment-amount::after {
-            content: '••••••';
-            visibility: visible;
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #999;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .toggle-amounts-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            border: none;
-            padding: 12px;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
-            font-size: 24px;
-            z-index: 999;
-            transition: all 0.3s;
-            width: auto;
-        }
-
-        .toggle-amounts-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-        }
-
-        /* Configuración del Sheet de Caja Chica */
-        .config-banner {
-            background: linear-gradient(135deg, #f0fff9 0%, #e0fdf4 100%);
-            border: 2px dashed #10ac84;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .config-banner-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .config-banner-title {
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .config-banner-desc {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .config-input-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .config-input-row input {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #b2dfdb;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .config-input-row input:focus {
-            outline: none;
-            border-color: #10ac84;
-        }
-
-        .config-save-btn {
-            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            width: auto;
-            transition: all 0.3s;
-        }
-
-        .config-save-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16,172,132,0.3);
-        }
-
-        /* ===== ACCORDION CAJA CHICA ===== */
-        .accordion-section {
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            border: 1px solid #E9ECEF;
-            overflow: hidden;
-        }
-
-        .accordion-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            cursor: pointer;
-            user-select: none;
-            background: white;
-            border: none;
-            width: 100%;
-            text-align: left;
-            transition: background 0.2s;
-        }
-
-        .accordion-header:hover {
-            background: #F8F9FA;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .accordion-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .accordion-badge {
-            background: #E07830;
-            color: white;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 10px;
-        }
-
-        .accordion-arrow {
-            font-size: 12px;
-            color: #ADB5BD;
-            transition: transform 0.3s;
-        }
-
-        .accordion-arrow.open {
-            transform: rotate(180deg);
-        }
-
-        .accordion-body {
-            display: none;
-            border-top: 1px solid #F1F3F5;
-        }
-
-        .accordion-body.open {
-            display: block;
-        }
-
-        /* ===== ITEMS DE AUTORIZACIÓN ===== */
-        .autorizacion-item {
-            padding: 15px;
-            border-bottom: 1px solid #F1F3F5;
-            transition: background 0.2s;
-        }
-
-        .autorizacion-item:last-child {
-            border-bottom: none;
-        }
-
-        .autorizacion-item.autorizado {
-            opacity: 0.45;
-            background: #F8F9FA;
-        }
-
-        .autorizacion-item.selected-auth {
-            background: #E8F5F1;
-        }
-
-        .auth-beneficiary {
-            font-weight: 700;
-            color: #333;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .auth-concepto {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .auth-amount {
-            font-size: 20px;
-            font-weight: bold;
-            color: #212529;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .hide-amounts .auth-amount {
-            visibility: hidden !important;
-            position: relative !important;
-        }
-
-        .hide-amounts .auth-amount::after {
-            content: '••••••';
-            visibility: visible;
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #ADB5BD;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .btn-auth {
-            flex: 1;
-            padding: 10px;
-            border: 1.5px solid #A8D8CB;
-            background: white;
-            color: #1A8A6A;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-auth.active {
-            background: #1A8A6A;
-            color: white;
-            border-color: #1A8A6A;
-        }
-
-        .btn-auth:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .auth-partial-input {
-            width: 100%;
-            padding: 8px;
-            border: 2px solid #10ac84;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .auth-partial-input:focus {
-            outline: none;
-            border-color: #1dd1a1;
-        }
-
-        .auth-total-card {
-            background: #1A8A6A;
-            color: white;
-            padding: 14px 20px;
-            border-radius: 10px;
-            margin: 12px 16px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .auth-total-label {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .auth-total-value {
-            font-size: 20px;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .hide-amounts .auth-total-value {
-            visibility: hidden !important;
-            position: relative !important;
-        }
-
-        .hide-amounts .auth-total-value::after {
-            content: '••••••';
-            visibility: visible;
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: rgba(255,255,255,0.6);
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .btn-autorizar-todo {
-            background: #1A8A6A;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: calc(100% - 32px);
-            margin: 0 16px 16px;
-            transition: all 0.3s;
-        }
-
-        .btn-autorizar-todo:hover {
-            background: #157A5C;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26,138,106,0.25);
-        }
-
-        .btn-autorizar-todo:disabled {
-            background: #A8D8CB;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ===== HEADER INSTITUCIONAL ===== */
-        .main-header{
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:80px;
-            background:#F07F2F;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            padding:0 20px;
-            box-shadow:0 4px 12px rgba(0,0,0,0.2);
-            z-index:2000;
-        }
-
-        .header-left{display:flex;align-items:center;}
-        .header-center{
-            flex:1;
-            text-align:center;
-            font-size:22px;
-            font-weight:700;
-            color:white;
-            letter-spacing:0.5px;
-        }
-        .header-right{display:flex;align-items:center;}
-
-        .logo{
-            height:55px;
-            width:auto;
-        }
-
-        .eye-btn{
-            background: rgba(255,255,255,0.15);
-            border: 1.5px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            color: white;
-            width: 38px !important;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .eye-btn:hover {
-            background: rgba(255,255,255,0.25);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Para que no tape contenido */
-            body{
-            padding-top:90px;
-        }
-
-        /* =========================================================
-           NEUMORFISMO — Módulo Proveedores (solo este módulo)
-           ========================================================= */
-        #proveedores-content .container {
-            background: #F1F3F5;
-        }
-
-        #proveedores-content .header {
-            background: #F1F3F5;
-            border: none;
-            border-radius: 22px;
-            box-shadow: 9px 9px 18px #d1d5da, -9px -9px 18px #ffffff;
-        }
-
-        #proveedores-content .error {
-            border-radius: 16px;
-            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
-            border: none;
-        }
-
-        /* Paneles principales (acordeones de nivel superior) */
-        #proveedores-content .accordion-section {
-            background: #F1F3F5;
-            border: none;
-            border-radius: 22px;
-            box-shadow: 9px 9px 18px #d1d5da, -9px -9px 18px #ffffff;
-        }
-
-        #proveedores-content .accordion-header {
-            background: transparent;
-        }
-
-        #proveedores-content .accordion-header:hover {
-            background: transparent;
-        }
-
-        #proveedores-content .accordion-body {
-            border-top: none;
-        }
-
-        /* Panel anidado (Resumen dentro de Detalle de Facturas) — efecto "hundido" */
-        #proveedores-content .accordion-section.neu-nested {
-            box-shadow: inset 6px 6px 12px #d1d5da, inset -6px -6px 12px #ffffff;
-            border-radius: 18px;
-            margin: 0 0 18px 0;
-        }
-
-        #proveedores-content .accordion-section.neu-nested .accordion-header {
-            padding: 14px 18px;
-        }
-
-        #proveedores-content .accordion-section.neu-nested .accordion-title {
-            font-size: 14px;
-        }
-
-        /* Tarjetas de estadísticas */
-        #proveedores-content .stats {
-            padding: 4px 4px 16px 4px;
-            gap: 14px;
-        }
-
-        #proveedores-content .stat-card {
-            background: #F1F3F5;
-            border: none;
-            border-radius: 16px;
-            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
-            padding: 18px;
-        }
-
-        #proveedores-content .stat-card.total {
-            background: #F1F3F5;
-            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
-            color: #E07830;
-        }
-
-        #proveedores-content .stat-card.total .stat-label {
-            color: #C06520;
-        }
-
-        #proveedores-content .stat-value {
-            font-size: 26px;
-        }
-
-        /* Botones grandes y neumórficos dentro del panel de Resumen */
-        #proveedores-content #stats button,
-        #proveedores-content .btn-autorizar-todo {
-            background: #F1F3F5;
-            color: #E07830;
-            border: none;
-            border-radius: 16px;
-            box-shadow: 7px 7px 14px #d1d5da, -7px -7px 14px #ffffff;
-            padding: 20px 24px;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        #proveedores-content #stats button:hover,
-        #proveedores-content .btn-autorizar-todo:hover {
-            background: #F1F3F5;
-            color: #C06520;
-            box-shadow: 5px 5px 10px #d1d5da, -5px -5px 10px #ffffff;
-            transform: none;
-        }
-
-        #proveedores-content #stats button:active {
-            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
-        }
-
-        /* Botones generales del módulo (no los de arriba) */
-        #proveedores-content button:not(.cuenta-btn) {
-            background: #F1F3F5;
-            color: #E07830;
-            border: none;
-            border-radius: 14px;
-            box-shadow: 6px 6px 12px #d1d5da, -6px -6px 12px #ffffff;
-        }
-
-        #proveedores-content button:hover:not(.cuenta-btn) {
-            background: #F1F3F5;
-            color: #C06520;
-            box-shadow: 4px 4px 8px #d1d5da, -4px -4px 8px #ffffff;
-            transform: none;
-        }
-
-        #proveedores-content button:active {
-            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
-        }
-
-        #proveedores-content button:disabled {
-            color: #ADB5BD;
-            background: #F1F3F5;
-            box-shadow: inset 3px 3px 6px #d1d5da, inset -3px -3px 6px #ffffff;
-        }
-
-        /* Inputs con efecto hundido */
-        #proveedores-content input[type="text"] {
-            border: none;
-            background: #F1F3F5;
-            box-shadow: inset 4px 4px 8px #d1d5da, inset -4px -4px 8px #ffffff;
-            border-radius: 12px;
-        }
-
-        #proveedores-content input[type="text"]:focus {
-            box-shadow: inset 5px 5px 10px #d1d5da, inset -5px -5px 10px #ffffff;
-            border-color: transparent;
-        }
-
-        /* Contenedor de facturas e items */
-        #proveedores-content .invoices-container {
-            background: #F1F3F5;
-            border: none;
-            border-radius: 18px;
-            box-shadow: inset 5px 5px 10px #d1d5da, inset -5px -5px 10px #ffffff;
-        }
-
-        #proveedores-content .invoice-item {
-            border-bottom: 1px solid #e3e6e9;
-        }
-
-        #proveedores-content .auth-total-card {
-            background: #F1F3F5;
-            border: none;
-            border-radius: 14px;
-            box-shadow: 6px 6px 12px #d1d5da, -6px -6px 12px #ffffff;
-        }
+/* =========================================================
+   PAGOS MUNICIPALES · CAÁ CATÍ — Tema "Noche" v2
+   Oscuro cálido: carbón + naranja del escudo como luz.
+   ========================================================= */
+:root {
+    color-scheme: dark;
+
+    /* Tipografía */
+    --font: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-num: 'Space Grotesk', 'Geist', system-ui, sans-serif;
+
+    /* Superficies (de más profunda a más alta) */
+    --bg: #100E0C;
+    --bg-glow: rgba(240,128,46,.10);
+    --surface: #1A1714;
+    --surface-2: #221E1A;
+    --surface-3: #2B2621;
+    --input-bg: #13110F;
+    --line: rgba(255,240,225,.07);
+    --line-strong: rgba(255,240,225,.13);
+    --highlight: inset 0 1px 0 rgba(255,245,235,.045);
+
+    /* Texto */
+    --ink: #F5EFE8;
+    --ink-2: #C2B8AC;
+    --ink-3: #8A8075;
+    --ink-4: #635B52;
+
+    /* Naranja del escudo */
+    --accent: #F5893D;
+    --accent-hi: #FFA460;
+    --accent-lo: #E06E24;
+    --accent-ink: #1C1006;
+    --accent-text: #FFB27A;
+    --accent-soft: rgba(245,137,61,.11);
+    --accent-line: rgba(245,137,61,.32);
+    --accent-ring: rgba(245,137,61,.28);
+
+    /* Semánticos */
+    --ok: #52CC9E;   --ok-hi: #6BDDB0;  --ok-ink: #04190F; --ok-soft: rgba(82,204,158,.11);  --ok-line: rgba(82,204,158,.30);
+    --warn: #F2C35B; --warn-soft: rgba(242,195,91,.11); --warn-line: rgba(242,195,91,.30);
+    --danger: #FF8170; --danger-soft: rgba(255,129,112,.11); --danger-line: rgba(255,129,112,.30);
+    --info: #86ADFF; --info-soft: rgba(134,173,255,.12); --info-line: rgba(134,173,255,.34);
+
+    /* Forma y profundidad */
+    --r-lg: 20px;
+    --r: 14px;
+    --r-sm: 10px;
+    --shadow-card: 0 1px 2px rgba(0,0,0,.35), 0 12px 32px -16px rgba(0,0,0,.7);
+    --shadow-pop: 0 2px 6px rgba(0,0,0,.4), 0 24px 48px -20px rgba(0,0,0,.85);
+
+    /* Movimiento */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    --header-h: 64px;
+    --tabs-h: 68px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+
+body {
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--ink);
+    background:
+        radial-gradient(90% 50% at 50% -10%, var(--bg-glow), transparent 70%),
+        var(--bg);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: calc(var(--header-h) + 18px) 0 calc(var(--tabs-h) + 24px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+}
+
+::selection { background: var(--accent-soft); color: var(--accent-hi); }
+
+/* Íconos SVG */
+.ic {
+    width: 1.15em; height: 1.15em;
+    flex: none;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round;
+    vertical-align: -0.2em;
+}
+
+/* Números: misma tipografía y ancho fijo en todos los montos */
+.stat-value, .invoice-amount, .balance-amount, .total-disponible-value,
+.movement-amount, .caja-stat-value, .caja-payment-amount, .auth-amount,
+.auth-total-value, .accordion-badge {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    letter-spacing: -0.02em;
+}
+
+.container { max-width: 720px; margin: 0 auto; padding: 0 16px 8px; }
+
+/* ================= ENCABEZADO ================= */
+.main-header {
+    position: fixed; inset: 0 0 auto 0;
+    height: calc(var(--header-h) + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) max(16px, calc((100% - 720px) / 2 + 16px)) 0;
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(16,14,12,.78);
+    -webkit-backdrop-filter: saturate(140%) blur(18px); backdrop-filter: saturate(140%) blur(18px);
+    border-bottom: 1px solid var(--line);
+    z-index: 2000;
+}
+.header-left { display: flex; }
+.logo {
+    width: 40px; height: 40px; padding: 6px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: linear-gradient(160deg, rgba(245,137,61,.22), rgba(245,137,61,.06));
+    box-shadow: inset 0 0 0 1px var(--accent-line), 0 6px 16px -8px rgba(245,137,61,.6);
+}
+.header-center { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 650; letter-spacing: -0.01em; line-height: 1.2; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-center::after {
+    content: 'Tesorería · Pagos';
+    display: block; margin-top: 2px;
+    font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--accent);
+}
+.header-right { display: flex; }
+.eye-btn {
+    width: 40px !important; height: 40px; padding: 0;
+    display: grid; place-items: center;
+    color: var(--ink-2);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    box-shadow: var(--highlight);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out), color 200ms ease, background-color 200ms ease;
+}
+.eye-btn .ic { width: 19px; height: 19px; }
+.eye-btn:active { transform: scale(.94); }
+body:not(.hide-amounts) .eye-btn { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+
+/* ================= PESTAÑAS INFERIORES ================= */
+.tabs-container {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, rgba(16,14,12,.96) 55%, rgba(16,14,12,0));
+    z-index: 1000;
+    pointer-events: none;
+}
+.tabs {
+    pointer-events: auto;
+    max-width: 440px; margin: 0 auto;
+    display: flex; gap: 4px; padding: 5px;
+    background: rgba(30,26,22,.86);
+    -webkit-backdrop-filter: saturate(140%) blur(18px); backdrop-filter: saturate(140%) blur(18px);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    box-shadow: var(--highlight), var(--shadow-pop);
+}
+.tab {
+    flex: 1; width: auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    height: 52px; padding: 0 6px;
+    color: var(--ink-3);
+    background: transparent;
+    border: none; border-radius: 999px;
+    font: 600 11px/1 var(--font); letter-spacing: .01em;
+    cursor: pointer;
+    transition: color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out);
+}
+.tab-icon { display: grid; place-items: center; }
+.tab-icon .ic { width: 21px; height: 21px; }
+.tab:active { transform: scale(.96); }
+.tab.active, .tab.active-green {
+    color: var(--accent-hi);
+    background: linear-gradient(180deg, rgba(245,137,61,.20), rgba(245,137,61,.10));
+    box-shadow: inset 0 0 0 1px rgba(245,137,61,.25);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: entrar 260ms var(--ease-out); }
+@keyframes entrar { from { opacity: 0; transform: translateY(6px); } }
+
+/* ================= TÍTULOS ================= */
+.header, .header.green-header { background: none; border: 0; box-shadow: none; padding: 4px 2px 0; margin-bottom: 16px; }
+h1 {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font); font-size: 26px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.15;
+    color: var(--ink);
+}
+h1 .ic { width: 24px; height: 24px; color: var(--accent); }
+#finanzasUpdate, #sheetUpdate { color: var(--ink-3) !important; font-size: 12.5px !important; text-align: left !important; margin-top: 6px !important; }
+#sheetUpdate { text-align: center !important; margin-top: 10px !important; }
+
+/* ================= TARJETAS / ACORDEONES ================= */
+.accordion-section, .balance-section, .caja-container {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface) 140px);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--highlight), var(--shadow-card);
+    overflow: hidden;
+}
+.accordion-section { margin-bottom: 12px; }
+.accordion-header {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 14px 14px 14px;
+    color: var(--ink); background: transparent;
+    border: 0; border-radius: 0; box-shadow: none;
+    text-align: left; cursor: pointer;
+    transition: background-color 200ms ease;
+}
+.accordion-title { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.accordion-title > .ic {
+    width: 36px; height: 36px; padding: 8px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 11px;
+    box-shadow: inset 0 0 0 1px rgba(245,137,61,.16);
+}
+.accordion-section:has(#body-autorizaciones) .accordion-title > .ic,
+.accordion-section:has(#body-gastoPropio) .accordion-title > .ic { color: var(--ok); background: var(--ok-soft); box-shadow: inset 0 0 0 1px rgba(82,204,158,.16); }
+.accordion-badge {
+    min-width: 22px; padding: 2px 7px;
+    font-size: 12px; font-weight: 700; text-align: center;
+    color: var(--accent-ink); background: var(--accent);
+    border-radius: 999px;
+}
+.accordion-arrow {
+    width: 30px; height: 30px; flex: none;
+    display: grid; place-items: center;
+    color: var(--ink-3);
+    background: var(--surface-3);
+    border-radius: 999px;
+    transition: transform 240ms var(--ease-out), color 200ms ease;
+}
+.accordion-arrow .ic { width: 16px; height: 16px; }
+.accordion-arrow.open { transform: rotate(180deg); color: var(--ink); }
+.accordion-body { display: none; border-top: 1px solid var(--line); }
+.accordion-body.open { display: block; animation: desplegar 240ms var(--ease-out); }
+@keyframes desplegar { from { opacity: 0; transform: translateY(-4px); } }
+
+/* ================= RESUMEN DE FACTURAS ================= */
+#stats { padding: 14px 14px 2px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stats > #registerBtn, .stats > #sheetUpdate { grid-column: 1 / -1; }
+.stat-card {
+    padding: 14px 14px 13px;
+    color: var(--ink);
+    background: var(--surface-3);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    box-shadow: var(--highlight);
+}
+.stat-card.total {
+    color: var(--accent-hi);
+    background:
+        radial-gradient(120% 120% at 100% 0%, rgba(245,137,61,.24), transparent 60%),
+        var(--surface-3);
+    border-color: var(--accent-line);
+}
+.stat-label { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.stat-label .ic { width: 14px; height: 14px; }
+.stat-card.total .stat-label { color: var(--accent-text); }
+.stat-value { position: relative; font-size: 21px; font-weight: 600; line-height: 1.1; }
+
+/* ================= FORMULARIOS ================= */
+.input-group { margin-bottom: 12px; }
+label { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+input[type="text"], input[type="number"], .partial-input, .auth-partial-input, .config-input-row input {
+    width: 100%; height: 46px; padding: 0 14px;
+    font: 500 15.5px var(--font); color: var(--ink);
+    background: var(--input-bg);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.35);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+input::placeholder { color: var(--ink-4); }
+input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+.partial-input, .auth-partial-input { margin-top: 10px; font-family: var(--font-num); }
+.auth-partial-input:focus { border-color: var(--ok); box-shadow: 0 0 0 3px rgba(82,204,158,.25); }
+#body-gastoPropio { padding: 16px 14px 14px; }
+.check-row { display: flex !important; align-items: center; gap: 10px !important; padding: 4px 0 6px; }
+.check-row label { margin: 0 !important; font-size: 14px; color: var(--ink); cursor: pointer; }
+input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 22px !important; height: 22px; flex: none;
+    display: grid; place-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--line-strong); border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+input[type="checkbox"]::after {
+    content: ''; width: 10px; height: 6px;
+    border: 2px solid var(--ok-ink); border-top: 0; border-right: 0;
+    transform: translateY(-1px) rotate(-45deg) scale(.6); opacity: 0;
+    transition: transform 160ms var(--ease-out), opacity 160ms ease;
+}
+input[type="checkbox"]:checked { background: var(--ok); border-color: var(--ok); }
+input[type="checkbox"]:checked::after { opacity: 1; transform: translateY(-1px) rotate(-45deg) scale(1); }
+
+/* ================= BOTONES ================= */
+button {
+    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 20px;
+    font: 650 15px/1 var(--font); letter-spacing: -0.005em;
+    color: var(--accent-ink);
+    background: linear-gradient(180deg, var(--accent-hi), var(--accent) 55%, var(--accent-lo));
+    border: 0; border-radius: var(--r);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 1px 2px rgba(0,0,0,.4), 0 10px 24px -12px rgba(245,137,61,.75);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out), box-shadow 200ms ease, opacity 200ms ease, filter 200ms ease;
+}
+button .ic { width: 18px; height: 18px; }
+button:active:not(:disabled) { transform: scale(.97); }
+button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-shadow: none; }
+
+#registerBtn { margin-top: 4px !important; min-height: 54px; font-size: 15.5px; border-radius: var(--r); }
+
+/* Botón de guardado / confirmación en verde */
+#btnAgregarGastoPropio, .btn-autorizar-todo, .config-save-btn {
+    color: var(--ok-ink);
+    background: linear-gradient(180deg, var(--ok-hi), var(--ok) 60%, #3BB386);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 1px 2px rgba(0,0,0,.4), 0 10px 24px -12px rgba(82,204,158,.6);
+}
+#btnAgregarGastoPropio { margin-top: 6px; }
+.btn-autorizar-todo { width: calc(100% - 28px); margin: 0 14px 14px; }
+
+/* Selector "completo / parcial": control segmentado */
+.invoice-actions {
+    display: flex; gap: 4px; padding: 4px;
+    background: var(--input-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.btn-mark, .btn-auth {
+    flex: 1; min-height: 38px; padding: 0 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-2);
+    background: transparent;
+    border: 0; border-radius: 9px;
+    box-shadow: none;
+}
+.btn-mark.active {
+    color: var(--accent-ink);
+    background: linear-gradient(180deg, var(--accent-hi), var(--accent));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 4px 12px -6px rgba(245,137,61,.8);
+}
+.btn-auth.active {
+    color: var(--ok-ink);
+    background: linear-gradient(180deg, var(--ok-hi), var(--ok));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 4px 12px -6px rgba(82,204,158,.7);
+}
+.btn-mark:disabled, .btn-auth:disabled { opacity: .3; filter: none; background: transparent; }
+
+.cuenta-label { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--ink-3); }
+.cuenta-label .ic { width: 14px; height: 14px; }
+.cuenta-selector { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+.cuenta-btn {
+    flex: 1; width: auto; min-width: 70px; min-height: 36px; padding: 0 10px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-2);
+    background: var(--surface-3);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    box-shadow: none;
+}
+.cuenta-btn.selected { color: #fff; background: rgba(134,173,255,.22); border-color: var(--info); box-shadow: inset 0 0 0 1px var(--info); color: var(--info); }
+
+.refresh-btn, .refresh-btn.green-btn {
+    min-height: 46px; margin-top: 4px;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-2);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--highlight);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    button:hover:not(:disabled) { filter: brightness(1.06); }
+    .accordion-header:hover { background: rgba(255,245,235,.025); filter: none; }
+    .btn-mark:hover:not(.active):not(:disabled), .btn-auth:hover:not(.active):not(:disabled) { color: var(--ink); background: var(--surface-3); filter: none; }
+    .cuenta-btn:hover:not(.selected) { color: var(--ink); border-color: var(--ink-4); filter: none; }
+    .refresh-btn:hover { color: var(--accent-text); border-color: var(--accent-line); filter: none; }
+    .tab:hover:not(.active) { color: var(--ink); filter: none; }
+    .eye-btn:hover { color: var(--ink); filter: none; }
+}
+
+/* ================= LISTA DE FACTURAS ================= */
+.invoices-container {
+    margin: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    overflow: hidden;
+}
+.invoice-item, .autorizacion-item, .caja-payment-item {
+    position: relative;
+    padding: 16px 16px 15px;
+    border-bottom: 1px solid var(--line);
+    transition: background-color 200ms ease, opacity 200ms ease;
+}
+.invoice-item:last-child, .autorizacion-item:last-child, .caja-payment-item:last-child { border-bottom: 0; }
+.invoice-item::before, .autorizacion-item::before {
+    content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--accent);
+    transform: scaleY(0); transform-origin: center;
+    transition: transform 240ms var(--ease-out);
+}
+.autorizacion-item::before { background: var(--ok); }
+.invoice-item.selected { background: linear-gradient(90deg, rgba(245,137,61,.10), rgba(245,137,61,.03)); }
+.autorizacion-item.selected-auth { background: linear-gradient(90deg, rgba(82,204,158,.10), rgba(82,204,158,.03)); }
+.invoice-item.selected::before, .autorizacion-item.selected-auth::before { transform: scaleY(1); }
+.invoice-item.paid, .autorizacion-item.autorizado { opacity: .42; }
+
+.invoice-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
+.invoice-supplier, .auth-beneficiary, .caja-payment-beneficiary { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.invoice-amount, .auth-amount { position: relative; margin: 2px 0 10px; font-size: 24px; font-weight: 600; line-height: 1.15; color: var(--ink); }
+.invoice-details { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 14px; font-size: 12.5px; color: var(--ink-3); }
+.invoice-details > div, .caja-payment-details, .auth-concepto, .ya-autorizado { display: inline-flex; align-items: center; gap: 6px; }
+.invoice-details .ic, .caja-payment-details .ic, .auth-concepto .ic { width: 14px; height: 14px; color: var(--ink-4); }
+.auth-concepto { margin: 2px 0 6px; font-size: 13px; color: var(--ink-2); }
+.ya-autorizado { font-size: 12.5px; font-weight: 600; color: var(--ok); }
+.ya-autorizado .ic { width: 15px; height: 15px; }
+
+.invoice-badge, .caja-payment-type {
+    flex: none;
+    padding: 4px 9px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    border-radius: 999px;
+}
+.badge-pending { color: var(--warn); background: var(--warn-soft); box-shadow: inset 0 0 0 1px var(--warn-line); }
+.badge-paid, .caja-payment-type { color: var(--ok); background: var(--ok-soft); box-shadow: inset 0 0 0 1px var(--ok-line); }
+.caja-payment-type.proveedor { color: var(--warn); background: var(--warn-soft); box-shadow: inset 0 0 0 1px var(--warn-line); }
+.caja-payment-type.servicio { color: var(--info); background: var(--info-soft); box-shadow: inset 0 0 0 1px var(--info-line); }
+
+.auth-total-card {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 14px; padding: 14px 16px;
+    color: var(--ok);
+    background: radial-gradient(120% 140% at 100% 0%, rgba(82,204,158,.18), transparent 60%), var(--surface-3);
+    border: 1px solid var(--ok-line);
+    border-radius: var(--r);
+}
+.auth-total-label { font-size: 13px; font-weight: 600; }
+.auth-total-value { position: relative; font-size: 21px; font-weight: 600; }
+
+/* ================= TARJETAS DESTACADAS (saldos) ================= */
+.total-disponible {
+    position: relative; overflow: hidden; isolation: isolate;
+    margin-bottom: 12px; padding: 18px 20px 20px;
+    color: #fff;
+    text-align: left;
+    border-radius: var(--r-lg);
+    background:
+        radial-gradient(140% 120% at 100% 0%, rgba(255,190,130,.55) 0%, transparent 45%),
+        linear-gradient(150deg, #F5893D 0%, #C9531A 48%, #5A2A10 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 0 0 1px rgba(255,255,255,.06), 0 22px 44px -24px rgba(245,137,61,.7);
+}
+/* Arco del escudo como marca de agua */
+.total-disponible::after {
+    content: ''; position: absolute; z-index: -1;
+    right: -46px; top: -54px; width: 170px; height: 170px;
+    border-radius: 50%;
+    border: 16px solid rgba(255,255,255,.10);
+    border-left-color: transparent; border-bottom-color: transparent;
+    transform: rotate(-18deg);
+}
+.total-disponible.green {
+    background:
+        radial-gradient(140% 120% at 100% 0%, rgba(150,240,200,.40) 0%, transparent 45%),
+        linear-gradient(150deg, #3DBA8C 0%, #1C6E52 50%, #0D3125 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 22px 44px -24px rgba(82,204,158,.55);
+}
+.total-disponible:has(#cajaSaldoSinRegistrar) {
+    background:
+        radial-gradient(140% 120% at 100% 0%, rgba(255,170,150,.40) 0%, transparent 45%),
+        linear-gradient(150deg, #EE6A57 0%, #9E3226 52%, #451510 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 22px 44px -24px rgba(255,129,112,.5) !important;
+}
+.total-disponible:has(#cajaSaldoKunuu) {
+    background:
+        radial-gradient(140% 120% at 100% 0%, rgba(200,180,255,.40) 0%, transparent 45%),
+        linear-gradient(150deg, #9A7FF0 0%, #5A3FB6 52%, #241850 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 22px 44px -24px rgba(154,127,240,.5) !important;
+}
+.total-disponible-label { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.82); }
+.total-disponible-label .ic { width: 15px; height: 15px; }
+.total-disponible-value { position: relative; font-size: 34px; font-weight: 600; line-height: 1.05; text-shadow: 0 1px 12px rgba(0,0,0,.18); }
+#cajaFechaActual { font-size: 12.5px !important; margin-top: 8px !important; color: rgba(255,255,255,.75); opacity: 1 !important; }
+
+/* ================= FINANZAS ================= */
+.balance-section { margin-bottom: 12px; padding: 4px 0 0; }
+.balance-title { display: flex; align-items: center; gap: 8px; padding: 14px 16px 10px; font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.balance-title .ic { width: 15px; height: 15px; color: var(--accent); }
+.balance-item, .movement-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 16px; border-top: 1px solid var(--line); }
+.balance-item > div:first-child { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; min-width: 0; }
+.balance-bank { font-size: 14.5px; font-weight: 500; color: var(--ink); }
+.balance-ref { font-size: 11.5px; font-weight: 600; color: var(--ink-3); padding: 1px 7px; border-radius: 999px; background: var(--surface-3); }
+.balance-amount { position: relative; flex: none; font-size: 16px; font-weight: 600; color: var(--ink); }
+.balance-amount.green { color: var(--ok); }
+.movement-info { flex: 1; min-width: 0; }
+.movement-desc { margin-bottom: 2px; font-size: 14px; font-weight: 500; color: var(--ink); }
+.movement-date { font-size: 12px; color: var(--ink-3); }
+.movement-amount { position: relative; flex: none; font-size: 15.5px; font-weight: 600; }
+.movement-amount.positive { color: var(--ok); }
+.movement-amount.negative { color: var(--danger); }
+.movement-amount.positive::before { content: '+ '; }
+.movement-amount.negative::before { content: '− '; }
+
+/* ================= CAJA CHICA ================= */
+.caja-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.caja-stat { padding: 14px; border-radius: var(--r); color: var(--ok); background: var(--ok-soft); box-shadow: inset 0 0 0 1px var(--ok-line); }
+.caja-stat.outflow { color: var(--danger); background: var(--danger-soft); box-shadow: inset 0 0 0 1px var(--danger-line); }
+.caja-stat-label { margin-bottom: 4px; font-size: 11px; font-weight: 600; }
+.caja-stat-value { position: relative; font-size: 20px; font-weight: 600; }
+.caja-payment-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 4px; }
+.caja-payment-amount { position: relative; margin-bottom: 4px; font-size: 19px; font-weight: 600; }
+.caja-payment-amount.positive { color: var(--ok); }
+.caja-payment-amount.negative { color: var(--danger); }
+.caja-payment-details { font-size: 12px; color: var(--ink-3); }
+.caja-container { box-shadow: none !important; border: 0 !important; background: none !important; }
+
+/* ================= ESTADOS ================= */
+.loading { padding: 40px 20px; text-align: center; font-size: 14px; color: var(--ink-3); }
+.spinner, .spinner.green {
+    width: 30px; height: 30px; margin: 0 auto 14px;
+    border: 2.5px solid var(--surface-3); border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: girar 700ms linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+.error { margin-bottom: 14px; padding: 14px 16px; font-size: 14px; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger-line); border-radius: var(--r); box-shadow: none; }
+.empty-state { padding: 40px 20px; text-align: center; font-size: 14px; color: var(--ink-3); }
+.empty-icon { display: grid; place-items: center; margin: 0 auto 10px; width: 52px; height: 52px; border-radius: 16px; background: var(--surface-3); color: var(--ink-3); }
+.empty-icon .ic { width: 24px; height: 24px; }
+
+.config-banner { margin-bottom: 16px; padding: 20px; text-align: center; background: var(--ok-soft); border: 1.5px dashed var(--ok-line); border-radius: var(--r-lg); }
+.config-banner-title { margin-bottom: 6px; font-weight: 700; color: var(--ink); }
+.config-banner-desc { margin-bottom: 14px; font-size: 13px; color: var(--ink-2); }
+.config-input-row { display: flex; gap: 8px; }
+.config-save-btn { width: auto; white-space: nowrap; }
+
+/* ================= AVISOS (reemplazan los alert) ================= */
+.aviso {
+    position: fixed; left: 50%; bottom: calc(var(--tabs-h) + 30px + env(safe-area-inset-bottom));
+    z-index: 3000;
+    width: min(calc(100% - 32px), 440px);
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 13px 16px;
+    font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    background: rgba(38,33,28,.96);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    box-shadow: var(--highlight), var(--shadow-pop);
+    transform: translate(-50%, 0);
+    opacity: 1;
+    transition: transform 320ms var(--ease-out), opacity 220ms ease;
+    cursor: pointer;
+}
+@starting-style { .aviso { transform: translate(-50%, 16px); opacity: 0; } }
+.aviso.saliendo { transform: translate(-50%, 8px); opacity: 0; transition-duration: 180ms; }
+.aviso .ic { width: 19px; height: 19px; margin-top: 1px; }
+.aviso.ok .ic { color: var(--ok); }
+.aviso.error .ic { color: var(--danger); }
+.aviso.warn .ic { color: var(--warn); }
+
+/* ================= OCULTAR MONTOS ================= */
+.hide-amounts .stat-value, .hide-amounts .invoice-amount, .hide-amounts .balance-amount,
+.hide-amounts .total-disponible-value, .hide-amounts .movement-amount, .hide-amounts .caja-stat-value,
+.hide-amounts .caja-payment-amount, .hide-amounts .auth-amount, .hide-amounts .auth-total-value {
+    visibility: hidden !important; position: relative !important;
+}
+.hide-amounts .stat-value::after, .hide-amounts .invoice-amount::after, .hide-amounts .balance-amount::after,
+.hide-amounts .total-disponible-value::after, .hide-amounts .movement-amount::after, .hide-amounts .caja-stat-value::after,
+.hide-amounts .caja-payment-amount::after, .hide-amounts .auth-amount::after, .hide-amounts .auth-total-value::after {
+    content: '';
+    visibility: visible;
+    position: absolute; left: 0; top: 50%;
+    width: 5.2em; max-width: 100%; height: .62em;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: currentColor; opacity: .16;
+}
+.hide-amounts .balance-amount::after, .hide-amounts .movement-amount::after, .hide-amounts .auth-total-value::after { left: auto; right: 0; width: 4.4em; }
+.hide-amounts .total-disponible-value::after { opacity: .3; }
+.hide-amounts .movement-amount::before { content: none; }
+.hide-amounts .balance-amount, .hide-amounts .movement-amount, .hide-amounts .auth-total-value { min-width: 4.4em; }
+
+/* ================= ACCESIBILIDAD ================= */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+@media (max-width: 360px) {
+    .stats { grid-template-columns: 1fr; }
+    .total-disponible-value { font-size: 30px; }
+}
+
     </style>
 </head>
 <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2 20 7H4z"/></symbol><symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol><symbol id="i-banknote" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></symbol><symbol id="i-credit-card" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></symbol><symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol><symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-circle-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-circle-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="i-heart-pulse" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol><symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></symbol><symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></symbol></svg>
     <header class="main-header">
       <div class="header-left">
-        <img src="logo.png" alt="Municipalidad de Caá Catí" class="logo">
+        <img src="data:image/png;base64,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" alt="Municipalidad de Caá Catí" class="logo">
       </div>
 
       <div class="header-center">
@@ -1250,9 +629,7 @@
       </div>
 
       <div class="header-right">
-        <button class="eye-btn" onclick="toggleAmounts()" id="toggleBtn" title="Mostrar/ocultar montos">
-          👁
-        </button>
+        <button class="eye-btn" onclick="toggleAmounts()" id="toggleBtn" title="Mostrar/ocultar montos"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg></button>
       </div>
     </header>
 
@@ -1260,15 +637,15 @@
     <div class="tabs-container">
         <div class="tabs">
             <button class="tab active" id="tab-proveedores" onclick="switchTab('proveedores', event)">
-                <div class="tab-icon">🏦</div>
+                <div class="tab-icon"><svg class="ic" aria-hidden="true"><use href="#i-landmark"/></svg></div>
                 <div>Proveedores</div>
             </button>
             <button class="tab" id="tab-finanzas" onclick="switchTab('finanzas', event)">
-                <div class="tab-icon">💰</div>
+                <div class="tab-icon"><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg></div>
                 <div>Finanzas</div>
             </button>
             <button class="tab" id="tab-caja" onclick="switchTab('caja', event)">
-                <div class="tab-icon">💵</div>
+                <div class="tab-icon"><svg class="ic" aria-hidden="true"><use href="#i-banknote"/></svg></div>
                 <div>Caja Chica</div>
             </button>
         </div>
@@ -1278,7 +655,7 @@
     <div id="proveedores-content" class="tab-content active">
         <div class="container">
             <div class="header">
-                <h1>💳 Pagos Proveedores</h1>
+                <h1><svg class="ic" aria-hidden="true"><use href="#i-credit-card"/></svg>Pagos a proveedores</h1>
             </div>
 
             <div id="error" class="error" style="display: none;"></div>
@@ -1286,8 +663,8 @@
             <!-- ACCORDION: DETALLE DE FACTURAS -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion('facturas')">
-                    <span class="accordion-title">📋 Detalle de Facturas por Proveedor</span>
-                    <span class="accordion-arrow" id="arrow-facturas">▼</span>
+                    <span class="accordion-title"><svg class="ic" aria-hidden="true"><use href="#i-file-text"/></svg>Facturas por proveedor</span>
+                    <span class="accordion-arrow" id="arrow-facturas"><svg class="ic" aria-hidden="true"><use href="#i-chevron-down"/></svg></span>
                 </button>
                 <div class="accordion-body" id="body-facturas">
 
@@ -1295,16 +672,16 @@
                     <div id="stats" style="display: none;">
                         <div class="stats">
                             <div class="stat-card">
-                                <div class="stat-label">Deuda Total</div>
+                                <div class="stat-label"><svg class="ic" aria-hidden="true"><use href="#i-receipt"/></svg>Deuda total</div>
                                 <div class="stat-value" id="totalDebt">$0</div>
                             </div>
                             <div class="stat-card total">
-                                <div class="stat-label">💳 Total a Pagar Hoy</div>
+                                <div class="stat-label"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>A pagar hoy</div>
                                 <div class="stat-value" id="todayTotal">$0</div>
                             </div>
 
                             <button id="registerBtn" onclick="registerTodayPayments()" style="margin-top:10px;">
-                              🧾 Autorizar transferencias de hoy
+                              <svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Autorizar transferencias de hoy
                             </button>
 
                             <div id="sheetUpdate" style="
@@ -1327,8 +704,8 @@
             <!-- ACCORDION: CARGAR GASTO PROPIO (INTENDENTE) -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion('gastoPropio')">
-                    <span class="accordion-title">➕ Cargar Gasto en Efectivo</span>
-                    <span class="accordion-arrow" id="arrow-gastoPropio">▼</span>
+                    <span class="accordion-title"><svg class="ic" aria-hidden="true"><use href="#i-circle-plus"/></svg>Cargar gasto en efectivo</span>
+                    <span class="accordion-arrow" id="arrow-gastoPropio"><svg class="ic" aria-hidden="true"><use href="#i-chevron-down"/></svg></span>
                 </button>
                 <div class="accordion-body" id="body-gastoPropio">
                     <div class="input-group">
@@ -1343,11 +720,11 @@
                         <label>Monto</label>
                         <input type="text" id="intMonto" placeholder="0" inputmode="decimal">
                     </div>
-                    <div class="input-group" style="display:flex; align-items:center; gap:8px;">
+                    <div class="input-group check-row">
                         <input type="checkbox" id="intAutorizarAhora" style="width:auto;">
-                        <label style="margin:0;">Autorizar ahora</label>
+                        <label for="intAutorizarAhora">Autorizar ahora</label>
                     </div>
-                    <button id="btnAgregarGastoPropio" onclick="agregarGastoPropio()">💾 Guardar gasto</button>
+                    <button id="btnAgregarGastoPropio" onclick="agregarGastoPropio()"><svg class="ic" aria-hidden="true"><use href="#i-save"/></svg>Guardar gasto</button>
                 </div>
             </div>
 
@@ -1355,10 +732,10 @@
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion('autorizaciones')">
                     <span class="accordion-title">
-                        💵 Pagos en Efectivo a Autorizar
+                        <svg class="ic" aria-hidden="true"><use href="#i-badge-check"/></svg>Pagos en efectivo a autorizar
                         <span class="accordion-badge" id="autorizacionesBadge" style="display:none;">0</span>
                     </span>
-                    <span class="accordion-arrow" id="arrow-autorizaciones">▼</span>
+                    <span class="accordion-arrow" id="arrow-autorizaciones"><svg class="ic" aria-hidden="true"><use href="#i-chevron-down"/></svg></span>
                 </button>
                 <div class="accordion-body" id="body-autorizaciones">
                     <div id="autorizacionesContainer"></div>
@@ -1367,7 +744,7 @@
                         <span class="auth-total-value" id="authTotalValue">$0</span>
                     </div>
                     <button class="btn-autorizar-todo" id="btnAutorizarTodo" onclick="registrarAutorizaciones()" style="display:none;">
-                        ✅ Confirmar autorizaciones
+                        <svg class="ic" aria-hidden="true"><use href="#i-circle-check"/></svg>Confirmar autorizaciones
                     </button>
                 </div>
             </div>
@@ -1378,7 +755,7 @@
     <div id="finanzas-content" class="tab-content">
         <div class="container">
             <div class="header">
-                <h1>💰 Estado Financiero</h1>
+                <h1><svg class="ic" aria-hidden="true"><use href="#i-wallet"/></svg>Estado financiero</h1>
                 <div style="text-align:center; margin-top:8px; font-size:13px; color:#999;" id="finanzasUpdate">Última actualización: —</div>
             </div>
 
@@ -1398,17 +775,17 @@
 
                 <!-- SALDOS POR BANCO -->
                 <div class="balance-section">
-                    <div class="balance-title">🏦 Saldos por Cuenta</div>
+                    <div class="balance-title"><svg class="ic" aria-hidden="true"><use href="#i-landmark"/></svg>Saldos por cuenta</div>
                     <div id="saldosContainer"></div>
                 </div>
 
                 <!-- MOVIMIENTOS DEL DÍA -->
                 <div class="balance-section">
-                    <div class="balance-title">📊 Movimientos del Día</div>
+                    <div class="balance-title"><svg class="ic" aria-hidden="true"><use href="#i-activity"/></svg>Movimientos del día</div>
                     <div id="movimientosContainer"></div>
                 </div>
 
-                <button class="refresh-btn" onclick="loadFinanzas()">🔄 Actualizar Datos</button>
+                <button class="refresh-btn" onclick="loadFinanzas()"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Actualizar datos</button>
             </div>
         </div>
     </div>
@@ -1417,7 +794,7 @@
     <div id="caja-content" class="tab-content">
         <div class="container">
             <div class="header green-header">
-                <h1>💵 Caja Chica</h1>
+                <h1><svg class="ic" aria-hidden="true"><use href="#i-banknote"/></svg>Caja chica</h1>
             </div>
 
             <div id="cajaError" class="error" style="display: none;"></div>
@@ -1430,35 +807,35 @@
             <div id="cajaContainer" style="display: none;">
                 <!-- SALDO ACTUAL EN EFECTIVO -->
                 <div class="total-disponible green">
-                    <div class="total-disponible-label">💵 EFECTIVO DISPONIBLE</div>
+                    <div class="total-disponible-label"><svg class="ic" aria-hidden="true"><use href="#i-banknote"/></svg>Efectivo disponible</div>
                     <div class="total-disponible-value" id="cajaSaldoActual">$ 0,00</div>
                     <div style="font-size:13px; opacity:0.85; margin-top:6px;" id="cajaFechaActual">—</div>
                 </div>
 
                 <!-- EFECTIVO SIN REGISTRAR -->
                 <div class="total-disponible" style="background: #C0392B; box-shadow: 0 4px 16px rgba(192,57,43,0.15);">
-                    <div class="total-disponible-label">⚠️ EFECTIVO SIN REGISTRAR</div>
+                    <div class="total-disponible-label"><svg class="ic" aria-hidden="true"><use href="#i-triangle-alert"/></svg>Efectivo sin registrar</div>
                     <div class="total-disponible-value" id="cajaSaldoSinRegistrar">$ 0,00</div>
                 </div>
 
                 <!-- KUNU'U / ÑANDE ROGA -->
                 <div class="total-disponible" style="background: #6741D9; box-shadow: 0 4px 16px rgba(103,65,217,0.15); margin-bottom: 20px;">
-                    <div class="total-disponible-label">🏥 KUNU'U/ÑANDE ROGA</div>
+                    <div class="total-disponible-label"><svg class="ic" aria-hidden="true"><use href="#i-heart-pulse"/></svg>Kunu'u / Ñande Roga</div>
                     <div class="total-disponible-value" id="cajaSaldoKunuu">$ 0,00</div>
                 </div>
 
                 <!-- ACCORDION: MOVIMIENTOS DE CAJA -->
                 <div class="accordion-section">
                     <button class="accordion-header" onclick="toggleAccordion('movimientos')">
-                        <span class="accordion-title">📋 Movimientos de Caja</span>
-                        <span class="accordion-arrow" id="arrow-movimientos">▼</span>
+                        <span class="accordion-title"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>Movimientos de caja</span>
+                        <span class="accordion-arrow" id="arrow-movimientos"><svg class="ic" aria-hidden="true"><use href="#i-chevron-down"/></svg></span>
                     </button>
                     <div class="accordion-body" id="body-movimientos">
                         <div id="cajaMovimientosContainer" class="caja-container" style="box-shadow:none; border-radius:0;"></div>
                     </div>
                 </div>
 
-                <button class="refresh-btn green-btn" onclick="loadCaja()" style="margin-bottom:12px;">🔄 Actualizar Caja</button>
+                <button class="refresh-btn green-btn" onclick="loadCaja()" style="margin-bottom:12px;"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Actualizar caja</button>
             </div>
         </div>
     </div>
@@ -1479,16 +856,34 @@
         let currentTab = 'proveedores';
         let amountsHidden = true;
 
+        // ============ ÍCONOS Y AVISOS ============
+        const ic = n => `<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+
+        function aviso(msg, tipo = 'ok') {
+            const iconos = { ok: 'circle-check', error: 'circle-x', warn: 'triangle-alert' };
+            document.querySelectorAll('.aviso').forEach(a => a.remove());
+            const el = document.createElement('div');
+            el.className = 'aviso ' + tipo;
+            el.setAttribute('role', tipo === 'error' ? 'alert' : 'status');
+            el.innerHTML = ic(iconos[tipo] || iconos.ok) + '<span></span>';
+            el.querySelector('span').textContent = msg;
+            const cerrar = () => { el.classList.add('saliendo'); setTimeout(() => el.remove(), 200); };
+            el.addEventListener('click', cerrar);
+            document.body.appendChild(el);
+            setTimeout(cerrar, tipo === 'error' ? 7000 : 4500);
+        }
+
+
         // ============ OCULTAR/MOSTRAR MONTOS ============
         function toggleAmounts() {
             amountsHidden = !amountsHidden;
             const btn = document.getElementById('toggleBtn');
             if (amountsHidden) {
                 document.body.classList.add('hide-amounts');
-                btn.textContent = '👁';
+                btn.innerHTML = ic('eye');
             } else {
                 document.body.classList.remove('hide-amounts');
-                btn.textContent = '🙈';
+                btn.innerHTML = ic('eye-off');
             }
         }
 
@@ -1572,7 +967,7 @@
             }
           });
 
-          if (!items.length) { alert("⚠️ No hay pagos seleccionados."); if (btnCheck) btnCheck.disabled = false; return; }
+          if (!items.length) { aviso('No hay pagos seleccionados.', 'warn'); if (btnCheck) btnCheck.disabled = false; return; }
 
           const btn = btnCheck;
 
@@ -1585,12 +980,12 @@
             });
             const out = await res.json();
             if (!out.ok) throw new Error(out.message || 'Error registrando pagos');
-            alert(`✅ ${out.message}\nSE REGISTRÓ CORRECTAMENTE`);
+            aviso(`${out.message} · Se registró correctamente.`, 'ok');
             await loadInvoices();
             invoices.forEach(inv => { inv.selected = false; inv.partial = false; inv.partialAmount = 0; inv.cuenta = ''; });
           } catch (err) {
             console.error(err);
-            alert('❌ No se pudo registrar: ' + (err?.message || err));
+            aviso('No se pudo registrar: ' + (err?.message || err), 'error');
           } finally {
             if (btn) btn.disabled = false;
           }
@@ -1694,7 +1089,7 @@
         function renderInvoices() {
             const container = document.getElementById('invoicesContainer');
             if (invoices.length === 0) {
-                container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>No hay facturas para mostrar</p></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg class="ic" aria-hidden="true"><use href="#i-inbox"/></svg></div><p>No hay facturas para mostrar</p></div>`;
                 return;
             }
             container.innerHTML = invoices.map(inv => `
@@ -1706,20 +1101,20 @@
                     </div>
                     <div class="invoice-amount">${formatCurrency(inv.amount)}</div>
                     <div class="invoice-details">
-                        <div>📅 Emisión: ${formatDate(inv.issueDate)}</div>
-                        <div>✅ Ultimo Pago: ${formatDate(inv.payDate)}</div>
+                        <div><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>Emisión: ${formatDate(inv.issueDate)}</div>
+                        <div><svg class="ic" aria-hidden="true"><use href="#i-history"/></svg>Último pago: ${formatDate(inv.payDate)}</div>
                     </div>
                     ${!inv.isPaid ? `
                         <div class="invoice-actions">
                             <button class="btn-mark ${inv.selected ? 'active' : ''}" 
                                     onclick="toggleInvoice(${inv.id}, 'full')"
                                     ${inv.partial ? 'disabled' : ''}>
-                                ${inv.selected ? '✓ Completo' : 'Pago Completo'}
+                                ${inv.selected ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Completo' : 'Pago Completo'}
                             </button>
                             <button class="btn-mark ${inv.partial ? 'active' : ''}" 
                                     onclick="toggleInvoice(${inv.id}, 'partial')"
                                     ${inv.selected ? 'disabled' : ''}>
-                                ${inv.partial ? '✓ Parcial' : 'Pago Parcial'}
+                                ${inv.partial ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Parcial' : 'Pago Parcial'}
                             </button>
                         </div>
                         ${inv.partial ? `
@@ -1730,7 +1125,7 @@
                                    oninput="updatePartialAmount(${inv.id}, this.value)">
                         ` : ''}
                         ${(inv.selected || inv.partial) ? `
-                            <div class="cuenta-label">💳 Usar otra cuenta:</div>
+                            <div class="cuenta-label"><svg class="ic" aria-hidden="true"><use href="#i-credit-card"/></svg>Pagar desde otra cuenta</div>
                             <div class="cuenta-selector">
                                 <button class="cuenta-btn ${inv.cuenta === 'Cuenta 6' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'Cuenta 6')">Cuenta 6</button>
                                 <button class="cuenta-btn ${inv.cuenta === 'BNA' ? 'selected' : ''}" onclick="selectCuenta(${inv.id}, 'BNA')">BNA</button>
@@ -1930,10 +1325,10 @@
                                 <div class="caja-payment-beneficiary">${descripcion || '—'}</div>
                                 ${tipoBadge}
                             </div>
-                            <div class="caja-payment-amount" style="color: ${isIngreso ? '#1A8A6A' : '#C0392B'}">
-                                ${isIngreso ? '+' : '-'}${formatCurrency(monto)}
+                            <div class="caja-payment-amount ${isIngreso ? 'positive' : 'negative'}">
+                                ${isIngreso ? '+ ' : '− '}${formatCurrency(monto)}
                             </div>
-                            <div class="caja-payment-details">📅 ${fechaRaw || '—'}</div>
+                            <div class="caja-payment-details"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>${fechaRaw || '—'}</div>
                         </div>
                     `;
                 });
@@ -1975,7 +1370,7 @@
                 document.getElementById('cajaSaldoSinRegistrar').textContent = formatCurrency(saldoSinRegistrar);
                 document.getElementById('cajaSaldoKunuu').textContent = formatCurrency(saldoKunuu);
                 document.getElementById('cajaFechaActual').textContent = fechaStr;
-                document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon">📋</div><p>No hay movimientos registrados</p></div>';
+                document.getElementById('cajaMovimientosContainer').innerHTML = movimientosHTML || '<div class="empty-state"><div class="empty-icon"><svg class="ic" aria-hidden="true"><use href="#i-inbox"/></svg></div><p>No hay movimientos registrados</p></div>';
                 document.getElementById('cajaContainer').style.display = 'block';
 
                 renderAutorizaciones();
@@ -1984,7 +1379,7 @@
                 console.error('Error al cargar caja chica:', err);
                 const errorDiv = document.getElementById('cajaError');
                 errorDiv.innerHTML = `
-                    ❌ No se pudo cargar la Caja Chica.<br>
+                    No se pudo cargar la Caja Chica.<br>
                     <small>Verificá que el Sheet sea público y que tenga hojas llamadas <strong>Saldo</strong>, <strong>Movimientos</strong> y <strong>Autorizaciones</strong>.</small>
                 `;
                 errorDiv.style.display = 'block';
@@ -2006,7 +1401,7 @@
             }
 
             if (autorizaciones.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><p>No hay gastos para autorizar</p></div>';
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="ic" aria-hidden="true"><use href="#i-circle-check"/></svg></div><p>No hay gastos para autorizar</p></div>';
                 document.getElementById('authTotalCard').style.display = 'none';
                 document.getElementById('btnAutorizarTodo').style.display = 'none';
                 return;
@@ -2015,19 +1410,19 @@
             container.innerHTML = autorizaciones.map(a => `
                 <div class="autorizacion-item ${a.autorizado ? 'autorizado' : ''} ${(a.selected || a.partial) ? 'selected-auth' : ''}">
                     <div class="auth-beneficiary">${a.beneficiario || '—'}</div>
-                    ${a.concepto ? `<div class="auth-concepto">📝 ${a.concepto}</div>` : ''}
+                    ${a.concepto ? `<div class="auth-concepto"><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg>${a.concepto}</div>` : ''}
                     <div class="auth-amount">${formatCurrency(a.monto)}</div>
                     ${!a.autorizado ? `
                         <div class="invoice-actions">
                             <button class="btn-auth ${a.selected ? 'active' : ''}"
                                     onclick="toggleAuth(${a.id}, 'full')"
                                     ${a.partial ? 'disabled' : ''}>
-                                ${a.selected ? '✓ Total' : 'Autorizar Total'}
+                                ${a.selected ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Total' : 'Autorizar Total'}
                             </button>
                             <button class="btn-auth ${a.partial ? 'active' : ''}"
                                     onclick="toggleAuth(${a.id}, 'partial')"
                                     ${a.selected ? 'disabled' : ''}>
-                                ${a.partial ? '✓ Parcial' : 'Autorizar Parcial'}
+                                ${a.partial ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Parcial' : 'Autorizar Parcial'}
                             </button>
                         </div>
                         ${a.partial ? `
@@ -2037,7 +1432,7 @@
                                    max="${a.monto}"
                                    oninput="updateAuthPartial(${a.id}, this.value)">
                         ` : ''}
-                    ` : `<div style="font-size:12px;color:#1A8A6A;font-weight:600;">✅ Ya autorizado</div>`}
+                    ` : `<div class="ya-autorizado"><svg class="ic" aria-hidden="true"><use href="#i-circle-check"/></svg>Ya autorizado</div>`}
                 </div>
             `).join('');
 
@@ -2092,7 +1487,7 @@
                 }
             });
 
-            if (!items.length) { alert('⚠️ No hay autorizaciones seleccionadas.'); return; }
+            if (!items.length) { aviso('No hay autorizaciones seleccionadas.', 'warn'); return; }
 
             const btn = document.getElementById('btnAutorizarTodo');
             btn.disabled = true;
@@ -2110,11 +1505,11 @@
                 });
                 const out = await res.json();
                 if (!out.ok) throw new Error(out.message || 'Error al autorizar');
-                alert(`✅ ${out.message}`);
+                aviso(out.message, 'ok');
                 await loadCaja();
             } catch (err) {
                 console.error(err);
-                alert('❌ No se pudo registrar: ' + (err?.message || err));
+                aviso('No se pudo registrar: ' + (err?.message || err), 'error');
             } finally {
                 btn.disabled = false;
             }
@@ -2130,7 +1525,7 @@
             const autorizarAhora = document.getElementById('intAutorizarAhora').checked;
 
             if (!beneficiario || !monto || monto <= 0) {
-                alert('⚠️ Completá beneficiario y un monto válido.');
+                aviso('Completá beneficiario y un monto válido.', 'warn');
                 return;
             }
 
@@ -2149,7 +1544,7 @@
                 });
                 const out = await res.json();
                 if (!out.ok) throw new Error(out.message || 'Error al cargar gasto');
-                alert(`✅ ${out.message}`);
+                aviso(out.message, 'ok');
                 document.getElementById('intBeneficiario').value = '';
                 document.getElementById('intConcepto').value = '';
                 document.getElementById('intMonto').value = '';
@@ -2157,7 +1552,7 @@
                 await loadCaja();
             } catch (err) {
                 console.error(err);
-                alert('❌ No se pudo cargar: ' + (err?.message || err));
+                aviso('No se pudo cargar: ' + (err?.message || err), 'error');
             } finally {
                 btn.disabled = false;
             }
