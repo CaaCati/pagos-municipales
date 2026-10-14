@@ -255,7 +255,9 @@ h1 .ic { width: 24px; height: 24px; color: var(--accent); }
 
 /* ================= RESUMEN DE FACTURAS ================= */
 #stats { padding: 14px 14px 2px; }
-.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Dos columnas solo si cada tarjeta tiene al menos 220px; en el celular van una debajo de otra */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; }
+.stat-card { min-width: 0; }
 .stats > #registerBtn, .stats > #sheetUpdate { grid-column: 1 / -1; }
 .stat-card {
     padding: 14px 14px 13px;
@@ -275,7 +277,7 @@ h1 .ic { width: 24px; height: 24px; color: var(--accent); }
 .stat-label { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .stat-label .ic { width: 14px; height: 14px; }
 .stat-card.total .stat-label { color: var(--accent-text); }
-.stat-value { position: relative; font-size: 21px; font-weight: 600; line-height: 1.1; }
+.stat-value { position: relative; font-size: 23px; font-weight: 600; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ================= FORMULARIOS ================= */
 .input-group { margin-bottom: 12px; }
@@ -403,30 +405,44 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
 }
 
 /* ================= LISTA DE FACTURAS ================= */
-.invoices-container {
-    margin: 14px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--r);
-    overflow: hidden;
+/* Facturas y autorizaciones: cada una es su propia tarjeta, separada de la siguiente */
+.invoices-container, #autorizacionesContainer {
+    display: flex; flex-direction: column; gap: 12px;
+    margin: 0; padding: 14px;
+    background: rgba(0,0,0,.18);
+    border: 0; border-radius: 0;
+    box-shadow: inset 0 8px 16px -12px rgba(0,0,0,.6);
 }
-.invoice-item, .autorizacion-item, .caja-payment-item {
-    position: relative;
+#autorizacionesContainer:empty { display: none; }
+.invoice-item, .autorizacion-item {
+    position: relative; overflow: hidden;
     padding: 16px 16px 15px;
-    border-bottom: 1px solid var(--line);
-    transition: background-color 200ms ease, opacity 200ms ease;
+    background: linear-gradient(180deg, var(--surface-3), var(--surface-2));
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    box-shadow: var(--highlight), 0 1px 2px rgba(0,0,0,.45), 0 10px 22px -14px rgba(0,0,0,.9);
+    transition: background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
 }
-.invoice-item:last-child, .autorizacion-item:last-child, .caja-payment-item:last-child { border-bottom: 0; }
+.caja-payment-item { position: relative; padding: 16px 16px 15px; border-bottom: 1px solid var(--line); }
+.caja-payment-item:last-child { border-bottom: 0; }
+.invoices-container > .empty-state, #autorizacionesContainer > .empty-state { padding: 26px 10px; }
 .invoice-item::before, .autorizacion-item::before {
-    content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 3px;
-    border-radius: 0 3px 3px 0;
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     background: var(--accent);
     transform: scaleY(0); transform-origin: center;
     transition: transform 240ms var(--ease-out);
 }
 .autorizacion-item::before { background: var(--ok); }
-.invoice-item.selected { background: linear-gradient(90deg, rgba(245,137,61,.10), rgba(245,137,61,.03)); }
-.autorizacion-item.selected-auth { background: linear-gradient(90deg, rgba(82,204,158,.10), rgba(82,204,158,.03)); }
+.invoice-item.selected {
+    border-color: var(--accent-line);
+    background: linear-gradient(90deg, rgba(245,137,61,.13), rgba(245,137,61,.03)), linear-gradient(180deg, var(--surface-3), var(--surface-2));
+    box-shadow: var(--highlight), 0 1px 2px rgba(0,0,0,.45), 0 12px 26px -14px rgba(245,137,61,.45);
+}
+.autorizacion-item.selected-auth {
+    border-color: var(--ok-line);
+    background: linear-gradient(90deg, rgba(82,204,158,.13), rgba(82,204,158,.03)), linear-gradient(180deg, var(--surface-3), var(--surface-2));
+    box-shadow: var(--highlight), 0 1px 2px rgba(0,0,0,.45), 0 12px 26px -14px rgba(82,204,158,.4);
+}
 .invoice-item.selected::before, .autorizacion-item.selected-auth::before { transform: scaleY(1); }
 .invoice-item.paid, .autorizacion-item.autorizado { opacity: .42; }
 
