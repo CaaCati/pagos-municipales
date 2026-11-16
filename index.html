@@ -462,6 +462,38 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
     font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     border-radius: 999px;
 }
+.badge-venc { display: inline-flex; align-items: center; gap: 5px; }
+.badge-venc .ic { width: 12px; height: 12px; }
+.badge-venc.lejos { color: var(--ink-2); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.badge-venc.cerca { color: var(--warn); background: var(--warn-soft); box-shadow: inset 0 0 0 1px var(--warn-line); }
+.badge-venc.vencido { color: #fff; background: #D9412E; box-shadow: none; }
+.invoice-item.venc-cerca { border-color: var(--warn-line); box-shadow: var(--highlight), 0 0 0 1px var(--warn-line), 0 12px 26px -14px rgba(242,195,91,.35); }
+.invoice-item.venc-vencido { border-color: rgba(255,90,70,.55); background: linear-gradient(90deg, rgba(217,65,46,.16), rgba(217,65,46,.03)), linear-gradient(180deg, var(--surface-3), var(--surface-2)); box-shadow: var(--highlight), 0 0 0 1px rgba(255,90,70,.35), 0 12px 26px -14px rgba(217,65,46,.6); }
+.invoice-header .badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.venc-detail { color: var(--ink-2); }
+
+/* Aviso de vencimientos (arriba de todo en Proveedores) */
+#vencAlert:empty { display: none; }
+.venc-alert { margin: 0 0 14px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--warn-line); background: var(--warn-soft); }
+.venc-alert.urgente { border-color: rgba(255,90,70,.6); background: rgba(217,65,46,.13); animation: vencPulse 2.4s ease-in-out infinite; }
+@keyframes vencPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(217,65,46,0); } 50% { box-shadow: 0 0 0 4px rgba(217,65,46,.22); } }
+.venc-alert-head { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); }
+.venc-alert.urgente .venc-alert-head { color: #fff; background: #D9412E; }
+.venc-alert-head .ic { width: 16px; height: 16px; }
+.venc-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
+.venc-alert-head + .venc-row { border-top: 0; }
+.venc-when { flex: none; min-width: 64px; text-align: center; padding: 6px 8px; border-radius: var(--r-sm); background: var(--surface); }
+.venc-when b { display: block; font-family: var(--font-num); font-size: 20px; line-height: 1; color: var(--ink); }
+.venc-when small { display: block; margin-top: 3px; font-size: 9.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.venc-row.vencido .venc-when { background: #D9412E; }
+.venc-row.vencido .venc-when b, .venc-row.vencido .venc-when small { color: #fff; }
+.venc-row.cerca .venc-when b { color: var(--warn); }
+.venc-info { flex: 1; min-width: 0; }
+.venc-info .n { font-size: 14px; font-weight: 600; color: var(--ink); }
+.venc-info .d { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+.venc-monto { margin-top: 4px; font-family: var(--font-num); font-size: 16px; font-weight: 600; color: var(--ink); }
+.hide-amounts .venc-monto { visibility: hidden; }
+
 .badge-pending { color: var(--warn); background: var(--warn-soft); box-shadow: inset 0 0 0 1px var(--warn-line); }
 .badge-paid, .caja-payment-type { color: var(--ok); background: var(--ok-soft); box-shadow: inset 0 0 0 1px var(--ok-line); }
 .caja-payment-type.proveedor { color: var(--warn); background: var(--warn-soft); box-shadow: inset 0 0 0 1px var(--warn-line); }
@@ -696,6 +728,9 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
             </div>
 
             <div id="error" class="error" style="display: none;"></div>
+
+            <!-- AVISO DE VENCIMIENTOS (columna H "VENCIMIENTO" de la hoja Deudas) -->
+            <div id="vencAlert"></div>
 
             <!-- ACCORDION: DETALLE DE FACTURAS -->
             <div class="accordion-section">
@@ -1064,6 +1099,70 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
           }
         }
       
+        // ============ VENCIMIENTOS ============
+        // Toma la fecha de la columna H (VENCIMIENTO). Si está vacía, busca
+        // "hasta el dd/mm" en el nombre del proveedor.
+        function leerVencimiento(celda, nombre) {
+          let d = null;
+          if (celda instanceof Date) d = celda;
+          else if (typeof celda === 'string' && celda.trim()) {
+            d = parseGvizDate(celda);
+            if (!d || isNaN(d)) {
+              const m = celda.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+              d = m ? fechaDM(m[1], m[2], m[3]) : null;
+            }
+          }
+          if (!d && nombre) {
+            const m = String(nombre).match(/hasta el\s*(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/i);
+            if (m) d = fechaDM(m[1], m[2], m[3]);
+          }
+          if (!d || isNaN(d)) return null;
+          d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          return d;
+        }
+        function fechaDM(dd, mm, yy) {
+          let y = yy ? Number(yy) : new Date().getFullYear();
+          if (y < 100) y += 2000;
+          return new Date(y, Number(mm) - 1, Number(dd));
+        }
+        function diasHasta(d) {
+          const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+          return Math.round((d - hoy) / 86400000);
+        }
+        function nivelVenc(dias) { return dias <= 0 ? 'vencido' : dias <= 7 ? 'cerca' : 'lejos'; }
+        function textoVenc(dias, d) {
+          if (dias < 0)  return `Vencido hace ${-dias} día${dias === -1 ? '' : 's'}`;
+          if (dias === 0) return 'Vence hoy';
+          if (dias === 1) return 'Vence mañana';
+          if (dias <= 7) return `Vence en ${dias} días`;
+          return 'Vence el ' + d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
+        }
+        function nombreLimpio(n) { return String(n).replace(/\s*\(hasta el[^)]*\)/i, '').trim(); }
+
+        function renderVencimientos() {
+          const box = document.getElementById('vencAlert');
+          const lista = invoices.filter(i => !i.isPaid && i.dueDate).map(i => ({ i, dias: diasHasta(i.dueDate) }));
+          if (!lista.length) { box.innerHTML = ''; return; }
+          const urgente = lista.some(x => x.dias <= 7);
+          box.innerHTML = `
+            <div class="venc-alert ${urgente ? 'urgente' : ''}">
+              <div class="venc-alert-head"><svg class="ic" aria-hidden="true"><use href="#i-triangle-alert"/></svg>Pagos con fecha límite</div>
+              ${lista.map(({ i, dias }) => {
+                const grande = dias === 0 ? '¡HOY!' : Math.abs(dias);
+                const chico = dias < 0 ? (dias === -1 ? 'día vencido' : 'días vencido') : dias === 0 ? '' : (dias === 1 ? 'día' : 'días');
+                return `
+                <div class="venc-row ${nivelVenc(dias)}">
+                  <div class="venc-when"><b>${grande}</b>${chico ? `<small>${chico}</small>` : ''}</div>
+                  <div class="venc-info">
+                    <div class="n">${nombreLimpio(i.supplier)}</div>
+                    <div class="d">${dias < 0 ? 'Venció' : 'Vence'} el ${i.dueDate.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+                    <div class="venc-monto">${formatCurrency(i.amount)}</div>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>`;
+        }
+
         async function loadInvoices() {
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
@@ -1108,11 +1207,20 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
                     amount: (parseMonto(row.c?.[1]?.v) || 0),
                     issueDate: row.c?.[2]?.v || '-',
                     payDate: row.c?.[3]?.v || '-',
+                    dueDate: leerVencimiento(row.c?.[7]?.v, row.c?.[0]?.v),
                     estado, isPaid, selected: false, partial: false, partialAmount: 0, cuenta: ''
                   };
                 });
 
+                // Las deudas con vencimiento (no pagadas) van primero, la más próxima arriba
+                invoices.sort((a, b) => {
+                  const da = (!a.isPaid && a.dueDate) ? a.dueDate.getTime() : Infinity;
+                  const db = (!b.isPaid && b.dueDate) ? b.dueDate.getTime() : Infinity;
+                  return da - db;
+                });
+
                 document.getElementById('stats').style.display = 'block';
+                renderVencimientos();
                 renderInvoices();
                 updateStats();
             } catch (err) {
@@ -1166,16 +1274,21 @@ button:disabled { opacity: .45; cursor: not-allowed; filter: saturate(.5); box-s
                 return;
             }
             container.innerHTML = invoices.map(inv => `
-                <div class="invoice-item ${inv.selected || inv.partial ? 'selected' : ''} ${inv.isPaid ? 'paid' : ''}">
+                <div class="invoice-item ${inv.selected || inv.partial ? 'selected' : ''} ${inv.isPaid ? 'paid' : ''} ${(!inv.isPaid && inv.dueDate) ? 'venc-' + nivelVenc(diasHasta(inv.dueDate)) : ''}">
                     <div class="invoice-header">
-                      <div class="invoice-supplier">${inv.supplier}</div>
+                      <div class="invoice-supplier">${inv.dueDate ? nombreLimpio(inv.supplier) : inv.supplier}</div>
+                      <div class="badges">
+                      ${(!inv.isPaid && inv.dueDate)
+                        ? `<span class="invoice-badge badge-venc ${nivelVenc(diasHasta(inv.dueDate))}"><svg class="ic" aria-hidden="true"><use href="#i-triangle-alert"/></svg>${textoVenc(diasHasta(inv.dueDate), inv.dueDate)}</span>` : ''}
                       ${(!inv.isPaid && inv.estado?.toUpperCase() === 'SALDO PENDIENTE')
                         ? `<span class="invoice-badge badge-pending">SALDO PENDIENTE</span>` : ''}
+                      </div>
                     </div>
                     <div class="invoice-amount">${formatCurrency(inv.amount)}</div>
                     <div class="invoice-details">
                         <div><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>Emisión: ${formatDate(inv.issueDate)}</div>
                         <div><svg class="ic" aria-hidden="true"><use href="#i-history"/></svg>Último pago: ${formatDate(inv.payDate)}</div>
+                        ${inv.dueDate ? `<div class="venc-detail"><svg class="ic" aria-hidden="true"><use href="#i-triangle-alert"/></svg>Vencimiento: ${inv.dueDate.toLocaleDateString('es-AR')}</div>` : ''}
                     </div>
                     ${!inv.isPaid ? `
                         <div class="invoice-actions">
